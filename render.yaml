@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: astral-content-studio
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: NEXT_PUBLIC_APP_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_COPY_MODEL
+        value: gemini-2.5-flash
+      - key: AI_TEXT_PROVIDER
+        value: gemini
+      - key: IMAGE_GENERATION_API_KEY
+        sync: false
+      - key: IMAGE_GENERATION_PROVIDER
+        value: openai
+      - key: IMAGE_GENERATION_MODEL
+        value: gpt-image-1
+      - key: IMAGE_GENERATION_ESTIMATED_COST
+        value: "0.04"
+      - key: AI_DAILY_COST_LIMIT_USD
+        value: "1"
+      - key: NEXT_PUBLIC_AI_DAILY_TOKEN_LIMIT
+        value: "10000"
+      - key: NEXT_PUBLIC_AI_WEEKLY_TOKEN_LIMIT
+        value: "50000"

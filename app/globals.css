@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(143, 110, 232, 0.16), transparent 28rem),
+    radial-gradient(circle at 88% 10%, rgba(107, 212, 200, 0.1), transparent 22rem),
+    #07070b;
+  color: #f7f0df;
+}
+
+button,
+select {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(217, 182, 109, 0.32);
+}
+
+.toolbar-button {
+  display: inline-flex;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid #2b2638;
+  background: #11111a;
+  padding: 0 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #f5f5f4;
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+}
+
+.toolbar-button:hover {
+  border-color: #d9b66d;
+  color: #ffffff;
+  background: #171723;
+}
