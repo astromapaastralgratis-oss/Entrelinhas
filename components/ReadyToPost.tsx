@@ -1,7 +1,7 @@
 "use client";
 
 import { Clipboard, ImageDown, Send } from "lucide-react";
-import { buildCaptionTxt, createPlaceholderPng, downloadBlob } from "@/lib/export-utils";
+import { buildCaptionTxt, downloadBlob, getSafePngBlob } from "@/lib/export-utils";
 import type { ProductionContent, ProductionStatus } from "@/types/production";
 
 type ReadyToPostProps = {
@@ -10,17 +10,19 @@ type ReadyToPostProps = {
 };
 
 export function ReadyToPost({ contents, onStatusChange }: ReadyToPostProps) {
-  const approved = contents.filter((content) => content.status === "aprovado");
+  const approved = contents.filter(
+    (content) =>
+      content.status === "aprovado" &&
+      Boolean(content.copy?.copy.caption) &&
+      content.visualPrompts.some((prompt) => Boolean(prompt.imageUrl))
+  );
 
   async function copyText(text: string) {
     await navigator.clipboard.writeText(text);
   }
 
   async function downloadPng(content: ProductionContent, promptIndex = 0) {
-    const imageUrl = content.visualPrompts[promptIndex]?.imageUrl;
-    const blob = imageUrl
-      ? await fetch(imageUrl).then((response) => response.blob())
-      : await createPlaceholderPng(content, promptIndex);
+    const blob = await getSafePngBlob(content, promptIndex);
     downloadBlob(`${content.plan.date}-${content.plan.format}-${promptIndex + 1}.png`, blob);
   }
 

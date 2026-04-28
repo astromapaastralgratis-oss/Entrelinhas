@@ -65,11 +65,17 @@ export async function saveEditorialPlan(
     status: "planned" as const
   }));
 
-  const { data, error } = await client
+  const query = client
     .from("content_calendar")
-    .insert(rows)
+    .upsert(rows, { onConflict: "user_id,date,moment_of_day,platform" })
     .select("*");
 
+  const { data, error } = await query;
+  if (error && /unique|constraint|conflict/i.test(error.message)) {
+    const fallback = await client.from("content_calendar").insert(rows).select("*");
+    if (fallback.error) throw fallback.error;
+    return fallback.data ?? [];
+  }
   if (error) throw error;
   return data ?? [];
 }
@@ -96,9 +102,17 @@ export async function getRecentHistory(
 
   if (error) throw error;
 
-  return (data ?? [])
-    .reverse()
-    .map((row) => ({
+  const { data: calendarData, error: calendarError } = await client
+    .from("content_calendar")
+    .select("date, moment_of_day, platform, format, objective, science_base, theme, hook_type, cta_type, created_at")
+    .eq("user_id", userId)
+    .gte("created_at", since.toISOString())
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (calendarError) throw calendarError;
+
+  const generatedHistory: EditorialHistoryItem[] = (data ?? []).map((row) => ({
       date: row.created_at.slice(0, 10),
       moment: "noite",
       platform: "instagram",
@@ -109,6 +123,20 @@ export async function getRecentHistory(
       hookType: row.hook_type,
       ctaType: row.cta_type
     }));
+
+  const calendarHistory: EditorialHistoryItem[] = (calendarData ?? []).map((row) => ({
+    date: row.date,
+    moment: row.moment_of_day,
+    platform: row.platform,
+    format: row.format,
+    objective: row.objective,
+    scienceBase: row.science_base,
+    theme: row.theme,
+    hookType: row.hook_type,
+    ctaType: row.cta_type
+  }));
+
+  return [...generatedHistory, ...calendarHistory].slice(0, limit).reverse();
 }
 
 export function checkRepetitionRisk(
@@ -269,6 +297,93 @@ export async function updatePostStatus(
   return data;
 }
 
+export async function updateProductionStatus(
+  input: {
+    userId: string;
+    generatedPostId?: string | null;
+    calendarId?: string | null;
+    status:
+      | "aprovado"
+      | "publicado"
+      | "imagem gerada"
+      | "imagem pendente"
+      | "copy gerada"
+      | "planejado"
+      | "precisa ajuste";
+  },
+  client: DbClient | null = supabase
+) {
+  if (!client) return null;
+
+  const calendarStatus = mapProductionStatusToCalendar(input.status);
+  const exportStatus = mapProductionStatusToExport(input.status);
+  const errors: unknown[] = [];
+
+  if (input.generatedPostId) {
+    const { error } = await client
+      .from("generated_posts")
+      .update({ export_status: exportStatus })
+      .eq("id", input.generatedPostId)
+      .eq("user_id", input.userId);
+    if (error) errors.push(error);
+  }
+
+  if (input.calendarId) {
+    const { error } = await client
+      .from("content_calendar")
+      .update({ status: calendarStatus })
+      .eq("id", input.calendarId)
+      .eq("user_id", input.userId);
+    if (error) errors.push(error);
+  }
+
+  if (errors[0]) throw errors[0];
+
+  return { calendarStatus, exportStatus };
+}
+
+export async function getAiUsageSummary(
+  userId: string,
+  client: DbClient | null = supabase,
+  now = new Date()
+) {
+  if (!client) {
+    return { dailyCost: 0, weeklyCost: 0, monthlyCost: 0, dailyTokens: 0, weeklyTokens: 0, monthlyTokens: 0 };
+  }
+
+  const dayStart = new Date(now);
+  dayStart.setHours(0, 0, 0, 0);
+  const weekStart = new Date(dayStart);
+  weekStart.setDate(dayStart.getDate() - dayStart.getDay());
+  const monthStart = new Date(dayStart.getFullYear(), dayStart.getMonth(), 1);
+
+  const { data, error } = await client
+    .from("ai_generation_usage")
+    .select("created_at, total_tokens_estimate, estimated_cost")
+    .eq("user_id", userId)
+    .gte("created_at", monthStart.toISOString());
+
+  if (error) throw error;
+
+  return (data ?? []).reduce(
+    (summary, row) => {
+      const createdAt = new Date(row.created_at);
+      if (createdAt >= dayStart) {
+        summary.dailyCost += row.estimated_cost;
+        summary.dailyTokens += row.total_tokens_estimate;
+      }
+      if (createdAt >= weekStart) {
+        summary.weeklyCost += row.estimated_cost;
+        summary.weeklyTokens += row.total_tokens_estimate;
+      }
+      summary.monthlyCost += row.estimated_cost;
+      summary.monthlyTokens += row.total_tokens_estimate;
+      return summary;
+    },
+    { dailyCost: 0, weeklyCost: 0, monthlyCost: 0, dailyTokens: 0, weeklyTokens: 0, monthlyTokens: 0 }
+  );
+}
+
 export async function getWeeklyPlan(
   userId: string,
   weekStart: Date | string,
@@ -330,4 +445,19 @@ function toDate(date: Date | string) {
 
 function toIsoDate(date: Date) {
   return date.toISOString().slice(0, 10);
+}
+
+function mapProductionStatusToCalendar(status: Parameters<typeof updateProductionStatus>[0]["status"]) {
+  if (status === "publicado") return "published" as const;
+  if (status === "aprovado") return "approved" as const;
+  if (status === "copy gerada" || status === "imagem gerada" || status === "precisa ajuste") return "drafted" as const;
+  return "planned" as const;
+}
+
+function mapProductionStatusToExport(status: Parameters<typeof updateProductionStatus>[0]["status"]): ExportStatus {
+  if (status === "publicado") return "exported";
+  if (status === "aprovado") return "ready";
+  if (status === "imagem gerada") return "image_generated";
+  if (status === "precisa ajuste") return "failed";
+  return "not_exported";
 }

@@ -28,5 +28,6 @@ export type ProductionContent = {
   qualityScore: QualityScore;
   regeneratedCount: number;
   generatedPostId?: string | null;
+  calendarId?: string | null;
   publishedAt?: string;
 };

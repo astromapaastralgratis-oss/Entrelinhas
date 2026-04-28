@@ -110,6 +110,16 @@ export async function createPlaceholderPng(content: ProductionContent, promptInd
   });
 }
 
+export async function getSafePngBlob(content: ProductionContent, promptIndex = 0) {
+  const imageUrl = content.visualPrompts[promptIndex]?.imageUrl;
+  if (!imageUrl) return createPlaceholderPng(content, promptIndex);
+
+  const blob = await fetch(imageUrl).then((response) => response.blob());
+  if (blob.type === "image/png") return blob;
+
+  return createPlaceholderPng(content, promptIndex);
+}
+
 export async function downloadDayZip(contents: ProductionContent[], filename = "astral-content-dia.zip") {
   const JSZip = (await import("jszip")).default;
   const zip = new JSZip();
@@ -122,9 +132,7 @@ export async function downloadDayZip(contents: ProductionContent[], filename = "
       });
       await Promise.all(
         content.visualPrompts.map(async (prompt, promptIndex) => {
-          const imageBlob = prompt.imageUrl
-            ? await fetch(prompt.imageUrl).then((response) => response.blob())
-            : await createPlaceholderPng(content, promptIndex);
+          const imageBlob = await getSafePngBlob(content, promptIndex);
           zip.file(`conteudo-${index + 1}/imagem-${promptIndex + 1}.png`, imageBlob);
         })
       );

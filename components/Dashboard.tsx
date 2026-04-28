@@ -16,7 +16,8 @@ import {
   getRecentHistory,
   recordAiGenerationUsage,
   saveEditorialPlan,
-  saveGeneratedPost
+  saveGeneratedPost,
+  updateProductionStatus
 } from "@/lib/content-persistence";
 import { decideBudget, defaultAutomationSettings } from "@/lib/cost-control";
 import { generateEditorialPlan, generateWeeklyEditorialPlan } from "@/lib/editorial-engine";
@@ -70,7 +71,7 @@ export function Dashboard() {
   const [generatingKey, setGeneratingKey] = useState<string | null>(null);
   const [generatingImageKey, setGeneratingImageKey] = useState<string | null>(null);
   const [automationSettings, setAutomationSettings] = useState<AutomationSettings>(defaultAutomationSettings);
-  const [textProvider, setTextProvider] = useState<TextProvider>("openai");
+  const [textProvider, setTextProvider] = useState<TextProvider>("gemini");
   const [generationCache, setGenerationCache] = useState<Record<string, GenerateCopyResult>>({});
   const [budgetMessage, setBudgetMessage] = useState<string | null>(null);
   const [operationLogs, setOperationLogs] = useState<OperationLog[]>([]);
@@ -105,6 +106,23 @@ export function Dashboard() {
       isMounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem("astral-performance-metrics");
+      if (saved) setPerformanceMetrics(JSON.parse(saved) as PerformanceMetrics[]);
+    } catch {
+      // Local persistence is a convenience; Supabase remains the durable store once connected.
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem("astral-performance-metrics", JSON.stringify(performanceMetrics));
+    } catch {
+      // Ignore quota/privacy-mode failures without breaking the daily flow.
+    }
+  }, [performanceMetrics]);
 
   const summary = useMemo(
     () => ({
@@ -149,7 +167,8 @@ export function Dashboard() {
     if (!user) return;
 
     try {
-      await saveEditorialPlan(user.id, plan);
+      const savedRows = await saveEditorialPlan(user.id, plan);
+      setContents((current) => attachCalendarIds(current, savedRows));
       setPersistenceStatus("synced");
       addLog("generation_completed", "Plano do dia salvo no Supabase.", { count: plan.length });
     } catch (error) {
@@ -178,7 +197,9 @@ export function Dashboard() {
     if (!user) return;
 
     try {
-      await saveEditorialPlan(user.id, plan);
+      const savedRows = await saveEditorialPlan(user.id, plan);
+      setContents((current) => attachCalendarIds(current, savedRows));
+      setWeeklyContents((current) => attachCalendarIds(current, savedRows));
       setPersistenceStatus("synced");
       addLog("generation_completed", "Plano semanal salvo no Supabase.", { count: plan.length });
     } catch {
@@ -249,6 +270,7 @@ export function Dashboard() {
         },
         body: JSON.stringify({
           planItem: content.plan,
+          planItemId: content.calendarId,
           intensity: getModeContentIntensity(automationSettings.mode),
           automationMode: automationSettings.mode,
           currentDailyCost: contents.reduce((total, item) => total + (item.copy?.cost.estimatedCost ?? 0), 0),
@@ -266,7 +288,7 @@ export function Dashboard() {
 
       updateContent(content.id, (current) => withCopy(current, result, result.savedPostId));
       setGenerationCache((current) => ({ ...current, [cacheKey]: result }));
-      if (!result.savedPostId) await persistGeneratedCopy(content.plan, result);
+      if (!result.savedPostId) await persistGeneratedCopy(content, result);
       addLog("generation_completed", "Copy gerada e validada.", {
         source: result.source,
         provider: textProvider,
@@ -302,7 +324,7 @@ export function Dashboard() {
       let generatedPostId = content.generatedPostId;
 
       if (!generatedPostId && content.copy) {
-        generatedPostId = await persistGeneratedCopy(content.plan, content.copy);
+        generatedPostId = await persistGeneratedCopy(content, content.copy);
         if (generatedPostId) {
           updateContent(content.id, (current) => ({ ...current, generatedPostId }));
         }
@@ -369,12 +391,34 @@ export function Dashboard() {
     }
   }
 
-  function handleStatusChange(contentId: string, status: ProductionStatus) {
+  async function handleStatusChange(contentId: string, status: ProductionStatus) {
+    const target = contents.find((content) => content.id === contentId);
     updateContent(contentId, (current) => ({
       ...current,
       status,
       publishedAt: status === "publicado" ? new Date().toISOString() : current.publishedAt
     }));
+
+    if (supabase && target && (target.generatedPostId || target.calendarId)) {
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+      if (user) {
+        try {
+          await updateProductionStatus({
+            userId: user.id,
+            generatedPostId: target.generatedPostId,
+            calendarId: target.calendarId,
+            status
+          });
+          setPersistenceStatus("synced");
+        } catch (error) {
+          setPersistenceStatus("error");
+          addLog("supabase_error", friendlyErrorMessage(error), { context: "update_status" }, "error");
+        }
+      }
+    }
+
     addLog(status === "publicado" ? "content_published" : "content_approved", `Conteúdo marcado como ${status}.`, {
       contentId
     });
@@ -395,7 +439,7 @@ export function Dashboard() {
     setOperationLogs((current) => [log, ...current].slice(0, 30));
   }
 
-  async function persistGeneratedCopy(item: EditorialPlanItem, result: GenerateCopyResult) {
+  async function persistGeneratedCopy(content: ProductionContent, result: GenerateCopyResult) {
     if (!supabase) return null;
     const {
       data: { user }
@@ -404,7 +448,8 @@ export function Dashboard() {
 
     const post = await saveGeneratedPost({
       userId: user.id,
-      item,
+      calendarId: content.calendarId ?? null,
+      item: content.plan,
       title: result.copy.title,
       subtitle: result.copy.subtitle,
       body: result.copy.slides.map((slide) => `${slide.number}. ${slide.title} - ${slide.subtitle}`).join("\n"),
@@ -613,6 +658,23 @@ function withCopy(content: ProductionContent, copy: GenerateCopyResult, generate
     ...next,
     qualityScore: calculateQualityScore(next)
   };
+}
+
+function attachCalendarIds(
+  contents: ProductionContent[],
+  rows: { id: string; date: string; moment_of_day: string; platform: string; format: string; theme: string }[]
+) {
+  return contents.map((content) => {
+    const row = rows.find(
+      (item) =>
+        item.date === content.plan.date &&
+        item.moment_of_day === content.plan.moment &&
+        item.platform === content.plan.platform &&
+        item.format === content.plan.format &&
+        item.theme === content.plan.theme
+    );
+    return row ? { ...content, calendarId: row.id } : content;
+  });
 }
 
 function Metric({ label, value }: { label: string; value: number }) {

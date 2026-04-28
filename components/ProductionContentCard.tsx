@@ -4,9 +4,9 @@ import { CheckCircle2, Clipboard, Download, FileText, ImageDown, RefreshCw, Send
 import { VisualPromptPreview } from "@/components/VisualPromptPreview";
 import {
   buildCaptionTxt,
-  createPlaceholderPng,
   downloadBlob,
-  downloadTextFile
+  downloadTextFile,
+  getSafePngBlob
 } from "@/lib/export-utils";
 import { validateGeneratedContent } from "@/lib/content-validation";
 import { getAverageQualityScore, getQualitySuggestions, needsAdjustment } from "@/lib/quality-score";
@@ -40,21 +40,16 @@ export function ProductionContentCard({
     theme: content.plan.theme,
     repetitionRisk: content.plan.score.repetitionRisk
   });
+  const hasGeneratedImage = content.visualPrompts.some((prompt) => Boolean(prompt.imageUrl));
+  const canApprove = Boolean(copy?.caption && copy.cta && copy.hashtags.length >= 5 && hasGeneratedImage && validation.valid);
 
   async function copyText(text: string) {
     await navigator.clipboard.writeText(text);
   }
 
   async function downloadPng(promptIndex = 0) {
-    const imageUrl = content.visualPrompts[promptIndex]?.imageUrl;
-    if (imageUrl && !isSvgFallback(imageUrl)) {
-      const blob = await fetch(imageUrl).then((response) => response.blob());
-      downloadBlob(`${content.plan.date}-${content.plan.format}-${promptIndex + 1}.png`, blob);
-      return;
-    }
-
-    const blob = await createPlaceholderPng(content, promptIndex);
-    downloadBlob(`${content.plan.date}-${content.plan.format}.png`, blob);
+    const blob = await getSafePngBlob(content, promptIndex);
+    downloadBlob(`${content.plan.date}-${content.plan.format}-${promptIndex + 1}.png`, blob);
   }
 
   return (
@@ -131,17 +126,13 @@ export function ProductionContentCard({
         <ActionButton onClick={() => copyText(content.visualPrompts[0]?.prompt ?? "")} label="Copiar prompt" icon={<Clipboard />} />
         <ActionButton onClick={onRegenerateCopy} label={isGenerating ? "Gerando..." : "Regenerar copy"} icon={<RefreshCw />} />
         <ActionButton onClick={onRegenerateVisual} label="Regenerar prompt visual" icon={<RefreshCw />} />
-        <ActionButton onClick={() => onStatusChange("aprovado")} label="Aprovar" icon={<CheckCircle2 />} />
-        <ActionButton onClick={() => onStatusChange("publicado")} label="Marcar publicado" icon={<Send />} />
+        <ActionButton disabled={!canApprove} onClick={() => onStatusChange("aprovado")} label="Aprovar" icon={<CheckCircle2 />} />
+        <ActionButton disabled={content.status !== "aprovado"} onClick={() => onStatusChange("publicado")} label="Marcar publicado" icon={<Send />} />
         <ActionButton onClick={() => downloadPng(0)} label="Baixar PNG" icon={<ImageDown />} />
         <ActionButton onClick={() => downloadTextFile(`${content.plan.date}-${content.plan.format}.txt`, buildCaptionTxt(content))} label="Legenda TXT" icon={<FileText />} />
       </div>
     </article>
   );
-}
-
-function isSvgFallback(imageUrl: string) {
-  return imageUrl.startsWith("data:image/svg") || imageUrl.includes(".svg");
 }
 
 function QualityChecklist({ content }: { content: ProductionContent }) {
@@ -174,17 +165,20 @@ function Badge({ children }: { children: React.ReactNode }) {
 function ActionButton({
   onClick,
   label,
-  icon
+  icon,
+  disabled = false
 }: {
   onClick: () => void;
   label: string;
   icon: React.ReactElement;
+  disabled?: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-astral-line bg-astral-night px-3 text-sm text-stone-100 transition hover:border-astral-gold hover:text-white"
+      disabled={disabled}
+      className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-astral-line bg-astral-night px-3 text-sm text-stone-100 transition hover:border-astral-gold hover:text-white disabled:cursor-not-allowed disabled:opacity-45"
     >
       {icon}
       {label}
