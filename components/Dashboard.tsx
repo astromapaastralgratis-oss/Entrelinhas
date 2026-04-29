@@ -410,9 +410,9 @@ export function Dashboard() {
 
       const result = await response.json();
       if (!response.ok) {
-        const message = friendlyErrorMessage(result.error ?? "Nao foi possivel gerar o post agora.");
+        const message = "Post ainda nao foi gerado. Clique em Gerar post para tentar novamente.";
         setBudgetMessage(message);
-        addLog("image_error", message, { status: response.status }, "error");
+        addLog("image_error", message, { status: response.status, error: result.error }, "warning");
         return null;
       }
 
@@ -458,6 +458,14 @@ export function Dashboard() {
         cardIndex: result.cardIndex,
         estimatedCost: result.estimatedCost
       });
+      if (result.persistenceWarning) {
+        addLog(
+          "supabase_error",
+          "Post gerado, mas nao consegui salvar no historico.",
+          { warning: result.persistenceWarning, cardIndex: result.cardIndex },
+          "warning"
+        );
+      }
       return finalContent;
     } finally {
       setGeneratingImageKey(null);

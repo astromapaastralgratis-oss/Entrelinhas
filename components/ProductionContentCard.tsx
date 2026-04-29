@@ -32,7 +32,8 @@ export function ProductionContentCard({
     theme: content.plan.theme,
     repetitionRisk: content.plan.score.repetitionRisk
   });
-  const hasGeneratedPost = content.visualPrompts.some((prompt) => Boolean(prompt.imageUrl));
+  const hasGeneratedPost =
+    content.visualPrompts.length > 0 && content.visualPrompts.every((prompt) => Boolean(prompt.imageUrl));
   const canApprove = Boolean(copy?.caption && copy.cta && copy.hashtags.length >= 5 && hasGeneratedPost && validation.valid);
   const missingItems = getMissingApprovalItems(Boolean(copy?.caption), hasGeneratedPost, validation.valid);
   const aiLabel = content.copy?.aiStatus?.label ?? "IA automatica";

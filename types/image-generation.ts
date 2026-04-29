@@ -32,6 +32,8 @@ export type GeneratedImageResult = {
   estimatedCost: number;
   exportStatus: "image_generated" | "failed";
   source: "renderer" | "provider" | "fallback";
+  persistenceStatus?: "saved" | "warning" | "skipped";
+  persistenceWarning?: string;
 };
 
 export type GenerateImagesBatchRequest = {

@@ -64,7 +64,7 @@ export function friendlyErrorMessage(error: unknown) {
     return `Falha no banco ou permissao: ${message}`;
   }
   if (/storage|bucket|upload/i.test(message)) return `Storage indisponivel: ${message}`;
-  if (/image|imagem|PNG/i.test(message)) return "Imagem nao gerada. Tente regenerar apenas esta imagem.";
+  if (/image|imagem|PNG|post/i.test(message)) return "Post ainda nao foi gerado. Clique em Gerar post para tentar novamente.";
   if (/OpenAI|Gemini|IA|provider/i.test(message)) return "IA indisponivel. O app pode continuar com fallback local.";
   if (/content|blocked|bloqueado/i.test(message)) return "Conteudo invalido pelas regras de seguranca. Ajuste ou regenere este item.";
 

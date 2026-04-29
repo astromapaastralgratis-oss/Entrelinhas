@@ -61,30 +61,40 @@ export async function generateImage(input: GenerateImageRequest, options: { clie
   const storagePath = input.userId ? `${input.userId}/${filename}` : filename;
   const estimatedCost = 0;
   let imageUrl = artwork.dataUrl;
+  let finalStoragePath = storagePath;
+  let persistenceStatus: GeneratedImageResult["persistenceStatus"] = options.client && input.userId ? "saved" : "skipped";
+  let persistenceWarning: string | undefined;
 
   if (options.client && input.userId) {
-    imageUrl = await uploadPostArtwork({
-      client: options.client,
-      bucket,
-      storagePath,
-      imageBytes,
-      contentType: artwork.contentType
-    });
-
-    if (input.generatedPostId) {
-      await persistImageRecord(options.client, input, {
+    try {
+      imageUrl = await uploadPostArtwork({
+        client: options.client,
         bucket,
         storagePath,
-        imageUrl,
-        provider,
-        estimatedCost
+        imageBytes,
+        contentType: artwork.contentType
       });
+
+      if (input.generatedPostId) {
+        await persistImageRecord(options.client, input, {
+          bucket,
+          storagePath,
+          imageUrl,
+          provider,
+          estimatedCost
+        });
+      }
+    } catch (error) {
+      persistenceStatus = "warning";
+      persistenceWarning = readablePersistenceError(error);
+      imageUrl = artwork.dataUrl;
+      finalStoragePath = "";
     }
   }
 
   return {
     imageUrl,
-    storagePath,
+    storagePath: finalStoragePath,
     bucket,
     filename,
     format: normalizeFormat(input.format),
@@ -93,7 +103,9 @@ export async function generateImage(input: GenerateImageRequest, options: { clie
     provider,
     estimatedCost,
     exportStatus: "image_generated",
-    source: "renderer"
+    source: "renderer",
+    persistenceStatus,
+    persistenceWarning
   } satisfies GeneratedImageResult;
 }
 
@@ -130,8 +142,7 @@ async function persistImageRecord(
 ) {
   if (!input.userId || !input.generatedPostId) return;
 
-  const { error } = await client.from("generated_post_images").insert({
-    user_id: input.userId,
+  const imageRecord = {
     generated_post_id: input.generatedPostId,
     format: normalizeFormat(input.format),
     ratio: input.ratio,
@@ -143,12 +154,37 @@ async function persistImageRecord(
     negative_prompt: buildFinalNegativePrompt(input),
     provider: result.provider,
     estimated_cost: result.estimatedCost,
-    export_status: "image_generated"
-  });
+    export_status: "image_generated" as const
+  };
 
-  if (error) throw error;
+  const { error: updateExistingError } = await client
+    .from("generated_post_images")
+    .update(imageRecord)
+    .eq("user_id", input.userId)
+    .eq("generated_post_id", input.generatedPostId)
+    .eq("card_index", input.cardIndex ?? 1);
 
-  await client
+  if (updateExistingError) throw updateExistingError;
+
+  const { data: existingRecord, error: existingRecordError } = await client
+    .from("generated_post_images")
+    .select("id")
+    .eq("user_id", input.userId)
+    .eq("generated_post_id", input.generatedPostId)
+    .eq("card_index", input.cardIndex ?? 1)
+    .maybeSingle();
+
+  if (existingRecordError) throw existingRecordError;
+
+  if (!existingRecord) {
+    const { error: insertError } = await client.from("generated_post_images").insert({
+      user_id: input.userId,
+      ...imageRecord
+    });
+    if (insertError) throw insertError;
+  }
+
+  const { error: postUpdateError } = await client
     .from("generated_posts")
     .update({
       image_url: result.imageUrl,
@@ -157,6 +193,8 @@ async function persistImageRecord(
     })
     .eq("id", input.generatedPostId)
     .eq("user_id", input.userId);
+
+  if (postUpdateError) throw postUpdateError;
 }
 
 export function buildImageFilename(input: GenerateImageRequest, _provider: ImageGenerationProvider = "renderer") {
@@ -209,4 +247,15 @@ function asksForForbiddenMultiImageLayout(prompt: string) {
     const prefix = normalized.slice(Math.max(0, index - 8), index);
     return !/(no |sem |nao )$/.test(prefix);
   });
+}
+
+function readablePersistenceError(error: unknown) {
+  if (error instanceof Error) return error.message;
+  if (!error) return "Nao foi possivel salvar o post no historico.";
+  if (typeof error === "string") return error;
+  if (typeof error === "object") {
+    const record = error as Record<string, unknown>;
+    return [record.message, record.code, record.details, record.hint].filter(Boolean).map(String).join(" | ");
+  }
+  return String(error);
 }
