@@ -35,9 +35,10 @@ export function VisualPromptPreview({
         <div className="flex items-center gap-2">
           <ImageIcon className="h-4 w-4 text-astral-violet" />
           <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-violet-200">Imagem</p>
+            <p className="text-xs uppercase tracking-[0.18em] text-violet-200">Post</p>
             <p className="mt-1 text-sm text-stone-300">
-              {prompts.length} arte(s) independente(s). Principal: {firstPrompt.styleName} · {firstPrompt.ratio}
+              {prompts.length} post(s) independente(s). {firstPrompt.styleName} · modo{" "}
+              {firstPrompt.visualMode === "light" ? "claro" : "escuro"} · {firstPrompt.width}x{firstPrompt.height}
             </p>
           </div>
         </div>
@@ -50,7 +51,7 @@ export function VisualPromptPreview({
               className="inline-flex h-9 items-center gap-2 rounded-md border border-astral-line px-3 text-sm text-stone-100 transition hover:border-astral-gold"
             >
               <ImageIcon className="h-4 w-4" />
-              {generatingImageIndex === 0 ? "Gerando..." : firstPrompt.imageUrl ? "Regenerar imagem" : "Gerar imagem"}
+              {generatingImageIndex === 0 ? "Gerando..." : firstPrompt.imageUrl ? "Refazer post" : "Gerar post"}
             </button>
           ) : null}
 
@@ -60,7 +61,7 @@ export function VisualPromptPreview({
               onClick={() => onDownloadImage(0)}
               className="inline-flex h-9 items-center rounded-md border border-astral-line px-3 text-sm text-stone-100 transition hover:border-astral-gold"
             >
-              Baixar imagem
+              Baixar post
             </button>
           ) : null}
 
@@ -78,7 +79,7 @@ export function VisualPromptPreview({
       {firstPrompt.imageUrl ? (
         <div className="mt-3 overflow-hidden rounded-md border border-white/10 bg-black/30">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={firstPrompt.imageUrl} alt="Preview da imagem principal" className="h-80 w-full object-contain" />
+          <img src={firstPrompt.imageUrl} alt="Preview do post principal" className="h-80 w-full object-contain" />
         </div>
       ) : null}
 
@@ -88,7 +89,8 @@ export function VisualPromptPreview({
             <div key={`${prompt.styleName}-${index}`} className="rounded-md border border-white/5 bg-astral-void/45 p-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-sm font-semibold text-stone-50">
-                  {index + 1}. {prompt.styleName} · {prompt.ratio}
+                  {index + 1}. {prompt.styleName} · modo {prompt.visualMode === "light" ? "claro" : "escuro"} ·{" "}
+                  {prompt.ratio}
                 </p>
                 <button
                   type="button"
@@ -96,7 +98,7 @@ export function VisualPromptPreview({
                   className="inline-flex h-8 items-center gap-2 rounded-md border border-astral-line px-2 text-xs text-stone-200 transition hover:border-astral-gold"
                 >
                   <Copy className="h-3.5 w-3.5" />
-                  {copiedIndex === index ? "Copiado" : "Copiar estilo"}
+                  {copiedIndex === index ? "Copiado" : "Copiar direcao"}
                 </button>
               </div>
 
@@ -109,7 +111,18 @@ export function VisualPromptPreview({
                 ))}
               </div>
 
-              <p className="mt-3 line-clamp-3 text-xs leading-5 text-stone-300">{prompt.prompt}</p>
+              <div className="mt-3 grid gap-2 text-xs text-stone-300 sm:grid-cols-3">
+                <p>Formato final: {prompt.width}x{prompt.height}</p>
+                <p>Area segura: {prompt.safeArea ? "sim" : "revisar"}</p>
+                <p>{prompt.isPostReady ? "Arte pronta para post" : "Precisa ajuste"}</p>
+              </div>
+              {prompt.validationNotes.length ? (
+                <ul className="mt-2 list-inside list-disc text-xs text-astral-rose">
+                  {prompt.validationNotes.map((note) => (
+                    <li key={note}>{note}</li>
+                  ))}
+                </ul>
+              ) : null}
             </div>
           ))}
         </div>

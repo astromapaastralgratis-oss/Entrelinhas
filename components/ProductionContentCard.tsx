@@ -32,9 +32,9 @@ export function ProductionContentCard({
     theme: content.plan.theme,
     repetitionRisk: content.plan.score.repetitionRisk
   });
-  const hasGeneratedImage = content.visualPrompts.some((prompt) => Boolean(prompt.imageUrl));
-  const canApprove = Boolean(copy?.caption && copy.cta && copy.hashtags.length >= 5 && hasGeneratedImage && validation.valid);
-  const missingItems = getMissingApprovalItems(Boolean(copy?.caption), hasGeneratedImage, validation.valid);
+  const hasGeneratedPost = content.visualPrompts.some((prompt) => Boolean(prompt.imageUrl));
+  const canApprove = Boolean(copy?.caption && copy.cta && copy.hashtags.length >= 5 && hasGeneratedPost && validation.valid);
+  const missingItems = getMissingApprovalItems(Boolean(copy?.caption), hasGeneratedPost, validation.valid);
   const aiLabel = content.copy?.aiStatus?.label ?? "IA automatica";
   const previewText = copy?.subtitle ?? content.plan.strategicReason;
 
@@ -42,7 +42,7 @@ export function ProductionContentCard({
     await navigator.clipboard.writeText(text);
   }
 
-  async function downloadPng(promptIndex = 0) {
+  async function downloadPost(promptIndex = 0) {
     const blob = await getSafePngBlob(content, promptIndex);
     downloadBlob(`${content.plan.date}-${content.plan.format}-${promptIndex + 1}.png`, blob);
   }
@@ -59,11 +59,11 @@ export function ProductionContentCard({
           <div className="mt-4 overflow-hidden rounded-md border border-white/10 bg-black/30">
             {content.visualPrompts[0]?.imageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={content.visualPrompts[0].imageUrl} alt="Imagem do conteudo" className="h-72 w-full object-contain" />
+              <img src={content.visualPrompts[0].imageUrl} alt="Post final do conteudo" className="h-72 w-full object-contain" />
             ) : (
               <div className="flex h-72 flex-col items-center justify-center px-6 text-center text-stone-500">
                 <ImageDown className="h-8 w-8 text-astral-violet" />
-                <p className="mt-3 text-sm">Imagem ainda nao gerada</p>
+                <p className="mt-3 text-sm">Post ainda nao gerado</p>
               </div>
             )}
           </div>
@@ -71,10 +71,10 @@ export function ProductionContentCard({
           <div className="mt-3 grid gap-2">
             <ActionButton
               onClick={() => onGenerateImage(0)}
-              label={generatingImageIndex === 0 ? "Gerando imagem..." : hasGeneratedImage ? "Refazer imagem" : "Gerar imagem"}
+              label={generatingImageIndex === 0 ? "Gerando post..." : hasGeneratedPost ? "Refazer post" : "Gerar post"}
               icon={<ImageDown />}
             />
-            {hasGeneratedImage ? <ActionButton onClick={() => downloadPng(0)} label="Baixar" icon={<Download />} /> : null}
+            {hasGeneratedPost ? <ActionButton onClick={() => downloadPost(0)} label="Baixar post" icon={<Download />} /> : null}
           </div>
         </div>
 
@@ -132,16 +132,16 @@ export function ProductionContentCard({
           </details>
 
           <details className="mt-3 rounded-md border border-astral-line bg-astral-void/35 p-3 text-sm">
-            <summary className="cursor-pointer text-stone-200">Estilo da imagem</summary>
+            <summary className="cursor-pointer text-stone-200">Estilo do post</summary>
             <VisualPromptPreview
               prompts={content.visualPrompts}
               generatingImageIndex={generatingImageIndex}
               onGenerateImage={onGenerateImage}
-              onDownloadImage={(index) => downloadPng(index)}
+              onDownloadImage={(index) => downloadPost(index)}
             />
             <button type="button" onClick={onRegenerateVisual} className="mt-3 toolbar-button">
               <RefreshCw className="h-4 w-4" />
-              Refazer estilo da imagem
+              Refazer estilo do post
             </button>
           </details>
 
@@ -165,7 +165,7 @@ export function ProductionContentCard({
 function getMissingApprovalItems(hasCaption: boolean, hasImage: boolean, isValid: boolean) {
   const items: string[] = [];
   if (!hasCaption) items.push("gerar ou revisar legenda");
-  if (!hasImage) items.push("gerar imagem");
+  if (!hasImage) items.push("gerar post");
   if (!isValid) items.push("corrigir texto sinalizado");
   return items.length ? items : ["revisar conteudo"];
 }
@@ -185,8 +185,8 @@ function friendlyStatus(status: ProductionStatus) {
   const labels: Record<ProductionStatus, string> = {
     planejado: "Planejado",
     "copy gerada": "Texto gerado",
-    "imagem pendente": "Imagem pendente",
-    "imagem gerada": "Imagem gerada",
+    "imagem pendente": "Post pendente",
+    "imagem gerada": "Post gerado",
     "precisa ajuste": "Precisa ajuste",
     aprovado: "Aprovado",
     publicado: "Publicado"

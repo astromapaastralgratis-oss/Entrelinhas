@@ -12,7 +12,7 @@ const absolutePredictionPattern =
 const psychologicalDiagnosisPattern =
   /\b(voc[eê] tem ansiedade|voc[eê] tem depress[aã]o|seu trauma|diagn[oó]stico|transtorno|borderline|bipolar)\b/i;
 const genericCopyPattern =
-  /\b(conteúdo incrível|não perca|imperdível|confira agora|acesse já|melhor conteúdo|transforme sua vida hoje)\b/i;
+  /\b(conte[uú]do incr[ií]vel|n[aã]o perca|imperd[ií]vel|confira agora|acesse j[aá]|melhor conte[uú]do|transforme sua vida hoje)\b/i;
 
 export function validateGeneratedContent(input: GeneratedContentValidationInput): GeneratedContentValidationResult {
   const copy = input.copy;
@@ -38,7 +38,10 @@ export function validateGeneratedContent(input: GeneratedContentValidationInput)
     noPsychologicalDiagnosis: !psychologicalDiagnosisPattern.test(text),
     noGenericCopy: !genericCopyPattern.test(text),
     noRepeatedTheme: !isRepeatedTheme(input),
-    visualPromptHasRatio: Boolean(input.visualPrompts?.length ? input.visualPrompts.every((prompt) => Boolean(prompt.ratio)) : true)
+    visualPromptHasRatio: Boolean(input.visualPrompts?.length ? input.visualPrompts.every((prompt) => Boolean(prompt.ratio)) : true),
+    visualPostReady: Boolean(
+      input.visualPrompts?.length ? input.visualPrompts.every((prompt) => prompt.isPostReady !== false && !prompt.validationNotes?.length) : true
+    )
   };
 
   const errors = Object.entries(checks)
@@ -53,7 +56,8 @@ export function validateGeneratedContent(input: GeneratedContentValidationInput)
     "noAbsolutePrediction",
     "noPsychologicalDiagnosis",
     "noGenericCopy",
-    "visualPromptHasRatio"
+    "visualPromptHasRatio",
+    "visualPostReady"
   ];
   const blocked = blockingKeys.some((key) => !checks[key]);
 
@@ -69,7 +73,7 @@ export function validateGeneratedContent(input: GeneratedContentValidationInput)
 export function assertValidGeneratedContent(input: GeneratedContentValidationInput) {
   const result = validateGeneratedContent(input);
   if (result.blocked) {
-    throw new Error(`Conteúdo gerado bloqueado: ${result.errors.join(" ")}`);
+    throw new Error(`Conteudo gerado bloqueado: ${result.errors.join(" ")}`);
   }
   return result;
 }
@@ -86,17 +90,18 @@ function wordCount(text?: string) {
 }
 
 const validationMessages: Record<keyof GeneratedContentValidationChecks, string> = {
-  titleWordCount: "Título excede 12 palavras.",
-  subtitleWordCount: "Subtítulo excede 18 palavras.",
-  hasCTA: "CTA ausente.",
-  hasCaption: "Legenda ausente.",
-  hasHashtags: "Hashtags ausentes.",
-  noMedicalPromise: "Conteúdo contém promessa médica ou terapêutica.",
-  noAbsolutePrediction: "Conteúdo contém previsão absoluta ou promessa garantida.",
-  noPsychologicalDiagnosis: "Conteúdo parece diagnóstico psicológico.",
-  noGenericCopy: "Copy genérica bloqueada.",
-  noRepeatedTheme: "Tema repetitivo sinalizado pelo histórico.",
-  visualPromptHasRatio: "Prompt visual sem proporção."
+  titleWordCount: "Titulo muito longo.",
+  subtitleWordCount: "Subtitulo muito longo.",
+  hasCTA: "Chamada para acao ausente.",
+  hasCaption: "Falta legenda.",
+  hasHashtags: "Faltam hashtags.",
+  noMedicalPromise: "Conteudo contem promessa medica ou terapeutica.",
+  noAbsolutePrediction: "Conteudo contem previsao absoluta ou promessa garantida.",
+  noPsychologicalDiagnosis: "Conteudo parece diagnostico psicologico.",
+  noGenericCopy: "Texto generico bloqueado.",
+  noRepeatedTheme: "Tema repetitivo sinalizado pelo historico.",
+  visualPromptHasRatio: "Estilo do post sem proporcao.",
+  visualPostReady: "Este post ainda precisa de ajuste antes de publicar."
 };
 
 const blockingMessages = new Set([
@@ -107,5 +112,6 @@ const blockingMessages = new Set([
   validationMessages.noAbsolutePrediction,
   validationMessages.noPsychologicalDiagnosis,
   validationMessages.noGenericCopy,
-  validationMessages.visualPromptHasRatio
+  validationMessages.visualPromptHasRatio,
+  validationMessages.visualPostReady
 ]);

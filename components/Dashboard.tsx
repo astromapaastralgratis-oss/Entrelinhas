@@ -383,7 +383,7 @@ export function Dashboard() {
 
       const result = await response.json();
       if (!response.ok) {
-        const message = friendlyErrorMessage(result.error ?? "Nao foi possivel gerar a imagem agora.");
+        const message = friendlyErrorMessage(result.error ?? "Nao foi possivel gerar o post agora.");
         setBudgetMessage(message);
         addLog("image_error", message, { status: response.status }, "error");
         return;
@@ -404,7 +404,7 @@ export function Dashboard() {
         const next = { ...current, visualPrompts, status: "imagem gerada" as const };
         return { ...next, qualityScore: calculateQualityScore(next) };
       });
-      addLog("generation_completed", "PNG individual gerado.", {
+      addLog("generation_completed", "Post individual gerado.", {
         format: result.format,
         cardIndex: result.cardIndex,
         estimatedCost: result.estimatedCost

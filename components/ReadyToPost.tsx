@@ -21,7 +21,7 @@ export function ReadyToPost({ contents, onStatusChange }: ReadyToPostProps) {
     await navigator.clipboard.writeText(text);
   }
 
-  async function downloadPng(content: ProductionContent, promptIndex = 0) {
+  async function downloadPost(content: ProductionContent, promptIndex = 0) {
     const blob = await getSafePngBlob(content, promptIndex);
     downloadBlob(`${content.plan.date}-${content.plan.format}-${promptIndex + 1}.png`, blob);
   }
@@ -29,16 +29,17 @@ export function ReadyToPost({ contents, onStatusChange }: ReadyToPostProps) {
   return (
     <section className="space-y-4">
       <div className="rounded-lg border border-astral-line bg-astral-panel/86 p-5 shadow-astral">
-        <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">Operação assistida</p>
+        <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">Operacao assistida</p>
         <h1 className="mt-2 text-2xl font-semibold text-stone-50 md:text-3xl">Pronto para postar</h1>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-stone-300">
-          Conteúdos aprovados, com imagem, legenda, hashtags, CTA e comentário fixado em uma fila simples para publicação manual.
+          Conteudos aprovados, com post final, legenda, hashtags, chamada para acao e comentario fixado em uma fila
+          simples para publicacao manual.
         </p>
       </div>
 
       {approved.length === 0 ? (
         <div className="rounded-lg border border-astral-line bg-astral-panel/72 p-5 text-sm text-stone-300">
-          Nenhum conteúdo aprovado ainda. Gere copy, gere imagem, revise e clique em Aprovar.
+          Nenhum conteudo aprovado ainda. Gere o texto, gere o post, revise e clique em Aprovar.
         </div>
       ) : (
         approved.map((content) => (
@@ -47,10 +48,10 @@ export function ReadyToPost({ contents, onStatusChange }: ReadyToPostProps) {
               <div className="overflow-hidden rounded-md border border-white/10 bg-black/30">
                 {content.visualPrompts[0]?.imageUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={content.visualPrompts[0].imageUrl} alt={`Imagem ${content.plan.theme}`} className="h-72 w-full object-contain" />
+                  <img src={content.visualPrompts[0].imageUrl} alt={`Post ${content.plan.theme}`} className="h-72 w-full object-contain" />
                 ) : (
                   <div className="flex h-72 items-center justify-center px-4 text-center text-sm text-stone-500">
-                    PNG ainda não gerado. O download usará placeholder.
+                    Post ainda nao gerado. O download usara uma arte de seguranca.
                   </div>
                 )}
               </div>
@@ -64,11 +65,11 @@ export function ReadyToPost({ contents, onStatusChange }: ReadyToPostProps) {
                 <h2 className="mt-3 text-lg font-semibold text-stone-50">{content.copy?.copy.title ?? content.plan.theme}</h2>
                 <p className="mt-3 whitespace-pre-line text-sm leading-6 text-stone-300">{content.copy?.copy.caption}</p>
                 <p className="mt-3 text-xs text-astral-gold">{content.copy?.copy.hashtags.join(" ")}</p>
-                <p className="mt-2 text-sm text-stone-200">CTA: {content.copy?.copy.cta}</p>
-                <p className="mt-1 text-sm text-stone-400">Comentário fixado: {content.copy?.copy.pinnedComment}</p>
+                <p className="mt-2 text-sm text-stone-200">Chamada para acao: {content.copy?.copy.cta}</p>
+                <p className="mt-1 text-sm text-stone-400">Comentario fixado: {content.copy?.copy.pinnedComment}</p>
 
                 <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-                  <ActionButton onClick={() => downloadPng(content)} label="Baixar PNG" icon={<ImageDown />} />
+                  <ActionButton onClick={() => downloadPost(content)} label="Baixar post" icon={<ImageDown />} />
                   <ActionButton onClick={() => copyText(buildCaptionTxt(content))} label="Copiar legenda" icon={<Clipboard />} />
                   <ActionButton onClick={() => copyText(content.copy?.copy.hashtags.join(" ") ?? "")} label="Copiar hashtags" icon={<Clipboard />} />
                   <ActionButton onClick={() => onStatusChange(content.id, "publicado")} label="Publicado" icon={<Send />} />
@@ -86,15 +87,7 @@ function Badge({ children }: { children: React.ReactNode }) {
   return <span className="rounded border border-astral-violet/25 bg-astral-violet/10 px-2 py-1 text-violet-200">{children}</span>;
 }
 
-function ActionButton({
-  onClick,
-  label,
-  icon
-}: {
-  onClick: () => void;
-  label: string;
-  icon: React.ReactElement;
-}) {
+function ActionButton({ onClick, label, icon }: { onClick: () => void; label: string; icon: React.ReactElement }) {
   return (
     <button
       type="button"

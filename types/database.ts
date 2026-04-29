@@ -65,7 +65,7 @@ export type GeneratedPostImageRow = {
   user_id: string;
   generated_post_id: string;
   format: EditorialFormat;
-  ratio: "1:1" | "9:16";
+  ratio: "1:1" | "4:5" | "9:16";
   card_index: number;
   bucket: string;
   storage_path: string;

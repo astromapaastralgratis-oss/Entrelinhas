@@ -22,6 +22,7 @@ export type GeneratedContentValidationChecks = {
   noGenericCopy: boolean;
   noRepeatedTheme: boolean;
   visualPromptHasRatio: boolean;
+  visualPostReady: boolean;
 };
 
 export type GeneratedContentValidationResult = {

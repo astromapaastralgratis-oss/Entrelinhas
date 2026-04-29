@@ -38,7 +38,8 @@ describe("validateGeneratedContent", () => {
       noPsychologicalDiagnosis: true,
       noGenericCopy: true,
       noRepeatedTheme: true,
-      visualPromptHasRatio: true
+      visualPromptHasRatio: true,
+      visualPostReady: true
     });
   });
 
@@ -52,8 +53,8 @@ describe("validateGeneratedContent", () => {
     });
 
     expect(result.blocked).toBe(true);
-    expect(result.errors).toContain("Título excede 12 palavras.");
-    expect(result.errors).toContain("Subtítulo excede 18 palavras.");
+    expect(result.errors).toContain("Titulo muito longo.");
+    expect(result.errors).toContain("Subtitulo muito longo.");
   });
 
   it("blocks medical promises and absolute predictions", () => {

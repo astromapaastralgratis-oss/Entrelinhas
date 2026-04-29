@@ -1,7 +1,7 @@
 import type { EditorialFormat, EditorialScienceBase } from "@/types/content";
 import type { VisualRatio } from "@/types/visual";
 
-export type ImageGenerationProvider = "openai" | "ideogram" | "leonardo" | "replicate" | "canva" | "fallback";
+export type ImageGenerationProvider = "renderer" | "openai" | "ideogram" | "leonardo" | "replicate" | "canva" | "fallback";
 
 export type GenerateImageRequest = {
   generatedPostId?: string;
@@ -31,7 +31,7 @@ export type GeneratedImageResult = {
   provider: ImageGenerationProvider;
   estimatedCost: number;
   exportStatus: "image_generated" | "failed";
-  source: "provider" | "fallback";
+  source: "renderer" | "provider" | "fallback";
 };
 
 export type GenerateImagesBatchRequest = {

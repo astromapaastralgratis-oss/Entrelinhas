@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { generateVisualPrompt, generateVisualPromptsForContent, getRatioForFormat, getVisualStyle } from "../../lib/visual-prompts";
+import {
+  generateVisualPrompt,
+  generateVisualPromptsForContent,
+  getRatioForFormat,
+  getVisualStyle,
+  selectPostVisualStyle
+} from "../../lib/visual-prompts";
 import type { EditorialPlanItem } from "../../types/content";
 import type { GeneratedCopy } from "../../types/copy";
 
@@ -10,7 +16,7 @@ const planItem: EditorialPlanItem = {
   format: "carrossel",
   objective: "educar",
   scienceBase: "astrologia",
-  theme: "astrologia educativa: decisão prática",
+  theme: "astrologia educativa: decisao pratica",
   hookType: "microensinamento",
   ctaType: "salvar",
   strategicReason: "Carrossel educativo com alto potencial de salvamento.",
@@ -27,55 +33,59 @@ const planItem: EditorialPlanItem = {
 
 const copy: GeneratedCopy = {
   title: "Hoje sua energia pede pausa",
-  subtitle: "Nem toda urgência merece sua entrega",
+  subtitle: "Nem toda urgencia merece sua entrega",
   slides: [
-    { number: 1, title: "Pausa antes da resposta", subtitle: "Nem toda urgência merece sua entrega", visualCue: "lua" },
-    { number: 2, title: "Observe o corpo", subtitle: "A tensão mostra onde simplificar", visualCue: "aura" },
-    { number: 3, title: "Escolha uma ação", subtitle: "Um passo pequeno já muda o ritmo", visualCue: "estrela" }
+    { number: 1, title: "Pausa antes da resposta", subtitle: "Nem toda urgencia merece sua entrega", visualCue: "lua" },
+    { number: 2, title: "Observe o corpo", subtitle: "A tensao mostra onde simplificar", visualCue: "aura" },
+    { number: 3, title: "Escolha uma acao", subtitle: "Um passo pequeno ja muda o ritmo", visualCue: "estrela" }
   ],
   caption: "Legenda",
   hashtags: ["#AstralPessoal", "#Autoconhecimento", "#Astrologia", "#ClarezaEmocional", "#EnergiaDoDia"],
   cta: "Salve para consultar depois",
   pinnedComment: "Qual sinal apareceu?",
   qualityNotes: {
-    scrollStop: "Título curto.",
+    scrollStop: "Titulo curto.",
     identification: "Tema emocional.",
     action: "CTA claro."
   }
 };
 
 describe("visual prompts", () => {
-  it("uses the correct ratio by format", () => {
-    expect(getRatioForFormat("feed")).toBe("1:1");
-    expect(getRatioForFormat("carrossel")).toBe("1:1");
+  it("uses post-ready ratios by format", () => {
+    expect(getRatioForFormat("feed")).toBe("4:5");
+    expect(getRatioForFormat("feed", true)).toBe("1:1");
+    expect(getRatioForFormat("carrossel")).toBe("4:5");
     expect(getRatioForFormat("stories")).toBe("9:16");
     expect(getRatioForFormat("reels")).toBe("9:16");
     expect(getRatioForFormat("tiktok")).toBe("9:16");
   });
 
-  it("generates one independent prompt for each carousel card", () => {
+  it("generates independent carousel cards without mixing styles", () => {
     const prompts = generateVisualPromptsForContent(planItem, copy);
 
     expect(prompts).toHaveLength(3);
-    expect(new Set(prompts.map((prompt) => prompt.styleName)).size).toBeGreaterThan(1);
+    expect(new Set(prompts.map((prompt) => prompt.styleName)).size).toBe(1);
+    expect(new Set(prompts.map((prompt) => prompt.visualMode)).size).toBe(1);
     prompts.forEach((prompt) => {
-      expect(prompt.ratio).toBe("1:1");
+      expect(prompt.ratio).toBe("4:5");
+      expect(prompt.width).toBe(1080);
+      expect(prompt.height).toBe(1350);
       expect(prompt.safeArea).toBe(true);
-      expect(prompt.prompt).toContain("one single independent social media image");
-      expect(prompt.prompt).toContain("no multiple slides in one image");
-      expect(prompt.negativePrompt).toContain("grid");
-      expect(prompt.negativePrompt).toContain("multiple cards");
+      expect(prompt.prompt).toContain("Arte final postavel");
+      expect(prompt.prompt).toContain("Texto sera renderizado pelo sistema");
+      expect(prompt.prompt).toContain("sem grid");
+      expect(prompt.negativePrompt).toContain("multiplos cards");
     });
   });
 
-  it("creates a mobile-first prompt with safe text limits", () => {
+  it("creates a mobile-first post direction with safe text limits", () => {
     const style = getVisualStyle(0, "stories");
     const prompt = generateVisualPrompt(
       {
         format: "stories",
         ratio: "9:16",
         title: "Hoje sua energia pede pausa antes de decidir qualquer coisa",
-        subtitle: "Nem toda urgência merece sua entrega completa neste momento",
+        subtitle: "Nem toda urgencia merece sua entrega completa neste momento",
         cta: "Acesse o link na bio agora",
         scienceBase: "energia emocional",
         style: "premium cosmic dark"
@@ -85,8 +95,17 @@ describe("visual prompts", () => {
 
     expect(prompt.textBlocks.find((block) => block.type === "title")?.text.split(/\s+/).length).toBeLessThanOrEqual(12);
     expect(prompt.textBlocks.find((block) => block.type === "subtitle")?.text.split(/\s+/).length).toBeLessThanOrEqual(18);
-    expect(prompt.prompt).toContain("high contrast");
-    expect(prompt.prompt).toContain("safe margins");
+    expect(prompt.prompt).toContain("leitura perfeita no celular");
+    expect(prompt.prompt).toContain("margens");
+  });
+
+  it("selects the correct visual style by content strategy", () => {
+    expect(selectPostVisualStyle({ ...planItem, scienceBase: "tarot" }).name).toBe("Tarot Premium");
+    expect(selectPostVisualStyle({ ...planItem, scienceBase: "numerologia" }).name).toBe("Numerology Editorial Light");
+    expect(selectPostVisualStyle({ ...planItem, scienceBase: "astrologia", objective: "autoridade" }).name).toBe(
+      "Elegant Astro Light"
+    );
+    expect(selectPostVisualStyle({ ...planItem, scienceBase: "energia emocional" }).name).toBe("Cosmic Gold Dark");
   });
 
   it("rejects visual prompts without ratio", () => {
@@ -98,13 +117,13 @@ describe("visual prompts", () => {
           format: "stories",
           ratio: "" as never,
           title: "Energia do dia",
-          subtitle: "Uma direção simples",
+          subtitle: "Uma direcao simples",
           cta: "Comente",
           scienceBase: "energia emocional",
           style: "premium cosmic dark"
         },
         style
       )
-    ).toThrow("Prompt visual rejeitado");
+    ).toThrow("Estilo do post rejeitado");
   });
 });
