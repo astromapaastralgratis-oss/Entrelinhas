@@ -37,7 +37,7 @@ export function ProductionToolbar({
           <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">Gerar, revisar, baixar</p>
           <h1 className="mt-2 text-3xl font-semibold text-stone-50 md:text-4xl">Conteudos de Hoje</h1>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-300">
-            Crie o plano, texto, legenda e hashtags do dia em um clique. Depois gere as imagens e baixe para postar.
+            Crie textos, posts finais, legendas e hashtags do dia em um clique. Depois revise e baixe para postar.
           </p>
         </div>
 
@@ -49,7 +49,7 @@ export function ProductionToolbar({
             type="button"
           >
             <Wand2 className="h-5 w-5" />
-            {isGenerating ? "Gerando com IA automatica..." : "Gerar conteudos de hoje"}
+            {isGenerating ? "Gerando textos e posts..." : "Gerar conteudos de hoje"}
           </button>
           <button
             onClick={onGenerateWeek}

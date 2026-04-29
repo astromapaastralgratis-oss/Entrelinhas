@@ -181,8 +181,12 @@ export function Dashboard() {
       }
 
       for (const content of nextContents) {
-        await generateCopyForContent(content);
+        const contentWithCopy = await generateCopyForContent(content);
+        if (contentWithCopy) {
+          await generatePostsForContent(contentWithCopy);
+        }
       }
+      addLog("generation_completed", "Conteudos e posts do dia prontos para revisao.", { count: nextContents.length });
     } finally {
       setIsGeneratingDay(false);
     }
@@ -241,10 +245,11 @@ export function Dashboard() {
   }
 
   async function handleRegenerateCopy(content: ProductionContent) {
-    await generateCopyForContent(content);
+    const contentWithCopy = await generateCopyForContent(content);
+    if (contentWithCopy) await generatePostsForContent(contentWithCopy);
   }
 
-  async function generateCopyForContent(content: ProductionContent) {
+  async function generateCopyForContent(content: ProductionContent): Promise<ProductionContent | null> {
     setGeneratingKey(content.id);
     setBudgetMessage(null);
     addLog("generation_started", "Geracao de texto iniciada.", {
@@ -257,8 +262,9 @@ export function Dashboard() {
       const cachedCopy = generationCache[cacheKey];
 
       if (cachedCopy) {
+        const nextContent = withCopy(content, { ...cachedCopy, cost: { ...cachedCopy.cost, cached: true } });
         updateContent(content.id, (current) => withCopy(current, { ...cachedCopy, cost: { ...cachedCopy.cost, cached: true } }));
-        return;
+        return nextContent;
       }
 
       const budgetDecision = decideBudget({
@@ -272,7 +278,7 @@ export function Dashboard() {
         const message = friendlyErrorMessage(budgetDecision.reason ?? "Limite de custo atingido.");
         setBudgetMessage(message);
         addLog("estimated_cost", message, { projectedTokens: budgetDecision.projectedTokens }, "warning");
-        return;
+        return null;
       }
 
       const session = supabase ? await supabase.auth.getSession() : null;
@@ -300,12 +306,13 @@ export function Dashboard() {
         );
         setBudgetMessage(message);
         addLog("ai_error", message, { status: response.status }, "error");
-        return;
+        return null;
       }
 
-      updateContent(content.id, (current) => withCopy(current, result, result.savedPostId));
+      const savedPostId = result.savedPostId ?? (await persistGeneratedCopy(content, result));
+      const nextContent = withCopy(content, result, savedPostId);
+      updateContent(content.id, (current) => withCopy(current, result, savedPostId));
       setGenerationCache((current) => ({ ...current, [cacheKey]: result }));
-      if (!result.savedPostId) await persistGeneratedCopy(content, result);
       addLog(
         "generation_completed",
         result.cost.fallbackUsed
@@ -318,6 +325,7 @@ export function Dashboard() {
         }
       );
       addLog("estimated_cost", "Custo estimado registrado.", { estimatedCost: result.cost.estimatedCost });
+      return nextContent;
     } finally {
       setGeneratingKey(null);
     }
@@ -336,9 +344,27 @@ export function Dashboard() {
     });
   }
 
+  async function generatePostsForContent(content: ProductionContent): Promise<ProductionContent> {
+    let nextContent = content;
+    for (let index = 0; index < nextContent.visualPrompts.length; index += 1) {
+      if (nextContent.visualPrompts[index]?.imageUrl) continue;
+      const generated = await generatePostForPrompt(nextContent, index, { automatic: true });
+      if (generated) nextContent = generated;
+    }
+    return nextContent;
+  }
+
   async function handleGenerateImage(content: ProductionContent, promptIndex: number) {
+    await generatePostForPrompt(content, promptIndex);
+  }
+
+  async function generatePostForPrompt(
+    content: ProductionContent,
+    promptIndex: number,
+    options: { automatic?: boolean } = {}
+  ): Promise<ProductionContent | null> {
     const prompt = content.visualPrompts[promptIndex];
-    if (!prompt) return;
+    if (!prompt) return null;
 
     setGeneratingImageKey(`${content.id}-${promptIndex}`);
     setBudgetMessage(null);
@@ -350,6 +376,7 @@ export function Dashboard() {
         generatedPostId = await persistGeneratedCopy(content, content.copy);
         if (generatedPostId) {
           updateContent(content.id, (current) => ({ ...current, generatedPostId }));
+          content = { ...content, generatedPostId };
         }
       }
 
@@ -386,9 +413,10 @@ export function Dashboard() {
         const message = friendlyErrorMessage(result.error ?? "Nao foi possivel gerar o post agora.");
         setBudgetMessage(message);
         addLog("image_error", message, { status: response.status }, "error");
-        return;
+        return null;
       }
 
+      let updatedContent: ProductionContent | null = null;
       updateContent(content.id, (current) => {
         const visualPrompts = current.visualPrompts.map((item, index) =>
           index === promptIndex
@@ -402,13 +430,35 @@ export function Dashboard() {
             : item
         );
         const next = { ...current, visualPrompts, status: "imagem gerada" as const };
-        return { ...next, qualityScore: calculateQualityScore(next) };
+        updatedContent = { ...next, qualityScore: calculateQualityScore(next) };
+        return updatedContent;
       });
-      addLog("generation_completed", "Post individual gerado.", {
+      const nextVisualPrompts = content.visualPrompts.map((item, index) =>
+        index === promptIndex
+          ? {
+              ...item,
+              imageUrl: result.imageUrl,
+              storagePath: result.storagePath,
+              exportStatus: result.exportStatus,
+              estimatedCost: result.estimatedCost
+            }
+          : item
+      );
+      const fallbackUpdatedContent = {
+        ...content,
+        visualPrompts: nextVisualPrompts,
+        status: "imagem gerada" as const
+      };
+      const finalContent = updatedContent ?? {
+        ...fallbackUpdatedContent,
+        qualityScore: calculateQualityScore(fallbackUpdatedContent)
+      };
+      addLog("generation_completed", options.automatic ? "Post gerado automaticamente." : "Post individual gerado.", {
         format: result.format,
         cardIndex: result.cardIndex,
         estimatedCost: result.estimatedCost
       });
+      return finalContent;
     } finally {
       setGeneratingImageKey(null);
     }
@@ -586,8 +636,8 @@ export function Dashboard() {
                 <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">IA automatica</p>
                 <p className="mt-2 text-sm text-stone-400">
                   {isGeneratingDay
-                    ? "Gerando com IA automatica..."
-                    : budgetMessage ?? "Gerado com melhor IA disponivel quando voce refaz ou cria textos."}
+                    ? "Gerando textos e posts com IA automatica..."
+                    : budgetMessage ?? "Conteudos e posts prontos para revisar quando voce gerar o dia."}
                 </p>
               </section>
 
