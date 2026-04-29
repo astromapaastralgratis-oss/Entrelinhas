@@ -2,14 +2,8 @@
 
 import { CheckCircle2, Clipboard, Download, FileText, ImageDown, RefreshCw, Send } from "lucide-react";
 import { VisualPromptPreview } from "@/components/VisualPromptPreview";
-import {
-  buildCaptionTxt,
-  downloadBlob,
-  downloadTextFile,
-  getSafePngBlob
-} from "@/lib/export-utils";
+import { buildCaptionTxt, downloadBlob, downloadTextFile, getSafePngBlob } from "@/lib/export-utils";
 import { validateGeneratedContent } from "@/lib/content-validation";
-import { getAverageQualityScore, getQualitySuggestions, needsAdjustment } from "@/lib/quality-score";
 import type { ProductionContent, ProductionStatus } from "@/types/production";
 
 type ProductionContentCardProps = {
@@ -32,8 +26,6 @@ export function ProductionContentCard({
   onStatusChange
 }: ProductionContentCardProps) {
   const copy = content.copy?.copy;
-  const qualityAverage = getAverageQualityScore(content.qualityScore);
-  const needsFix = needsAdjustment(content.qualityScore);
   const validation = validateGeneratedContent({
     copy,
     visualPrompts: content.visualPrompts,
@@ -42,7 +34,9 @@ export function ProductionContentCard({
   });
   const hasGeneratedImage = content.visualPrompts.some((prompt) => Boolean(prompt.imageUrl));
   const canApprove = Boolean(copy?.caption && copy.cta && copy.hashtags.length >= 5 && hasGeneratedImage && validation.valid);
-  const aiLabel = content.copy?.aiStatus?.label ?? "IA automática";
+  const missingItems = getMissingApprovalItems(Boolean(copy?.caption), hasGeneratedImage, validation.valid);
+  const aiLabel = content.copy?.aiStatus?.label ?? "IA automatica";
+  const previewText = copy?.subtitle ?? content.plan.strategicReason;
 
   async function copyText(text: string) {
     await navigator.clipboard.writeText(text);
@@ -54,117 +48,150 @@ export function ProductionContentCard({
   }
 
   return (
-    <article className="rounded-lg border border-astral-line bg-[#151520]/92 p-4">
-      <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+    <article className="rounded-lg border border-astral-line bg-[#151520]/92 p-4 shadow-astral">
+      <div className="grid gap-5 xl:grid-cols-[320px_minmax(0,1fr)]">
         <div>
           <div className="flex flex-wrap gap-2 text-xs">
             <Badge>{content.plan.moment}</Badge>
-            <Badge>{content.plan.format}</Badge>
-            <Badge>{content.plan.objective}</Badge>
-            <Badge>{content.plan.scienceBase}</Badge>
+            <Badge>{friendlyFormat(content.plan.format)}</Badge>
           </div>
-          <h3 className="mt-3 text-lg font-semibold text-stone-50">{content.plan.theme}</h3>
-          <p className="mt-2 text-sm leading-6 text-stone-400">{content.plan.strategicReason}</p>
-        </div>
-        <div className="rounded-md border border-astral-gold/30 bg-astral-gold/10 px-3 py-2 text-right">
-          <p className="text-xs uppercase tracking-[0.16em] text-astral-gold">Status</p>
-          <p className="mt-1 text-sm font-semibold text-stone-50">{content.status}</p>
-        </div>
-      </div>
 
-      <section className="mt-4 rounded-md border border-white/5 bg-white/[0.035] p-3">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-xs uppercase tracking-[0.18em] text-astral-teal">Preview textual</p>
-          <span className={needsFix ? "text-xs text-astral-rose" : "text-xs text-astral-teal"}>
-            Qualidade {qualityAverage}/10 {needsFix ? "· precisa ajuste" : "· pronto para revisar"}
-          </span>
+          <div className="mt-4 overflow-hidden rounded-md border border-white/10 bg-black/30">
+            {content.visualPrompts[0]?.imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={content.visualPrompts[0].imageUrl} alt="Imagem do conteudo" className="h-72 w-full object-contain" />
+            ) : (
+              <div className="flex h-72 flex-col items-center justify-center px-6 text-center text-stone-500">
+                <ImageDown className="h-8 w-8 text-astral-violet" />
+                <p className="mt-3 text-sm">Imagem ainda nao gerada</p>
+              </div>
+            )}
+          </div>
+
+          <div className="mt-3 grid gap-2">
+            <ActionButton
+              onClick={() => onGenerateImage(0)}
+              label={generatingImageIndex === 0 ? "Gerando imagem..." : hasGeneratedImage ? "Refazer imagem" : "Gerar imagem"}
+              icon={<ImageDown />}
+            />
+            {hasGeneratedImage ? <ActionButton onClick={() => downloadPng(0)} label="Baixar" icon={<Download />} /> : null}
+          </div>
         </div>
-        <h4 className="mt-2 text-base font-semibold text-stone-50">{copy?.title ?? "Copy ainda não gerada"}</h4>
-        <p className="mt-1 text-sm text-stone-300">{copy?.subtitle ?? "Clique em gerar/regenerar copy para preencher este conteúdo."}</p>
-        <p className="mt-3 whitespace-pre-line text-sm leading-6 text-stone-300">{copy?.caption ?? ""}</p>
-        <p className="mt-3 text-xs text-astral-gold">{copy?.hashtags.join(" ") ?? ""}</p>
-        <p className="mt-2 text-sm text-stone-200">CTA: {copy?.cta ?? content.plan.ctaType}</p>
-        <p className="mt-1 text-sm text-stone-400">Comentário fixado: {copy?.pinnedComment ?? "-"}</p>
-        {content.copy ? (
-          <details className="mt-3 text-xs text-stone-500">
-            <summary className="cursor-pointer text-astral-teal">{aiLabel} · Ver detalhes</summary>
-            <p className="mt-2">
-              {content.copy.cost.fallbackUsed ? "Alternativa usada automaticamente." : "Gerado com melhor IA disponível."}
-            </p>
+
+        <div>
+          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+            <div>
+              <p className="text-xs uppercase tracking-[0.18em] text-astral-gold">Texto do post</p>
+              <h3 className="mt-2 text-xl font-semibold text-stone-50">{copy?.title ?? content.plan.theme}</h3>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-stone-300">{previewText}</p>
+            </div>
+            <div className="rounded-md border border-astral-gold/30 bg-astral-gold/10 px-3 py-2 text-right">
+              <p className="text-xs uppercase tracking-[0.16em] text-astral-gold">Etapa</p>
+              <p className="mt-1 text-sm font-semibold text-stone-50">{friendlyStatus(content.status)}</p>
+            </div>
+          </div>
+
+          <section className="mt-4 rounded-md border border-white/5 bg-white/[0.035] p-3">
+            {copy ? (
+              <>
+                <p className="whitespace-pre-line text-sm leading-6 text-stone-300">{copy.caption}</p>
+                <p className="mt-3 text-xs text-astral-gold">{copy.hashtags.join(" ")}</p>
+                <p className="mt-3 text-sm text-stone-200">
+                  <span className="text-stone-500">Chamada para acao:</span> {copy.cta}
+                </p>
+                <p className="mt-1 text-sm text-stone-400">
+                  <span className="text-stone-500">Comentario fixado:</span> {copy.pinnedComment}
+                </p>
+              </>
+            ) : (
+              <p className="text-sm text-stone-400">Clique em refazer texto caso queira preencher este card novamente.</p>
+            )}
+          </section>
+
+          {!canApprove ? (
+            <div className="mt-3 rounded-md border border-astral-rose/25 bg-astral-rose/10 p-3 text-sm text-stone-200">
+              <p className="font-semibold text-astral-rose">Para aprovar, falta:</p>
+              <ul className="mt-2 list-inside list-disc space-y-1">
+                {missingItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          <details className="mt-3 rounded-md border border-astral-line bg-astral-void/35 p-3 text-sm">
+            <summary className="cursor-pointer text-stone-200">Ver estrategia</summary>
+            <div className="mt-3 grid gap-2 text-stone-400 md:grid-cols-2">
+              <p>Base do conteudo: {content.plan.scienceBase}</p>
+              <p>Objetivo: {content.plan.objective}</p>
+              <p>Chamada para acao: {copy?.cta ?? content.plan.ctaType}</p>
+              <p>IA usada: {aiLabel}</p>
+              <p className="md:col-span-2">Motivo: {content.plan.strategicReason}</p>
+              {content.copy?.cost.fallbackUsed ? <p className="text-astral-gold">Alternativa usada automaticamente.</p> : null}
+            </div>
           </details>
-        ) : null}
-      </section>
 
-      <QualityChecklist content={content} />
+          <details className="mt-3 rounded-md border border-astral-line bg-astral-void/35 p-3 text-sm">
+            <summary className="cursor-pointer text-stone-200">Estilo da imagem</summary>
+            <VisualPromptPreview
+              prompts={content.visualPrompts}
+              generatingImageIndex={generatingImageIndex}
+              onGenerateImage={onGenerateImage}
+              onDownloadImage={(index) => downloadPng(index)}
+            />
+            <button type="button" onClick={onRegenerateVisual} className="mt-3 toolbar-button">
+              <RefreshCw className="h-4 w-4" />
+              Refazer estilo da imagem
+            </button>
+          </details>
 
-      {needsFix ? (
-        <div className="mt-3 rounded-md border border-astral-rose/25 bg-astral-rose/10 p-3 text-sm text-stone-200">
-          <p className="font-semibold text-astral-rose">Precisa ajuste</p>
-          <ul className="mt-2 list-inside list-disc space-y-1">
-            {getQualitySuggestions(content.qualityScore).map((suggestion) => (
-              <li key={suggestion}>{suggestion}</li>
-            ))}
-          </ul>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+            <ActionButton onClick={onRegenerateCopy} label={isGenerating ? "Gerando..." : "Refazer texto"} icon={<RefreshCw />} />
+            <ActionButton onClick={() => copyText(copy?.caption ?? "")} label="Copiar legenda" icon={<Clipboard />} />
+            <ActionButton
+              onClick={() => downloadTextFile(`${content.plan.date}-${content.plan.format}.txt`, buildCaptionTxt(content))}
+              label="Baixar legenda"
+              icon={<FileText />}
+            />
+            <ActionButton disabled={!canApprove} onClick={() => onStatusChange("aprovado")} label="Aprovar" icon={<CheckCircle2 />} />
+            <ActionButton disabled={content.status !== "aprovado"} onClick={() => onStatusChange("publicado")} label="Marcar publicado" icon={<Send />} />
+          </div>
         </div>
-      ) : null}
-
-      {copy && !validation.valid ? (
-        <div className="mt-3 rounded-md border border-astral-gold/25 bg-astral-gold/10 p-3 text-sm text-stone-200">
-          <p className="font-semibold text-astral-gold">
-            Validação de conteúdo {validation.blocked ? "bloqueou aprovação" : "pediu revisão"}
-          </p>
-          <ul className="mt-2 list-inside list-disc space-y-1">
-            {validation.errors.map((error) => (
-              <li key={error}>{error}</li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-
-      <VisualPromptPreview
-        prompts={content.visualPrompts}
-        generatingImageIndex={generatingImageIndex}
-        onGenerateImage={onGenerateImage}
-        onDownloadImage={(index) => downloadPng(index)}
-      />
-
-      <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-        <ActionButton onClick={() => copyText(copy?.caption ?? "")} label="Copiar legenda" icon={<Clipboard />} />
-        <ActionButton onClick={() => copyText(copy?.hashtags.join(" ") ?? "")} label="Copiar hashtags" icon={<Clipboard />} />
-        <ActionButton onClick={() => copyText(copy?.pinnedComment ?? "")} label="Copiar comentário" icon={<Clipboard />} />
-        <ActionButton onClick={() => copyText(content.visualPrompts[0]?.prompt ?? "")} label="Copiar prompt" icon={<Clipboard />} />
-        <ActionButton onClick={onRegenerateCopy} label={isGenerating ? "Gerando..." : "Regenerar copy"} icon={<RefreshCw />} />
-        <ActionButton onClick={onRegenerateVisual} label="Regenerar prompt visual" icon={<RefreshCw />} />
-        <ActionButton disabled={!canApprove} onClick={() => onStatusChange("aprovado")} label="Aprovar" icon={<CheckCircle2 />} />
-        <ActionButton disabled={content.status !== "aprovado"} onClick={() => onStatusChange("publicado")} label="Marcar publicado" icon={<Send />} />
-        <ActionButton onClick={() => downloadPng(0)} label="Baixar PNG" icon={<ImageDown />} />
-        <ActionButton onClick={() => downloadTextFile(`${content.plan.date}-${content.plan.format}.txt`, buildCaptionTxt(content))} label="Legenda TXT" icon={<FileText />} />
       </div>
     </article>
   );
 }
 
-function QualityChecklist({ content }: { content: ProductionContent }) {
-  const items = [
-    ["Faz parar o scroll?", content.qualityScore.scrollStop],
-    ["Gera identificação?", content.qualityScore.identification],
-    ["Leva à ação?", content.qualityScore.action],
-    ["Texto cabe na imagem?", content.qualityScore.clarity],
-    ["Não está repetitivo?", content.qualityScore.nonRepetition]
-  ] as const;
+function getMissingApprovalItems(hasCaption: boolean, hasImage: boolean, isValid: boolean) {
+  const items: string[] = [];
+  if (!hasCaption) items.push("gerar ou revisar legenda");
+  if (!hasImage) items.push("gerar imagem");
+  if (!isValid) items.push("corrigir texto sinalizado");
+  return items.length ? items : ["revisar conteudo"];
+}
 
-  return (
-    <div className="mt-4 grid gap-2 md:grid-cols-5">
-      {items.map(([label, score]) => (
-        <div key={label} className="rounded-md border border-white/5 bg-astral-void/35 p-2">
-          <p className="text-xs text-stone-400">{label}</p>
-          <p className={score < 7 ? "mt-1 font-semibold text-astral-rose" : "mt-1 font-semibold text-astral-teal"}>
-            {score}/10
-          </p>
-        </div>
-      ))}
-    </div>
-  );
+function friendlyFormat(format: string) {
+  const labels: Record<string, string> = {
+    feed: "Feed",
+    carrossel: "Carrossel",
+    stories: "Story",
+    reels: "Reels",
+    tiktok: "TikTok"
+  };
+  return labels[format] ?? format;
+}
+
+function friendlyStatus(status: ProductionStatus) {
+  const labels: Record<ProductionStatus, string> = {
+    planejado: "Planejado",
+    "copy gerada": "Texto gerado",
+    "imagem pendente": "Imagem pendente",
+    "imagem gerada": "Imagem gerada",
+    "precisa ajuste": "Precisa ajuste",
+    aprovado: "Aprovado",
+    publicado: "Publicado"
+  };
+  return labels[status];
 }
 
 function Badge({ children }: { children: React.ReactNode }) {

@@ -53,8 +53,8 @@ export function PerformanceManual({ metrics, onAddMetric }: PerformanceManualPro
         <div className="flex items-center gap-2">
           <BarChart3 className="h-5 w-5 text-astral-gold" />
           <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">Performance Manual</p>
-            <h2 className="mt-1 text-xl font-semibold text-stone-50">Registrar resultado de publicação</h2>
+            <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">Resultados dos Posts</p>
+            <h2 className="mt-1 text-xl font-semibold text-stone-50">Registrar resultado de publicacao</h2>
           </div>
         </div>
 
@@ -74,7 +74,7 @@ export function PerformanceManual({ metrics, onAddMetric }: PerformanceManualPro
           <NumberInput label="Compartilhamentos" value={draft.shares} onChange={(value) => update("shares", value)} />
           <NumberInput label="Novos seguidores" value={draft.newFollowers} onChange={(value) => update("newFollowers", value)} />
           <NumberInput label="Cliques na bio" value={draft.bioClicks} onChange={(value) => update("bioClicks", value)} />
-          <Input label="Observação" value={draft.qualitativeNote} onChange={(value) => update("qualitativeNote", value)} />
+          <Input label="Observacao" value={draft.qualitativeNote} onChange={(value) => update("qualitativeNote", value)} />
         </div>
 
         <div className="mt-5 grid gap-3 md:grid-cols-6">
@@ -88,7 +88,7 @@ export function PerformanceManual({ metrics, onAddMetric }: PerformanceManualPro
 
         <button type="button" onClick={submit} className="toolbar-button mt-5">
           <Plus className="h-4 w-4" />
-          Registrar performance
+          Registrar resultado
         </button>
       </div>
 

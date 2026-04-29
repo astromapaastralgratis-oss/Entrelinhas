@@ -1,4 +1,5 @@
 import type { ContentIntensity } from "@/types/content";
+import type { TextProvider } from "@/types/copy";
 
 export type AutomationMode = "economico" | "padrao" | "crescimento";
 
@@ -9,6 +10,7 @@ export type AutomationSettings = {
   weeklyGenerationLimit: number;
   monthlyCostLimit: number;
   mode: AutomationMode;
+  aiProviderPreference: TextProvider;
   automaticGenerationEnabled: boolean;
   lockedWeeklyThemes: string[];
 };

@@ -1,16 +1,15 @@
 "use client";
 
-import { Activity, Archive, Database, MoonStar, ShieldCheck } from "lucide-react";
+import { Download, MoonStar, Settings, Sparkles } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { LibraryPanel } from "@/components/LibraryPanel";
+import type { ReactNode } from "react";
+import { AutomationSettingsPanel } from "@/components/AutomationSettingsPanel";
+import { OperationLogPanel } from "@/components/OperationLogPanel";
 import { PerformanceManual } from "@/components/PerformanceManual";
 import { ProductionContentCard } from "@/components/ProductionContentCard";
 import { ProductionToolbar } from "@/components/ProductionToolbar";
 import { ReadyToPost } from "@/components/ReadyToPost";
-import { ShortVideoStudio } from "@/components/ShortVideoStudio";
 import { WeeklyCalendar } from "@/components/WeeklyCalendar";
-import { AutomationSettingsPanel } from "@/components/AutomationSettingsPanel";
-import { OperationLogPanel } from "@/components/OperationLogPanel";
 import { applyLockedThemes, createGenerationCacheKey, getModeContentIntensity } from "@/lib/automation-engine";
 import {
   getRecentHistory,
@@ -21,16 +20,16 @@ import {
 } from "@/lib/content-persistence";
 import { decideBudget, defaultAutomationSettings } from "@/lib/cost-control";
 import { generateEditorialPlan, generateWeeklyEditorialPlan } from "@/lib/editorial-engine";
-import { generateVisualPromptsForContent } from "@/lib/visual-prompts";
-import { calculateQualityScore, needsAdjustment } from "@/lib/quality-score";
 import { createLearningRecommendation } from "@/lib/performance-learning";
+import { calculateQualityScore, needsAdjustment } from "@/lib/quality-score";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
+import { generateVisualPromptsForContent } from "@/lib/visual-prompts";
 import { createOperationLog, friendlyErrorMessage, logOperation, type OperationLog } from "@/lib/operation-logger";
+import type { AutomationMode, AutomationSettings } from "@/types/automation";
 import type { EditorialHistoryItem, EditorialPlanItem } from "@/types/content";
 import type { GenerateCopyResult } from "@/types/copy";
 import type { PerformanceMetrics } from "@/types/performance";
 import type { ProductionContent, ProductionStatus } from "@/types/production";
-import type { AutomationSettings } from "@/types/automation";
 
 const editorialMockHistory: EditorialHistoryItem[] = [
   {
@@ -57,6 +56,8 @@ const editorialMockHistory: EditorialHistoryItem[] = [
   }
 ];
 
+type Screen = "production" | "ready" | "performance" | "settings";
+
 export function Dashboard() {
   const [remoteHistory, setRemoteHistory] = useState<EditorialHistoryItem[]>([]);
   const [contents, setContents] = useState<ProductionContent[]>(() =>
@@ -64,11 +65,11 @@ export function Dashboard() {
   );
   const [weeklyPlan, setWeeklyPlan] = useState<EditorialPlanItem[] | null>(null);
   const [weeklyContents, setWeeklyContents] = useState<ProductionContent[]>([]);
-  const [libraryVisible, setLibraryVisible] = useState(false);
-  const [activeScreen, setActiveScreen] = useState<"production" | "performance" | "shortVideos" | "ready">("production");
+  const [activeScreen, setActiveScreen] = useState<Screen>("production");
   const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetrics[]>([]);
   const [generatingKey, setGeneratingKey] = useState<string | null>(null);
   const [generatingImageKey, setGeneratingImageKey] = useState<string | null>(null);
+  const [isGeneratingDay, setIsGeneratingDay] = useState(false);
   const [automationSettings, setAutomationSettings] = useState<AutomationSettings>(defaultAutomationSettings);
   const [generationCache, setGenerationCache] = useState<Record<string, GenerateCopyResult>>({});
   const [budgetMessage, setBudgetMessage] = useState<string | null>(null);
@@ -95,7 +96,6 @@ export function Dashboard() {
       } catch (error) {
         if (isMounted) setPersistenceStatus("error");
         addLog("supabase_error", friendlyErrorMessage(error), { context: "load_recent_history" }, "error");
-        addLog("supabase_error", "Falha ao carregar histórico do Supabase.", undefined, "error");
       }
     }
 
@@ -110,7 +110,7 @@ export function Dashboard() {
       const saved = window.localStorage.getItem("astral-performance-metrics");
       if (saved) setPerformanceMetrics(JSON.parse(saved) as PerformanceMetrics[]);
     } catch {
-      // Local persistence is a convenience; Supabase remains the durable store once connected.
+      // Local persistence is only a convenience.
     }
   }, []);
 
@@ -148,30 +148,43 @@ export function Dashboard() {
   }, [contents, weeklyContents]);
 
   async function handleGenerateToday() {
+    setIsGeneratingDay(true);
+    setBudgetMessage(null);
     const history = getLearningAwareHistory();
     const intensity = getModeContentIntensity(automationSettings.mode);
     const plan = applyLockedThemes(
       generateEditorialPlan(new Date(), intensity, "ganhar seguidores", history),
       automationSettings.lockedWeeklyThemes
     );
-    setContents(createProductionContents(plan));
-    setLibraryVisible(false);
+    let nextContents = createProductionContents(plan);
+    setContents(nextContents);
     addLog("generation_started", "Plano do dia gerado por regras.", { count: plan.length });
 
-    if (!supabase) return;
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
-    if (!user) return;
-
     try {
-      const savedRows = await saveEditorialPlan(user.id, plan);
-      setContents((current) => attachCalendarIds(current, savedRows));
-      setPersistenceStatus("synced");
-      addLog("generation_completed", "Plano do dia salvo no Supabase.", { count: plan.length });
-    } catch (error) {
-      setPersistenceStatus("error");
-      addLog("supabase_error", friendlyErrorMessage(error), { context: "save_today_plan" }, "error");
+      if (supabase) {
+        const {
+          data: { user }
+        } = await supabase.auth.getUser();
+
+        if (user) {
+          try {
+            const savedRows = await saveEditorialPlan(user.id, plan);
+            nextContents = attachCalendarIds(nextContents, savedRows);
+            setContents(nextContents);
+            setPersistenceStatus("synced");
+            addLog("generation_completed", "Plano do dia salvo no banco.", { count: plan.length });
+          } catch (error) {
+            setPersistenceStatus("error");
+            addLog("supabase_error", friendlyErrorMessage(error), { context: "save_today_plan" }, "error");
+          }
+        }
+      }
+
+      for (const content of nextContents) {
+        await generateCopyForContent(content);
+      }
+    } finally {
+      setIsGeneratingDay(false);
     }
   }
 
@@ -199,10 +212,10 @@ export function Dashboard() {
       setContents((current) => attachCalendarIds(current, savedRows));
       setWeeklyContents((current) => attachCalendarIds(current, savedRows));
       setPersistenceStatus("synced");
-      addLog("generation_completed", "Plano semanal salvo no Supabase.", { count: plan.length });
-    } catch {
+      addLog("generation_completed", "Plano semanal salvo no banco.", { count: plan.length });
+    } catch (error) {
       setPersistenceStatus("error");
-      addLog("supabase_error", "Falha ao salvar plano semanal no Supabase.", undefined, "error");
+      addLog("supabase_error", friendlyErrorMessage(error), { context: "save_week_plan" }, "error");
     }
   }
 
@@ -224,16 +237,20 @@ export function Dashboard() {
       ctaType: recommendation.ctaType ?? "seguir página"
     };
 
-    return [
-      ...baseHistory,
-      learnedHistoryItem
-    ];
+    return [...baseHistory, learnedHistoryItem];
   }
 
   async function handleRegenerateCopy(content: ProductionContent) {
+    await generateCopyForContent(content);
+  }
+
+  async function generateCopyForContent(content: ProductionContent) {
     setGeneratingKey(content.id);
     setBudgetMessage(null);
-    addLog("generation_started", "Geração de copy iniciada.", { format: content.plan.format, theme: content.plan.theme });
+    addLog("generation_started", "Geracao de texto iniciada.", {
+      format: content.plan.format,
+      theme: content.plan.theme
+    });
 
     try {
       const cacheKey = createGenerationCacheKey(content.plan, automationSettings.mode, content.regeneratedCount);
@@ -272,13 +289,15 @@ export function Dashboard() {
           intensity: getModeContentIntensity(automationSettings.mode),
           automationMode: automationSettings.mode,
           currentDailyCost: contents.reduce((total, item) => total + (item.copy?.cost.estimatedCost ?? 0), 0),
-          provider: "auto"
+          provider: automationSettings.aiProviderPreference
         })
       });
 
       const result = (await response.json()) as GenerateCopyResult & { savedPostId?: string | null; error?: string };
       if (!response.ok) {
-        const message = friendlyErrorMessage(result.cost?.reason ?? result.error ?? "Não foi possível gerar copy agora.");
+        const message = friendlyErrorMessage(
+          result.cost?.reason ?? result.error ?? "Nao consegui gerar agora. Tente novamente ou revise suas configuracoes avancadas."
+        );
         setBudgetMessage(message);
         addLog("ai_error", message, { status: response.status }, "error");
         return;
@@ -287,11 +306,17 @@ export function Dashboard() {
       updateContent(content.id, (current) => withCopy(current, result, result.savedPostId));
       setGenerationCache((current) => ({ ...current, [cacheKey]: result }));
       if (!result.savedPostId) await persistGeneratedCopy(content, result);
-      addLog("generation_completed", "Copy gerada e validada.", {
-        source: result.source,
-        provider: result.cost.providerUsed ?? "auto",
-        estimatedCost: result.cost.estimatedCost
-      });
+      addLog(
+        "generation_completed",
+        result.cost.fallbackUsed
+          ? "Uma alternativa foi usada automaticamente para concluir sua geracao."
+          : "Conteudo gerado com a melhor IA disponivel.",
+        {
+          source: result.source,
+          provider: result.cost.providerUsed ?? "auto",
+          estimatedCost: result.cost.estimatedCost
+        }
+      );
       addLog("estimated_cost", "Custo estimado registrado.", { estimatedCost: result.cost.estimatedCost });
     } finally {
       setGeneratingKey(null);
@@ -358,7 +383,7 @@ export function Dashboard() {
 
       const result = await response.json();
       if (!response.ok) {
-        const message = friendlyErrorMessage(result.error ?? "Não foi possível gerar a imagem agora.");
+        const message = friendlyErrorMessage(result.error ?? "Nao foi possivel gerar a imagem agora.");
         setBudgetMessage(message);
         addLog("image_error", message, { status: response.status }, "error");
         return;
@@ -417,7 +442,7 @@ export function Dashboard() {
       }
     }
 
-    addLog(status === "publicado" ? "content_published" : "content_approved", `Conteúdo marcado como ${status}.`, {
+    addLog(status === "publicado" ? "content_published" : "content_approved", `Conteudo marcado como ${status}.`, {
       contentId
     });
   }
@@ -489,125 +514,108 @@ export function Dashboard() {
           <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-astral-gold/45 bg-astral-gold/10">
             <MoonStar className="h-6 w-6 text-astral-gold" />
           </div>
-          <div className="flex flex-col gap-3">
-            {[Activity, Archive, Database, ShieldCheck].map((Icon, index) => (
-              <button
-                key={index}
-                type="button"
-                className="flex h-10 w-10 items-center justify-center rounded-md border border-transparent text-stone-400 transition hover:border-astral-line hover:bg-white/[0.04] hover:text-stone-100"
-                aria-label={`Atalho ${index + 1}`}
-              >
-                <Icon className="h-5 w-5" />
-              </button>
-            ))}
+          <div className="flex flex-col gap-4 text-stone-500">
+            <Sparkles className="h-5 w-5" />
+            <Download className="h-5 w-5" />
+            <Settings className="h-5 w-5" />
           </div>
           <div className="h-2 w-2 rounded-full bg-astral-teal shadow-[0_0_20px_rgba(107,212,200,0.8)]" />
         </aside>
 
         <div className="space-y-5">
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => setActiveScreen("production")}
-              className={activeScreen === "production" ? "toolbar-button border-astral-gold" : "toolbar-button"}
-            >
-              Conteúdos de Hoje
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveScreen("performance")}
-              className={activeScreen === "performance" ? "toolbar-button border-astral-gold" : "toolbar-button"}
-            >
-              Performance Manual
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveScreen("shortVideos")}
-              className={activeScreen === "shortVideos" ? "toolbar-button border-astral-gold" : "toolbar-button"}
-            >
-              Vídeos Curtos
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveScreen("ready")}
-              className={activeScreen === "ready" ? "toolbar-button border-astral-gold" : "toolbar-button"}
-            >
+          <nav className="flex flex-wrap gap-2" aria-label="Telas principais">
+            <NavButton active={activeScreen === "production"} onClick={() => setActiveScreen("production")}>
+              Conteudos de Hoje
+            </NavButton>
+            <NavButton active={activeScreen === "ready"} onClick={() => setActiveScreen("ready")}>
               Pronto para postar
-            </button>
-          </div>
+            </NavButton>
+            <NavButton active={activeScreen === "performance"} onClick={() => setActiveScreen("performance")}>
+              Resultados dos Posts
+            </NavButton>
+            <NavButton active={activeScreen === "settings"} onClick={() => setActiveScreen("settings")}>
+              Configuracoes avancadas
+            </NavButton>
+          </nav>
 
-          {activeScreen === "performance" ? (
+          {activeScreen === "ready" ? (
+            <ReadyToPost contents={contents} onStatusChange={handleStatusChange} />
+          ) : activeScreen === "performance" ? (
             <PerformanceManual
               metrics={performanceMetrics}
               onAddMetric={(metric) => setPerformanceMetrics((current) => [metric, ...current])}
             />
-          ) : activeScreen === "shortVideos" ? (
-            <ShortVideoStudio />
-          ) : activeScreen === "ready" ? (
-            <ReadyToPost contents={contents} onStatusChange={handleStatusChange} />
+          ) : activeScreen === "settings" ? (
+            <>
+              <AutomationSettingsPanel settings={automationSettings} usage={automationUsage} onChange={setAutomationSettings} />
+
+              <section className="rounded-lg border border-astral-line bg-astral-panel/72 p-5">
+                <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">Operacao</p>
+                <div className="mt-4 grid gap-3 md:grid-cols-5">
+                  <Metric label="conteudos" value={summary.total} />
+                  <Metric label="texto gerado" value={summary.generated} />
+                  <Metric label="aprovados" value={summary.approved} />
+                  <Metric label="publicados" value={summary.published} />
+                  <Metric label="ajustes" value={summary.needsAdjustment} />
+                </div>
+                <p className="mt-4 text-sm text-stone-400">
+                  Banco de dados: {persistenceStatus === "offline" ? "aguardando configuracao" : persistenceStatus}
+                </p>
+                {budgetMessage ? (
+                  <p className="mt-2 rounded-md border border-astral-gold/30 bg-astral-gold/10 px-3 py-2 text-sm text-astral-gold">
+                    {budgetMessage}
+                  </p>
+                ) : null}
+              </section>
+
+              <OperationLogPanel logs={operationLogs} />
+            </>
           ) : (
             <>
-          <AutomationSettingsPanel
-            settings={automationSettings}
-            usage={automationUsage}
-            onChange={setAutomationSettings}
-          />
-
-          <section className="rounded-lg border border-astral-line bg-astral-panel/72 p-4">
-            <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">IA automática</p>
-            <p className="mt-2 text-sm text-stone-400">
-              O app usa a melhor IA disponível e troca automaticamente se alguma alternativa falhar.
-            </p>
-          </section>
-
-          <ProductionToolbar
-            contents={contents}
-            weeklyContents={weeklyContents}
-            onGenerateToday={handleGenerateToday}
-            onGenerateWeek={handleGenerateWeek}
-            onShowLibrary={() => setLibraryVisible((current) => !current)}
-          />
-
-          <section className="rounded-lg border border-astral-line bg-astral-panel/72 p-5">
-            <div className="grid gap-3 md:grid-cols-5">
-              <Metric label="conteúdos" value={summary.total} />
-              <Metric label="copy gerada" value={summary.generated} />
-              <Metric label="aprovados" value={summary.approved} />
-              <Metric label="publicados" value={summary.published} />
-              <Metric label="ajustes" value={summary.needsAdjustment} />
-            </div>
-            <p className="mt-4 text-sm text-stone-400">
-              Supabase: {persistenceStatus === "offline" ? "aguardando env" : persistenceStatus}
-            </p>
-            {budgetMessage ? (
-              <p className="mt-2 rounded-md border border-astral-gold/30 bg-astral-gold/10 px-3 py-2 text-sm text-astral-gold">
-                {budgetMessage}
-              </p>
-            ) : null}
-          </section>
-
-          {libraryVisible ? <LibraryPanel contents={[...contents, ...weeklyContents]} /> : null}
-
-          <OperationLogPanel logs={operationLogs} />
-
-          <section className="space-y-4">
-            {contents.map((content) => (
-              <ProductionContentCard
-                key={content.id}
-                content={content}
-                isGenerating={generatingKey === content.id}
-                generatingImageIndex={
-                  generatingImageKey?.startsWith(`${content.id}-`) ? Number(generatingImageKey.split("-").at(-1)) : null
-                }
-                onRegenerateCopy={() => handleRegenerateCopy(content)}
-                onRegenerateVisual={() => handleRegenerateVisual(content)}
-                onGenerateImage={(promptIndex) => handleGenerateImage(content, promptIndex)}
-                onStatusChange={(status) => handleStatusChange(content.id, status)}
+              <ProductionToolbar
+                contents={contents}
+                weeklyContents={weeklyContents}
+                intensity={automationSettings.mode}
+                isGenerating={isGeneratingDay}
+                onIntensityChange={(mode: AutomationMode) => setAutomationSettings((current) => ({ ...current, mode }))}
+                onGenerateToday={handleGenerateToday}
+                onGenerateWeek={handleGenerateWeek}
               />
-            ))}
-          </section>
 
-          <WeeklyCalendar plan={weeklyPlan} />
+              <section className="rounded-lg border border-astral-line bg-astral-panel/72 p-4">
+                <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">IA automatica</p>
+                <p className="mt-2 text-sm text-stone-400">
+                  {isGeneratingDay
+                    ? "Gerando com IA automatica..."
+                    : budgetMessage ?? "Gerado com melhor IA disponivel quando voce refaz ou cria textos."}
+                </p>
+              </section>
+
+              <section className="space-y-4">
+                {contents.map((content) => (
+                  <ProductionContentCard
+                    key={content.id}
+                    content={content}
+                    isGenerating={generatingKey === content.id}
+                    generatingImageIndex={
+                      generatingImageKey?.startsWith(`${content.id}-`)
+                        ? Number(generatingImageKey.split("-").at(-1))
+                        : null
+                    }
+                    onRegenerateCopy={() => handleRegenerateCopy(content)}
+                    onRegenerateVisual={() => handleRegenerateVisual(content)}
+                    onGenerateImage={(promptIndex) => handleGenerateImage(content, promptIndex)}
+                    onStatusChange={(status) => handleStatusChange(content.id, status)}
+                  />
+                ))}
+              </section>
+
+              <details className="rounded-lg border border-astral-line bg-astral-panel/72 p-4">
+                <summary className="cursor-pointer text-sm font-semibold text-stone-100">Ver planejamento da semana</summary>
+                <div className="mt-4">
+                  <WeeklyCalendar plan={weeklyPlan} />
+                </div>
+              </details>
             </>
           )}
         </div>
@@ -616,7 +624,7 @@ export function Dashboard() {
   );
 }
 
-function createProductionContents(plan: EditorialPlanItem[]) {
+function createProductionContents(plan: EditorialPlanItem[]): ProductionContent[] {
   return plan.map((item, index) => {
     const base = {
       id: `${item.date}-${item.moment}-${item.platform}-${item.format}-${index}`,
@@ -672,5 +680,29 @@ function Metric({ label, value }: { label: string; value: number }) {
       <p className="text-xl font-semibold text-stone-50">{value}</p>
       <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-stone-500">{label}</p>
     </div>
+  );
+}
+
+function NavButton({
+  active,
+  children,
+  onClick
+}: {
+  active: boolean;
+  children: ReactNode;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={
+        active
+          ? "toolbar-button border-astral-gold bg-astral-gold/10 text-stone-50"
+          : "toolbar-button text-stone-300"
+      }
+    >
+      {children}
+    </button>
   );
 }

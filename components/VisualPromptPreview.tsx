@@ -96,7 +96,7 @@ export function VisualPromptPreview({
                   className="inline-flex h-8 items-center gap-2 rounded-md border border-astral-line px-2 text-xs text-stone-200 transition hover:border-astral-gold"
                 >
                   <Copy className="h-3.5 w-3.5" />
-                  {copiedIndex === index ? "Copiado" : "Copiar prompt"}
+                  {copiedIndex === index ? "Copiado" : "Copiar estilo"}
                 </button>
               </div>
 

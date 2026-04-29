@@ -48,6 +48,7 @@ export const defaultAutomationSettings: AutomationSettings = {
   weeklyGenerationLimit: 60,
   monthlyCostLimit: 50,
   mode: "economico",
+  aiProviderPreference: "auto",
   automaticGenerationEnabled: false,
   lockedWeeklyThemes: []
 };

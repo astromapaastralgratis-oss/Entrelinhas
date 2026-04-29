@@ -1,9 +1,10 @@
 "use client";
 
-import { AlertTriangle, Bot, Gauge, Lock, TimerReset } from "lucide-react";
-import { buildTokenBudget, getAutomationAlerts, getModePolicy } from "@/lib/cost-control";
+import { AlertTriangle, Bot, ChevronDown, Gauge, Lock, TimerReset } from "lucide-react";
 import { planScheduledGenerations } from "@/lib/automation-engine";
+import { buildTokenBudget, getAutomationAlerts, getModePolicy } from "@/lib/cost-control";
 import type { AutomationAlert, AutomationMode, AutomationSettings, AutomationUsage } from "@/types/automation";
+import type { TextProvider } from "@/types/copy";
 
 type AutomationSettingsPanelProps = {
   settings: AutomationSettings;
@@ -12,9 +13,16 @@ type AutomationSettingsPanelProps = {
 };
 
 const modes: Array<{ value: AutomationMode; label: string; description: string }> = [
-  { value: "economico", label: "Econômico", description: "Templates, CTAs e hashtags fixos; IA só no essencial." },
-  { value: "padrao", label: "Padrão", description: "Copy completa com equilíbrio entre qualidade e custo." },
-  { value: "crescimento", label: "Crescimento", description: "Mais variações, teste A/B e maior consumo." }
+  { value: "economico", label: "Leve", description: "Menos conteudos, menor custo e revisao rapida." },
+  { value: "padrao", label: "Padrao", description: "Equilibrio entre volume, qualidade e custo." },
+  { value: "crescimento", label: "Intenso", description: "Mais conteudos e mais variacoes para crescer." }
+];
+
+const aiOptions: Array<{ value: TextProvider; label: string }> = [
+  { value: "auto", label: "IA automatica - recomendado" },
+  { value: "openai", label: "Preferir OpenAI" },
+  { value: "gemini", label: "Preferir Gemini" },
+  { value: "openrouter", label: "Preferir OpenRouter" }
 ];
 
 export function AutomationSettingsPanel({ settings, usage, onChange }: AutomationSettingsPanelProps) {
@@ -33,11 +41,11 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
         <div>
           <p className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-astral-gold">
             <Bot className="h-4 w-4" />
-            Automação e orçamento
+            Configuracoes avancadas
           </p>
-          <h2 className="mt-2 text-xl font-semibold text-stone-50">Controle rígido de custo</h2>
+          <h2 className="mt-2 text-xl font-semibold text-stone-50">IA, custo e operacao</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-stone-300">
-            O calendário continua por regras fixas. A IA entra só nos campos liberados pelo modo atual e a regeneração é sempre individual.
+            A tela principal fica simples. Aqui voce ajusta preferencias tecnicas quando precisar.
           </p>
         </div>
 
@@ -47,8 +55,31 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
             checked={settings.automaticGenerationEnabled}
             onChange={(event) => onChange({ ...settings, automaticGenerationEnabled: event.target.checked })}
           />
-          Geração automática
+          Geracao automatica
         </label>
+      </div>
+
+      <div className="mt-5 rounded-md border border-astral-line bg-astral-void/45 p-4">
+        <label className="block">
+          <span className="text-xs uppercase tracking-[0.16em] text-stone-500">Preferencia de IA</span>
+          <div className="relative mt-2">
+            <select
+              value={settings.aiProviderPreference}
+              onChange={(event) => onChange({ ...settings, aiProviderPreference: event.target.value as TextProvider })}
+              className="h-11 w-full appearance-none rounded-md border border-astral-line bg-black/25 px-3 pr-10 text-sm text-stone-100 outline-none focus:border-astral-gold"
+            >
+              {aiOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-3 top-3 h-4 w-4 text-stone-400" />
+          </div>
+        </label>
+        <p className="mt-2 text-sm leading-6 text-stone-400">
+          Se a IA escolhida nao estiver disponivel, o app usa automaticamente outra opcao para nao interromper sua geracao.
+        </p>
       </div>
 
       <div className="mt-5 grid gap-3 lg:grid-cols-3">
@@ -72,14 +103,14 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
       <div className="mt-5 grid gap-3 md:grid-cols-4">
         <BudgetMetric label="tokens hoje" value={`${budget.currentUsage}/${budget.dailyLimit}`} />
         <BudgetMetric label="tokens semana" value={`${usage.weeklyTokens}/${budget.weeklyLimit}`} />
-        <BudgetMetric label="gerações" value={`${usage.dailyGenerations}/${settings.dailyGenerationLimit}`} />
+        <BudgetMetric label="geracoes" value={`${usage.dailyGenerations}/${settings.dailyGenerationLimit}`} />
         <BudgetMetric label="custo mensal" value={`$${usage.monthlyEstimatedCost.toFixed(4)}/$${settings.monthlyCostLimit}`} />
       </div>
 
       <div className="mt-5 grid gap-4 lg:grid-cols-[1.2fr_1fr]">
         <div className="grid gap-3 sm:grid-cols-3">
           <NumberField
-            label="limite diário"
+            label="limite diario"
             value={settings.dailyGenerationLimit}
             onChange={(value) => updateNumber("dailyGenerationLimit", value)}
           />
@@ -98,10 +129,10 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
         <div className="rounded-md border border-astral-line bg-astral-void/45 p-4">
           <p className="flex items-center gap-2 text-sm font-semibold text-stone-100">
             <Gauge className="h-4 w-4 text-astral-teal" />
-            Política ativa
+            Politica ativa
           </p>
           <p className="mt-2 text-sm text-stone-400">
-            Intensidade {policy.intensity}; campos de IA: {policy.aiFields.join(", ")}; variações: {policy.variationLimit}.
+            Intensidade {policy.intensity}; campos de IA: {policy.aiFields.join(", ")}; variacoes: {policy.variationLimit}.
           </p>
         </div>
       </div>
@@ -116,7 +147,10 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
           onChange={(event) =>
             onChange({
               ...settings,
-              lockedWeeklyThemes: event.target.value.split("\n").map((item) => item.trim()).filter(Boolean)
+              lockedWeeklyThemes: event.target.value
+                .split("\n")
+                .map((item) => item.trim())
+                .filter(Boolean)
             })
           }
           className="mt-3 min-h-20 w-full rounded-md border border-astral-line bg-black/25 p-3 text-sm text-stone-100 outline-none focus:border-astral-gold"
@@ -127,7 +161,10 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
       <div className="mt-4 grid gap-3 lg:grid-cols-2">
         <div className="space-y-2">
           {alerts.map((alert) => (
-            <p key={alert.message} className="flex items-center gap-2 rounded-md border border-astral-line bg-astral-void/45 px-3 py-2 text-sm text-stone-300">
+            <p
+              key={alert.message}
+              className="flex items-center gap-2 rounded-md border border-astral-line bg-astral-void/45 px-3 py-2 text-sm text-stone-300"
+            >
               <AlertTriangle className={alert.level === "danger" ? "h-4 w-4 text-red-300" : "h-4 w-4 text-astral-gold"} />
               {alert.message}
             </p>
@@ -135,7 +172,10 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
         </div>
         <div className="space-y-2">
           {schedule.map((item) => (
-            <p key={item.type} className="flex items-center gap-2 rounded-md border border-astral-line bg-astral-void/45 px-3 py-2 text-sm text-stone-300">
+            <p
+              key={item.type}
+              className="flex items-center gap-2 rounded-md border border-astral-line bg-astral-void/45 px-3 py-2 text-sm text-stone-300"
+            >
               <TimerReset className="h-4 w-4 text-astral-teal" />
               {item.description} {item.enabled ? "Ativo" : "Pausado"}.
             </p>
