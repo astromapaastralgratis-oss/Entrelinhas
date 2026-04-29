@@ -58,6 +58,10 @@ export async function generateCopy(request: GenerateCopyRequest): Promise<Genera
 
   const baseCost = {
     model: defaultCopyModel,
+    providerUsed: "auto" as const,
+    modelUsed: defaultCopyModel,
+    fallbackUsed: false,
+    errorMessage: null,
     promptTokensEstimate,
     completionTokensEstimate,
     totalTokensEstimate: promptTokensEstimate + completionTokensEstimate,
@@ -87,7 +91,7 @@ export async function generateCopy(request: GenerateCopyRequest): Promise<Genera
   }
 
   try {
-    const aiResult = await generateTextCopy({
+      const aiResult = await generateTextCopy({
       planItemId: request.planItemId,
       format: request.planItem.format,
       objective: request.planItem.objective,
@@ -103,14 +107,29 @@ export async function generateCopy(request: GenerateCopyRequest): Promise<Genera
         subtitleMaxWords: 18
       },
       userId: request.userId,
-      provider: request.provider
+      provider: request.provider ?? "auto"
     });
 
     return {
       brief,
       copy: validateGeneratedCopy(aiResult.copy, brief.cards),
-      cost: { ...baseCost, model: aiResult.model },
+      cost: {
+        ...baseCost,
+        model: aiResult.model,
+        providerUsed: aiResult.provider,
+        modelUsed: aiResult.model,
+        fallbackUsed: aiResult.fallbackUsed,
+        errorMessage: aiResult.errorMessage ?? null
+      },
       source: aiResult.provider
+      ,
+      aiStatus: {
+        label: aiResult.fallbackUsed ? "Alternativa usada automaticamente" : "Gerado com melhor IA disponível",
+        providerUsed: aiResult.provider,
+        modelUsed: aiResult.model,
+        fallbackUsed: aiResult.fallbackUsed,
+        errorMessage: aiResult.errorMessage ?? null
+      }
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
@@ -119,9 +138,17 @@ export async function generateCopy(request: GenerateCopyRequest): Promise<Genera
       copy: validateGeneratedCopy(generateFallbackCopy(brief, modePolicy.copyCompleteness), brief.cards),
       cost: {
         ...baseCost,
+        providerUsed: "auto",
+        fallbackUsed: true,
+        errorMessage: message,
         reason: `Fallback local usado porque a IA falhou: ${message}`,
       },
-      source: "fallback"
+      source: "fallback",
+      aiStatus: {
+        label: "Alternativa usada automaticamente",
+        fallbackUsed: true,
+        errorMessage: message
+      }
     };
   }
 }

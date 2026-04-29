@@ -42,6 +42,7 @@ export function ProductionContentCard({
   });
   const hasGeneratedImage = content.visualPrompts.some((prompt) => Boolean(prompt.imageUrl));
   const canApprove = Boolean(copy?.caption && copy.cta && copy.hashtags.length >= 5 && hasGeneratedImage && validation.valid);
+  const aiLabel = content.copy?.aiStatus?.label ?? "IA automática";
 
   async function copyText(text: string) {
     await navigator.clipboard.writeText(text);
@@ -84,6 +85,14 @@ export function ProductionContentCard({
         <p className="mt-3 text-xs text-astral-gold">{copy?.hashtags.join(" ") ?? ""}</p>
         <p className="mt-2 text-sm text-stone-200">CTA: {copy?.cta ?? content.plan.ctaType}</p>
         <p className="mt-1 text-sm text-stone-400">Comentário fixado: {copy?.pinnedComment ?? "-"}</p>
+        {content.copy ? (
+          <details className="mt-3 text-xs text-stone-500">
+            <summary className="cursor-pointer text-astral-teal">{aiLabel} · Ver detalhes</summary>
+            <p className="mt-2">
+              {content.copy.cost.fallbackUsed ? "Alternativa usada automaticamente." : "Gerado com melhor IA disponível."}
+            </p>
+          </details>
+        ) : null}
       </section>
 
       <QualityChecklist content={content} />

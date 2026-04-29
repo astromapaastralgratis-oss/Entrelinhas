@@ -41,6 +41,10 @@ export type SaveGeneratedPostInput = {
   totalTokensEstimate?: number;
   estimatedCost?: number;
   generationSource?: string;
+  providerUsed?: string;
+  modelUsed?: string;
+  fallbackUsed?: boolean;
+  errorMessage?: string | null;
 };
 
 export async function saveEditorialPlan(
@@ -227,7 +231,7 @@ export async function saveGeneratedPost(input: SaveGeneratedPostInput, client: D
   if (postError) throw postError;
   if (!post) return null;
 
-  const { error: historyError } = await client.from("generation_history").insert({
+  const historyRow = {
     user_id: input.userId,
     generated_post_id: post.id,
     format: input.item.format,
@@ -240,10 +244,34 @@ export async function saveGeneratedPost(input: SaveGeneratedPostInput, client: D
     completion_tokens_estimate: input.completionTokensEstimate ?? 0,
     total_tokens_estimate: input.totalTokensEstimate ?? 0,
     estimated_cost: input.estimatedCost ?? 0,
-    generation_source: input.generationSource ?? "unknown"
-  });
+    generation_source: input.generationSource ?? "unknown",
+    provider_used: input.providerUsed ?? input.generationSource ?? "unknown",
+    model_used: input.modelUsed ?? null,
+    fallback_used: input.fallbackUsed ?? false,
+    error_message: input.errorMessage ?? null
+  };
 
-  if (historyError) throw historyError;
+  const { error: historyError } = await client.from("generation_history").insert(historyRow);
+
+  if (historyError) {
+    const fallbackRow = {
+      user_id: historyRow.user_id,
+      generated_post_id: historyRow.generated_post_id,
+      format: historyRow.format,
+      objective: historyRow.objective,
+      science_base: historyRow.science_base,
+      theme: historyRow.theme,
+      hook_type: historyRow.hook_type,
+      cta_type: historyRow.cta_type,
+      prompt_tokens_estimate: historyRow.prompt_tokens_estimate,
+      completion_tokens_estimate: historyRow.completion_tokens_estimate,
+      total_tokens_estimate: historyRow.total_tokens_estimate,
+      estimated_cost: historyRow.estimated_cost,
+      generation_source: historyRow.generation_source
+    };
+    const retry = await client.from("generation_history").insert(fallbackRow);
+    if (retry.error) throw retry.error;
+  }
   return post;
 }
 
@@ -256,26 +284,50 @@ export async function recordAiGenerationUsage(
     completionTokensEstimate: number;
     totalTokensEstimate: number;
     estimatedCost: number;
+    providerUsed?: string;
+    fallbackUsed?: boolean;
+    errorMessage?: string | null;
   },
   client: DbClient | null = supabase
 ) {
   if (!client) return null;
 
-  const { data, error } = await client
-    .from("ai_generation_usage")
-    .insert({
+  const usageRow = {
       user_id: input.userId,
       generated_post_id: input.generatedPostId ?? null,
       model: input.model,
       prompt_tokens_estimate: input.promptTokensEstimate,
       completion_tokens_estimate: input.completionTokensEstimate,
       total_tokens_estimate: input.totalTokensEstimate,
-      estimated_cost: input.estimatedCost
-    })
+      estimated_cost: input.estimatedCost,
+      provider_used: input.providerUsed ?? "unknown",
+      fallback_used: input.fallbackUsed ?? false,
+      error_message: input.errorMessage ?? null
+    };
+
+  const { data, error } = await client
+    .from("ai_generation_usage")
+    .insert(usageRow)
     .select("*")
     .single();
 
-  if (error) throw error;
+  if (error) {
+    const retry = await client
+      .from("ai_generation_usage")
+      .insert({
+        user_id: usageRow.user_id,
+        generated_post_id: usageRow.generated_post_id,
+        model: usageRow.model,
+        prompt_tokens_estimate: usageRow.prompt_tokens_estimate,
+        completion_tokens_estimate: usageRow.completion_tokens_estimate,
+        total_tokens_estimate: usageRow.total_tokens_estimate,
+        estimated_cost: usageRow.estimated_cost
+      })
+      .select("*")
+      .single();
+    if (retry.error) throw retry.error;
+    return retry.data;
+  }
   return data;
 }
 

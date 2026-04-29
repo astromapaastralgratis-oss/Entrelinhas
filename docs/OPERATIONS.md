@@ -10,6 +10,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 OPENAI_API_KEY=
 GEMINI_API_KEY=
+OPENROUTER_API_KEY=
 IMAGE_GENERATION_API_KEY=
 NEXT_PUBLIC_APP_URL=
 ```
@@ -17,9 +18,10 @@ NEXT_PUBLIC_APP_URL=
 Variaveis recomendadas:
 
 ```env
-AI_TEXT_PROVIDER=gemini
+AI_TEXT_PROVIDER=auto
 OPENAI_COPY_MODEL=gpt-5.2
 GEMINI_COPY_MODEL=gemini-2.5-flash
+OPENROUTER_COPY_MODEL=google/gemini-2.5-flash
 IMAGE_GENERATION_PROVIDER=openai
 IMAGE_GENERATION_MODEL=gpt-image-1
 IMAGE_GENERATION_ESTIMATED_COST=0.04
@@ -30,9 +32,19 @@ NEXT_PUBLIC_AI_WEEKLY_TOKEN_LIMIT=50000
 
 Nunca exponha `SUPABASE_SERVICE_ROLE_KEY` no cliente. Use apenas em rotas server-side quando necessario.
 
+## IA resiliente
+
+O modo recomendado e `AI_TEXT_PROVIDER=auto`. Nesse modo o app tenta OpenAI, Gemini e OpenRouter automaticamente, pulando provedores sem chave configurada e usando fallback local se todos falharem.
+
+- OpenAI: configure `OPENAI_API_KEY`.
+- Gemini: configure `GEMINI_API_KEY`.
+- OpenRouter: configure `OPENROUTER_API_KEY`.
+
+A tela principal mostra apenas estados simples: `IA automatica`, `Gerado com melhor IA disponivel` e `Alternativa usada automaticamente`. Os detalhes tecnicos ficam nos logs e nas tabelas de auditoria.
+
 ## Supabase
 
-1. Rode todas as migrations em `supabase/migrations`, incluindo a migration de hardening mais recente.
+1. Rode todas as migrations em `supabase/migrations`, incluindo `202604280002_ai_router_audit_fields.sql`.
 2. Confirme as tabelas principais: `content_calendar`, `generated_posts`, `generated_post_images`, `generation_history`, `ai_generation_usage`, `automation_settings`, `generation_cache`, `performance_metrics` e `operation_logs`.
 3. Confirme RLS ativo nas tabelas.
 4. Confirme os buckets de Storage: `posts`, `stories`, `carousels`, `reels-covers` e `exports`.

@@ -28,7 +28,6 @@ import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { createOperationLog, friendlyErrorMessage, logOperation, type OperationLog } from "@/lib/operation-logger";
 import type { EditorialHistoryItem, EditorialPlanItem } from "@/types/content";
 import type { GenerateCopyResult } from "@/types/copy";
-import type { TextProvider } from "@/types/copy";
 import type { PerformanceMetrics } from "@/types/performance";
 import type { ProductionContent, ProductionStatus } from "@/types/production";
 import type { AutomationSettings } from "@/types/automation";
@@ -71,7 +70,6 @@ export function Dashboard() {
   const [generatingKey, setGeneratingKey] = useState<string | null>(null);
   const [generatingImageKey, setGeneratingImageKey] = useState<string | null>(null);
   const [automationSettings, setAutomationSettings] = useState<AutomationSettings>(defaultAutomationSettings);
-  const [textProvider, setTextProvider] = useState<TextProvider>("gemini");
   const [generationCache, setGenerationCache] = useState<Record<string, GenerateCopyResult>>({});
   const [budgetMessage, setBudgetMessage] = useState<string | null>(null);
   const [operationLogs, setOperationLogs] = useState<OperationLog[]>([]);
@@ -274,7 +272,7 @@ export function Dashboard() {
           intensity: getModeContentIntensity(automationSettings.mode),
           automationMode: automationSettings.mode,
           currentDailyCost: contents.reduce((total, item) => total + (item.copy?.cost.estimatedCost ?? 0), 0),
-          provider: textProvider
+          provider: "auto"
         })
       });
 
@@ -291,7 +289,7 @@ export function Dashboard() {
       if (!result.savedPostId) await persistGeneratedCopy(content, result);
       addLog("generation_completed", "Copy gerada e validada.", {
         source: result.source,
-        provider: textProvider,
+        provider: result.cost.providerUsed ?? "auto",
         estimatedCost: result.cost.estimatedCost
       });
       addLog("estimated_cost", "Custo estimado registrado.", { estimatedCost: result.cost.estimatedCost });
@@ -461,13 +459,20 @@ export function Dashboard() {
       completionTokensEstimate: result.cost.completionTokensEstimate,
       totalTokensEstimate: result.cost.totalTokensEstimate,
       estimatedCost: result.cost.estimatedCost,
-      generationSource: result.source
+      generationSource: result.source,
+      providerUsed: result.cost.providerUsed,
+      modelUsed: result.cost.modelUsed ?? result.cost.model,
+      fallbackUsed: result.cost.fallbackUsed,
+      errorMessage: result.cost.errorMessage
     });
 
     await recordAiGenerationUsage({
       userId: user.id,
       generatedPostId: post?.id,
       model: result.cost.model,
+      providerUsed: result.cost.providerUsed,
+      fallbackUsed: result.cost.fallbackUsed,
+      errorMessage: result.cost.errorMessage,
       promptTokensEstimate: result.cost.promptTokensEstimate,
       completionTokensEstimate: result.cost.completionTokensEstimate,
       totalTokensEstimate: result.cost.totalTokensEstimate,
@@ -549,25 +554,9 @@ export function Dashboard() {
           />
 
           <section className="rounded-lg border border-astral-line bg-astral-panel/72 p-4">
-            <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">IA de texto</p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {(["openai", "gemini"] as const).map((provider) => (
-                <button
-                  key={provider}
-                  type="button"
-                  onClick={() => setTextProvider(provider)}
-                  className={
-                    textProvider === provider
-                      ? "toolbar-button border-astral-gold bg-astral-gold/10"
-                      : "toolbar-button"
-                  }
-                >
-                  {provider === "openai" ? "OpenAI" : "Gemini"}
-                </button>
-              ))}
-            </div>
+            <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">IA automática</p>
             <p className="mt-2 text-sm text-stone-400">
-              Provedor ativo para a proxima copy: {textProvider === "openai" ? "OpenAI" : "Gemini"}.
+              O app usa a melhor IA disponível e troca automaticamente se alguma alternativa falhar.
             </p>
           </section>
 

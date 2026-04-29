@@ -47,6 +47,10 @@ export type GeneratedCopy = {
 
 export type CopyCostEstimate = {
   model: string;
+  providerUsed?: TextProvider;
+  modelUsed?: string;
+  fallbackUsed?: boolean;
+  errorMessage?: string | null;
   promptTokensEstimate: number;
   completionTokensEstimate: number;
   totalTokensEstimate: number;
@@ -62,10 +66,17 @@ export type GenerateCopyResult = {
   brief: CopyBrief;
   copy: GeneratedCopy;
   cost: CopyCostEstimate;
-  source: "openai" | "gemini" | "fallback" | "mock";
+  source: TextProvider | "fallback" | "mock";
+  aiStatus?: {
+    label: "IA automática" | "Gerado com melhor IA disponível" | "Alternativa usada automaticamente";
+    providerUsed?: TextProvider;
+    modelUsed?: string;
+    fallbackUsed: boolean;
+    errorMessage?: string | null;
+  };
 };
 
-export type TextProvider = "openai" | "gemini";
+export type TextProvider = "auto" | "openai" | "gemini" | "openrouter";
 
 export type CompactGenerateCopyRequest = {
   planItemId?: string;

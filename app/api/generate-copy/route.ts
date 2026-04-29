@@ -102,13 +102,20 @@ async function persistResultIfPossible(
     completionTokensEstimate: result.cost.completionTokensEstimate,
     totalTokensEstimate: result.cost.totalTokensEstimate,
     estimatedCost: result.cost.estimatedCost,
-    generationSource: result.source
+    generationSource: result.source,
+    providerUsed: result.cost.providerUsed,
+    modelUsed: result.cost.modelUsed ?? result.cost.model,
+    fallbackUsed: result.cost.fallbackUsed,
+    errorMessage: result.cost.errorMessage
   }, client);
 
   await recordAiGenerationUsage({
     userId,
     generatedPostId: post?.id,
     model: result.cost.model,
+    providerUsed: result.cost.providerUsed,
+    fallbackUsed: result.cost.fallbackUsed,
+    errorMessage: result.cost.errorMessage,
     promptTokensEstimate: result.cost.promptTokensEstimate,
     completionTokensEstimate: result.cost.completionTokensEstimate,
     totalTokensEstimate: result.cost.totalTokensEstimate,

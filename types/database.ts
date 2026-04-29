@@ -130,6 +130,10 @@ export type GenerationHistoryRow = {
   total_tokens_estimate: number;
   estimated_cost: number;
   generation_source: string;
+  provider_used: string | null;
+  model_used: string | null;
+  fallback_used: boolean;
+  error_message: string | null;
   created_at: string;
 };
 
@@ -139,6 +143,9 @@ export type AiGenerationUsageRow = {
   generated_post_id: string | null;
   generation_date: string;
   model: string;
+  provider_used: string | null;
+  fallback_used: boolean;
+  error_message: string | null;
   prompt_tokens_estimate: number;
   completion_tokens_estimate: number;
   total_tokens_estimate: number;
@@ -260,6 +267,10 @@ export type Database = {
           | "total_tokens_estimate"
           | "estimated_cost"
           | "generation_source"
+          | "provider_used"
+          | "model_used"
+          | "fallback_used"
+          | "error_message"
         > & {
           id?: string;
           created_at?: string;
@@ -268,16 +279,26 @@ export type Database = {
           total_tokens_estimate?: number;
           estimated_cost?: number;
           generation_source?: string;
+          provider_used?: string | null;
+          model_used?: string | null;
+          fallback_used?: boolean;
+          error_message?: string | null;
         };
         Update: Partial<Omit<GenerationHistoryRow, "id" | "created_at" | "user_id">>;
         Relationships: [];
       };
       ai_generation_usage: {
         Row: AiGenerationUsageRow;
-        Insert: Omit<AiGenerationUsageRow, "id" | "created_at" | "generation_date"> & {
+        Insert: Omit<
+          AiGenerationUsageRow,
+          "id" | "created_at" | "generation_date" | "provider_used" | "fallback_used" | "error_message"
+        > & {
           id?: string;
           created_at?: string;
           generation_date?: string;
+          provider_used?: string | null;
+          fallback_used?: boolean;
+          error_message?: string | null;
         };
         Update: Partial<Omit<AiGenerationUsageRow, "id" | "created_at" | "user_id">>;
         Relationships: [];
