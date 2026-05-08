@@ -8,7 +8,7 @@ import type {
 } from "@/types/image-generation";
 
 const mandatoryPostDirection =
-  "Arte final postavel do Astral Pessoal. O sistema renderiza o texto na arte final; a IA de imagem nao deve escrever palavras. Design premium mistico moderno, alto contraste, margens seguras, composicao editorial, uma unica tela independente por post.";
+  "Arte final postavel do Entrelinhas. O sistema renderiza o texto na arte final; a IA de imagem nao deve escrever palavras. Design premium mistico moderno, alto contraste, margens seguras, composicao editorial, uma unica tela independente por post.";
 
 const mandatoryNegativePrompt =
   "texto pequeno, frase cortada, palavras aleatorias, erro ortografico, grid, colagem, multiplos cards, multiplas telas, baixa legibilidade, excesso de elementos, fonte distorcida, texto fora da margem, layout poluido, borda branca";

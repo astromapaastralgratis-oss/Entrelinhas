@@ -52,7 +52,7 @@ describe("short video engine", () => {
       "Energia do Dia",
       "Tarot que ninguém quer ouvir",
       "Número do dia",
-      "O trânsito astral explicou",
+      "O trânsito entrelinhas explicou",
       "Sinais de que sua energia pediu pausa",
       "Astrologia sem complicar",
       "O que você sente tem pista"

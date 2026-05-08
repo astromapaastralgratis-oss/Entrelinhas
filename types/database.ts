@@ -160,6 +160,39 @@ export type UserGenerationLimitRow = {
   updated_at: string;
 };
 
+export type ProfileRow = {
+  id: string;
+  full_name: string | null;
+  current_role: string | null;
+  industry: string | null;
+  career_goal: string | null;
+  preferred_style: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type GeneratedScriptRow = {
+  id: string;
+  user_id: string;
+  situation: string;
+  context: string | null;
+  desired_outcome: string | null;
+  people_involved: string | null;
+  tone: string | null;
+  ai_response: string;
+  created_at: string;
+};
+
+export type SavedScriptRow = {
+  id: string;
+  user_id: string;
+  title: string;
+  situation: string | null;
+  tone: string | null;
+  content: string;
+  created_at: string;
+};
+
 export type AutomationSettingsRow = {
   user_id: string;
   daily_generation_limit: number;
@@ -189,6 +222,38 @@ export type GenerationCacheRow = {
 export type Database = {
   public: {
     Tables: {
+      profiles: {
+        Row: ProfileRow;
+        Insert: Pick<ProfileRow, "id"> & {
+          full_name?: string | null;
+          current_role?: string | null;
+          industry?: string | null;
+          career_goal?: string | null;
+          preferred_style?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Omit<ProfileRow, "id" | "created_at">>;
+        Relationships: [];
+      };
+      generated_scripts: {
+        Row: GeneratedScriptRow;
+        Insert: Omit<GeneratedScriptRow, "id" | "created_at"> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<Omit<GeneratedScriptRow, "id" | "created_at" | "user_id">>;
+        Relationships: [];
+      };
+      saved_scripts: {
+        Row: SavedScriptRow;
+        Insert: Omit<SavedScriptRow, "id" | "created_at"> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<Omit<SavedScriptRow, "id" | "created_at" | "user_id">>;
+        Relationships: [];
+      };
       content_calendar: {
         Row: ContentCalendarRow;
         Insert: Omit<ContentCalendarRow, "id" | "created_at" | "status"> & {

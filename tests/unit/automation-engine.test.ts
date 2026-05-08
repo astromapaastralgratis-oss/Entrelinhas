@@ -14,7 +14,7 @@ const item: EditorialPlanItem = {
   platform: "instagram",
   format: "carrossel",
   objective: "ganhar seguidores",
-  scienceBase: "trânsito astral",
+  scienceBase: "trânsito entrelinhas",
   theme: "energia da semana",
   hookType: "identificação emocional",
   ctaType: "seguir página",

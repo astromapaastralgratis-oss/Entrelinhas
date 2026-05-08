@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Astral Content Studio",
-  description: "Planejamento editorial automatizado para a marca Astral Pessoal."
+  title: "Entrelinhas",
+  description: "Mentora executiva com IA para conversas corporativas difíceis."
 };
 
 export default function RootLayout({

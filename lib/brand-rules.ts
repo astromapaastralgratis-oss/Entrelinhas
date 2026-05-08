@@ -1,7 +1,7 @@
 import type { ContentIntensity } from "@/types/content";
 
 export const brandRules = {
-  name: "Astral Pessoal",
+  name: "Entrelinhas",
   promise: "clareza prática para decisões emocionais do dia a dia",
   voice: {
     base: "mística, direta, acolhedora e aplicável",

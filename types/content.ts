@@ -22,7 +22,7 @@ export type ContentScience =
   | "cor do dia"
   | "cristal do dia"
   | "energia emocional"
-  | "trânsito astral da semana";
+  | "trânsito entrelinhas da semana";
 
 export type HookType =
   | "identificação"
@@ -45,7 +45,7 @@ export type VisualStyle =
   | "editorial_dourado"
   | "tarot_moderno"
   | "cristal_luminoso"
-  | "calendario_astral";
+  | "calendario_entrelinhas";
 
 export type ContentPillar =
   | "CTA app"
@@ -74,7 +74,7 @@ export type PlannedContent = {
 };
 
 export type CompactAiBrief = {
-  brand: "Astral Pessoal";
+  brand: "Entrelinhas";
   format: ContentFormat;
   objective: ContentObjective;
   science: ContentScience;
@@ -123,7 +123,7 @@ export type EditorialScienceBase =
   | "cor"
   | "cristal"
   | "energia emocional"
-  | "trânsito astral";
+  | "trânsito entrelinhas";
 
 export type EditorialHookType =
   | "identificação emocional"

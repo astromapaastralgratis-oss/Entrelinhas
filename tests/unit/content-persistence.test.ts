@@ -8,7 +8,7 @@ const baseCandidate: EditorialPlanItem = {
   platform: "instagram",
   format: "carrossel",
   objective: "ganhar seguidores",
-  scienceBase: "trânsito astral",
+  scienceBase: "trânsito entrelinhas",
   theme: "energia da semana: direção do dia",
   hookType: "identificação emocional",
   ctaType: "seguir página",
@@ -33,7 +33,7 @@ describe("checkRepetitionRisk", () => {
         platform: "instagram",
         format: "carrossel",
         objective: "educar",
-        scienceBase: "trânsito astral",
+        scienceBase: "trânsito entrelinhas",
         theme: "outro tema",
         hookType: "curiosidade",
         ctaType: "salvar"

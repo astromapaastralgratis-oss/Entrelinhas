@@ -43,16 +43,16 @@ export function logOperation(log: OperationLog) {
   };
 
   if (log.level === "error") {
-    console.error("[AstralContentStudio]", payload);
+    console.error("[EntrelinhasContentStudio]", payload);
     return;
   }
 
   if (log.level === "warning") {
-    console.warn("[AstralContentStudio]", payload);
+    console.warn("[EntrelinhasContentStudio]", payload);
     return;
   }
 
-  console.info("[AstralContentStudio]", payload);
+  console.info("[EntrelinhasContentStudio]", payload);
 }
 
 export function friendlyErrorMessage(error: unknown) {

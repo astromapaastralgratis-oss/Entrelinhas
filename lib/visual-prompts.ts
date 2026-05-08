@@ -1,5 +1,6 @@
 import type { EditorialFormat, EditorialPlanItem } from "@/types/content";
 import type { GeneratedCopy } from "@/types/copy";
+import { normalizeGeneratedCopySlides } from "@/lib/slide-normalization";
 import type {
   VisualLayoutType,
   VisualMode,
@@ -9,7 +10,7 @@ import type {
   VisualStyle
 } from "@/types/visual";
 
-export const astralHookLibrary = [
+export const entrelinhasHookLibrary = [
   "Nem todo cansaco e fisico.",
   "Hoje sua energia pede menos reacao.",
   "Voce nao esta confusa. Esta captando sinais demais.",
@@ -20,7 +21,7 @@ export const astralHookLibrary = [
   "Seu dia nao precisa ser perfeito. Precisa ser lido com clareza."
 ];
 
-export const astralCtaLibrary = {
+export const entrelinhasCtaLibrary = {
   follow: "Segue a pagina pra entender o que esta por tras do que voce sente.",
   app: "Acesse o link na bio e veja sua leitura do dia.",
   save: "Salva este post para consultar quando o dia pesar.",
@@ -207,7 +208,7 @@ export function generateVisualPrompt(contentItem: VisualPromptInput, visualStyle
 
   return {
     prompt: [
-      `Arte final postavel para Astral Pessoal, formato ${contentItem.format}, proporcao ${contentItem.ratio}, tamanho ${dimensions.width}x${dimensions.height}.`,
+      `Arte final postavel para Entrelinhas, formato ${contentItem.format}, proporcao ${contentItem.ratio}, tamanho ${dimensions.width}x${dimensions.height}.`,
       `Modo visual: ${visualStyle.mode === "dark" ? "Premium Cosmico Escuro" : "Editorial Sofisticado Claro"}.`,
       `Estilo do post: ${visualStyle.name}. ${visualStyle.promptFragment}.`,
       `Paleta: ${visualStyle.palette.join(", ")}. Elementos: ${visualStyle.elements.join(", ")}.`,
@@ -255,10 +256,13 @@ export function generateVisualPromptsForContent(
   startStyleIndex = 0
 ) {
   const ratio = getRatioForFormat(planItem.format);
-  const baseTitle = generatedCopy?.title || chooseHook(planItem);
-  const baseSubtitle = generatedCopy?.subtitle || planItem.strategicReason;
-  const baseCta = generatedCopy?.cta || chooseCta(planItem.ctaType);
-  const units = getVisualUnits(planItem, generatedCopy);
+  const normalizedCopy = generatedCopy
+    ? normalizeGeneratedCopySlides(generatedCopy, planItem, getExpectedUnitCount(planItem, generatedCopy))
+    : undefined;
+  const baseTitle = normalizedCopy?.title || chooseHook(planItem);
+  const baseSubtitle = normalizedCopy?.subtitle || planItem.strategicReason;
+  const baseCta = normalizedCopy?.cta || chooseCta(planItem.ctaType);
+  const units = getVisualUnits(planItem, normalizedCopy);
   const visualStyle = selectPostVisualStyle(planItem, startStyleIndex);
 
   return units.map((unit) =>
@@ -275,6 +279,12 @@ export function generateVisualPromptsForContent(
       visualStyle
     )
   );
+}
+
+function getExpectedUnitCount(planItem: EditorialPlanItem, generatedCopy: GeneratedCopy) {
+  if (planItem.format === "stories") return 5;
+  if (planItem.format === "carrossel") return generatedCopy.slides.length <= 4 ? 4 : 6;
+  return 1;
 }
 
 function getVisualUnits(planItem: EditorialPlanItem, generatedCopy?: GeneratedCopy) {
@@ -300,16 +310,16 @@ function chooseHook(planItem: EditorialPlanItem) {
   if (science.includes("energia")) return "Hoje sua energia pede menos reacao.";
   if (science.includes("tarot")) return "Antes de decidir, observe o sinal do dia.";
   if (science.includes("numerologia")) return "O numero do dia pode organizar sua direcao.";
-  return astralHookLibrary[Math.abs(planItem.theme.length) % astralHookLibrary.length];
+  return entrelinhasHookLibrary[Math.abs(planItem.theme.length) % entrelinhasHookLibrary.length];
 }
 
 function chooseCta(ctaType: string) {
   const normalized = ctaType.toLowerCase();
-  if (normalized.includes("link") || normalized.includes("app") || normalized.includes("relatorio")) return astralCtaLibrary.app;
-  if (normalized.includes("salvar")) return astralCtaLibrary.save;
-  if (normalized.includes("comentar")) return astralCtaLibrary.comment;
-  if (normalized.includes("compartilhar")) return astralCtaLibrary.share;
-  return astralCtaLibrary.follow;
+  if (normalized.includes("link") || normalized.includes("app") || normalized.includes("relatorio")) return entrelinhasCtaLibrary.app;
+  if (normalized.includes("salvar")) return entrelinhasCtaLibrary.save;
+  if (normalized.includes("comentar")) return entrelinhasCtaLibrary.comment;
+  if (normalized.includes("compartilhar")) return entrelinhasCtaLibrary.share;
+  return entrelinhasCtaLibrary.follow;
 }
 
 function validatePostText(title: string, subtitle: string, cta: string) {

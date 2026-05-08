@@ -131,7 +131,7 @@ export async function getSafePngBlob(content: ProductionContent, promptIndex = 0
   }
 }
 
-export async function downloadDayZip(contents: ProductionContent[], filename = "astral-content-dia.zip") {
+export async function downloadDayZip(contents: ProductionContent[], filename = "entrelinhas-content-dia.zip") {
   const JSZip = (await import("jszip")).default;
   const zip = new JSZip();
 

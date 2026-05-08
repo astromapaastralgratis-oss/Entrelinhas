@@ -20,6 +20,7 @@ export type GeneratedContentValidationChecks = {
   noAbsolutePrediction: boolean;
   noPsychologicalDiagnosis: boolean;
   noGenericCopy: boolean;
+  noRepeatedSlides: boolean;
   noRepeatedTheme: boolean;
   visualPromptHasRatio: boolean;
   visualPostReady: boolean;

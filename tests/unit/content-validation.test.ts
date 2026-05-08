@@ -7,7 +7,7 @@ const validCopy: GeneratedCopy = {
   subtitle: "Nem toda urgência merece sua entrega",
   slides: [],
   caption: "Uma legenda direta com conexão emocional e CTA claro.",
-  hashtags: ["#AstralPessoal", "#Autoconhecimento", "#Astrologia", "#ClarezaEmocional", "#EnergiaDoDia"],
+  hashtags: ["#EntrelinhasPessoal", "#Autoconhecimento", "#Astrologia", "#ClarezaEmocional", "#EnergiaDoDia"],
   cta: "Comente sua palavra do dia.",
   pinnedComment: "Qual frase fez sentido?",
   qualityNotes: {
@@ -37,6 +37,7 @@ describe("validateGeneratedContent", () => {
       noAbsolutePrediction: true,
       noPsychologicalDiagnosis: true,
       noGenericCopy: true,
+      noRepeatedSlides: true,
       noRepeatedTheme: true,
       visualPromptHasRatio: true,
       visualPostReady: true
@@ -105,6 +106,22 @@ describe("validateGeneratedContent", () => {
 
     expect(result.checks.noRepeatedTheme).toBe(false);
     expect(result.checks.visualPromptHasRatio).toBe(false);
+    expect(result.blocked).toBe(true);
+  });
+
+  it("blocks repeated carousel cards", () => {
+    const result = validateGeneratedContent({
+      copy: {
+        ...validCopy,
+        slides: [
+          { number: 1, title: "Mesmo card", subtitle: "Mesmo texto", visualCue: "" },
+          { number: 2, title: "Mesmo card", subtitle: "Mesmo texto", visualCue: "" }
+        ]
+      }
+    });
+
+    expect(result.checks.noRepeatedSlides).toBe(false);
+    expect(result.errors).toContain("Cards do carrossel estao repetidos.");
     expect(result.blocked).toBe(true);
   });
 });

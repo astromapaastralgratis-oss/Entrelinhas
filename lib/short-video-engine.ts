@@ -19,7 +19,7 @@ const weeklyIntentPattern: ShortVideoIntent[] = [
 
 const formatByIntent: Record<ShortVideoIntent, ShortVideoFormat[]> = {
   identificacao: ["pov_emocional", "verdade_desconfortavel", "se_voce_sentiu_isso_hoje"],
-  educativo: ["transito_astral_simples", "serie_educativa", "mito_ou_verdade", "numero_do_dia"],
+  educativo: ["transito_entrelinhas_simples", "serie_educativa", "mito_ou_verdade", "numero_do_dia"],
   cta_app: ["gancho_explicacao_cta", "tarot_do_dia"],
   fechamento_reflexao: ["energia_da_semana", "se_voce_sentiu_isso_hoje"]
 };
@@ -30,7 +30,7 @@ const seriesByFormat: Record<ShortVideoFormat, ShortVideoSeries> = {
   pov_emocional: "O que você sente tem pista",
   tarot_do_dia: "Tarot que ninguém quer ouvir",
   numero_do_dia: "Número do dia",
-  transito_astral_simples: "O trânsito astral explicou",
+  transito_entrelinhas_simples: "O trânsito entrelinhas explicou",
   energia_da_semana: "Energia do Dia",
   serie_educativa: "Astrologia sem complicar",
   mito_ou_verdade: "Astrologia sem complicar",
@@ -43,7 +43,7 @@ const scienceByFormat: Record<ShortVideoFormat, EditorialScienceBase> = {
   pov_emocional: "energia emocional",
   tarot_do_dia: "tarot",
   numero_do_dia: "numerologia",
-  transito_astral_simples: "trânsito astral",
+  transito_entrelinhas_simples: "trânsito entrelinhas",
   energia_da_semana: "astrologia",
   serie_educativa: "astrologia",
   mito_ou_verdade: "astrologia",
@@ -75,7 +75,7 @@ export const shortVideoSeries: ShortVideoSeries[] = [
   "Energia do Dia",
   "Tarot que ninguém quer ouvir",
   "Número do dia",
-  "O trânsito astral explicou",
+  "O trânsito entrelinhas explicou",
   "Sinais de que sua energia pediu pausa",
   "Astrologia sem complicar",
   "O que você sente tem pista"
@@ -164,7 +164,7 @@ function buildHook(brief: ShortVideoBrief) {
     pov_emocional: "POV: sua energia cansou de insistir.",
     tarot_do_dia: "A carta de hoje pede uma escolha menor.",
     numero_do_dia: "O número do dia fala sobre direção.",
-    transito_astral_simples: "O céu explicou essa inquietação.",
+    transito_entrelinhas_simples: "O céu explicou essa inquietação.",
     energia_da_semana: "A semana começa pedindo presença.",
     serie_educativa: "Astrologia não precisa ser complicada.",
     mito_ou_verdade: "Mito ou verdade: signo define tudo?",
@@ -183,7 +183,7 @@ function buildDevelopment(brief: ShortVideoBrief) {
     cor: "A cor do dia ajuda a lembrar uma intenção simples.",
     cristal: "O cristal entra como símbolo de foco, não como promessa.",
     "energia emocional": "Sua emoção pode ser pista, mas não precisa mandar em tudo.",
-    "trânsito astral": "O trânsito astral mostra clima, não destino fechado."
+    "trânsito entrelinhas": "O trânsito entrelinhas mostra clima, não destino fechado."
   };
 
   return `${base[brief.scienceBase]} ${brief.theme}.`;
@@ -207,7 +207,7 @@ function buildTheme(format: ShortVideoFormat, intent: ShortVideoIntent) {
     pov_emocional: "quando insistir começa a pesar",
     tarot_do_dia: "um símbolo para decidir sem pressa",
     numero_do_dia: "direção prática em um número",
-    transito_astral_simples: "o clima astral sem complicar",
+    transito_entrelinhas_simples: "o clima entrelinhas sem complicar",
     energia_da_semana: "fechamento e preparação energética",
     serie_educativa: "um conceito explicado em 20 segundos",
     mito_ou_verdade: "astrologia sem fatalismo",
@@ -245,10 +245,10 @@ function buildHashtags(brief: ShortVideoBrief) {
     cor: "#CorDoDia",
     cristal: "#Cristais",
     "energia emocional": "#ClarezaEmocional",
-    "trânsito astral": "#TransitoAstral"
+    "trânsito entrelinhas": "#TransitoEntrelinhas"
   };
 
-  return ["#AstralPessoal", "#Autoconhecimento", scienceTag[brief.scienceBase], "#ReelsBrasil", "#TikTokBrasil", "#EnergiaDoDia"];
+  return ["#EntrelinhasPessoal", "#Autoconhecimento", scienceTag[brief.scienceBase], "#ReelsBrasil", "#TikTokBrasil", "#EnergiaDoDia"];
 }
 
 function buildStrategicReason(brief: ShortVideoBrief) {

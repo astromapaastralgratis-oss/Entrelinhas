@@ -36,10 +36,10 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
   }
 
   return (
-    <section className="rounded-lg border border-astral-line bg-astral-panel/80 p-5 shadow-astral">
+    <section className="rounded-lg border border-entrelinhas-line bg-entrelinhas-panel/80 p-5 shadow-entrelinhas">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
         <div>
-          <p className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-astral-gold">
+          <p className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-entrelinhas-gold">
             <Bot className="h-4 w-4" />
             Configuracoes avancadas
           </p>
@@ -49,7 +49,7 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
           </p>
         </div>
 
-        <label className="flex items-center gap-3 rounded-md border border-astral-line bg-astral-void/50 px-3 py-2 text-sm text-stone-200">
+        <label className="flex items-center gap-3 rounded-md border border-entrelinhas-line bg-entrelinhas-void/50 px-3 py-2 text-sm text-stone-200">
           <input
             type="checkbox"
             checked={settings.automaticGenerationEnabled}
@@ -59,14 +59,14 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
         </label>
       </div>
 
-      <div className="mt-5 rounded-md border border-astral-line bg-astral-void/45 p-4">
+      <div className="mt-5 rounded-md border border-entrelinhas-line bg-entrelinhas-void/45 p-4">
         <label className="block">
           <span className="text-xs uppercase tracking-[0.16em] text-stone-500">Preferencia de IA</span>
           <div className="relative mt-2">
             <select
               value={settings.aiProviderPreference}
               onChange={(event) => onChange({ ...settings, aiProviderPreference: event.target.value as TextProvider })}
-              className="h-11 w-full appearance-none rounded-md border border-astral-line bg-black/25 px-3 pr-10 text-sm text-stone-100 outline-none focus:border-astral-gold"
+              className="h-11 w-full appearance-none rounded-md border border-entrelinhas-line bg-black/25 px-3 pr-10 text-sm text-stone-100 outline-none focus:border-entrelinhas-gold"
             >
               {aiOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -90,8 +90,8 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
             onClick={() => onChange({ ...settings, mode: mode.value })}
             className={`rounded-md border p-4 text-left transition ${
               settings.mode === mode.value
-                ? "border-astral-gold bg-astral-gold/10"
-                : "border-astral-line bg-astral-void/40 hover:border-astral-gold/50"
+                ? "border-entrelinhas-gold bg-entrelinhas-gold/10"
+                : "border-entrelinhas-line bg-entrelinhas-void/40 hover:border-entrelinhas-gold/50"
             }`}
           >
             <p className="font-semibold text-stone-50">{mode.label}</p>
@@ -126,9 +126,9 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
           />
         </div>
 
-        <div className="rounded-md border border-astral-line bg-astral-void/45 p-4">
+        <div className="rounded-md border border-entrelinhas-line bg-entrelinhas-void/45 p-4">
           <p className="flex items-center gap-2 text-sm font-semibold text-stone-100">
-            <Gauge className="h-4 w-4 text-astral-teal" />
+            <Gauge className="h-4 w-4 text-entrelinhas-teal" />
             Politica ativa
           </p>
           <p className="mt-2 text-sm text-stone-400">
@@ -137,9 +137,9 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
         </div>
       </div>
 
-      <label className="mt-4 block rounded-md border border-astral-line bg-astral-void/45 p-4">
+      <label className="mt-4 block rounded-md border border-entrelinhas-line bg-entrelinhas-void/45 p-4">
         <span className="flex items-center gap-2 text-sm font-semibold text-stone-100">
-          <Lock className="h-4 w-4 text-astral-gold" />
+          <Lock className="h-4 w-4 text-entrelinhas-gold" />
           Temas travados da semana
         </span>
         <textarea
@@ -153,7 +153,7 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
                 .filter(Boolean)
             })
           }
-          className="mt-3 min-h-20 w-full rounded-md border border-astral-line bg-black/25 p-3 text-sm text-stone-100 outline-none focus:border-astral-gold"
+          className="mt-3 min-h-20 w-full rounded-md border border-entrelinhas-line bg-black/25 p-3 text-sm text-stone-100 outline-none focus:border-entrelinhas-gold"
           placeholder="Um tema por linha"
         />
       </label>
@@ -163,9 +163,9 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
           {alerts.map((alert) => (
             <p
               key={alert.message}
-              className="flex items-center gap-2 rounded-md border border-astral-line bg-astral-void/45 px-3 py-2 text-sm text-stone-300"
+              className="flex items-center gap-2 rounded-md border border-entrelinhas-line bg-entrelinhas-void/45 px-3 py-2 text-sm text-stone-300"
             >
-              <AlertTriangle className={alert.level === "danger" ? "h-4 w-4 text-red-300" : "h-4 w-4 text-astral-gold"} />
+              <AlertTriangle className={alert.level === "danger" ? "h-4 w-4 text-red-300" : "h-4 w-4 text-entrelinhas-gold"} />
               {alert.message}
             </p>
           ))}
@@ -174,9 +174,9 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
           {schedule.map((item) => (
             <p
               key={item.type}
-              className="flex items-center gap-2 rounded-md border border-astral-line bg-astral-void/45 px-3 py-2 text-sm text-stone-300"
+              className="flex items-center gap-2 rounded-md border border-entrelinhas-line bg-entrelinhas-void/45 px-3 py-2 text-sm text-stone-300"
             >
-              <TimerReset className="h-4 w-4 text-astral-teal" />
+              <TimerReset className="h-4 w-4 text-entrelinhas-teal" />
               {item.description} {item.enabled ? "Ativo" : "Pausado"}.
             </p>
           ))}
@@ -188,7 +188,7 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
 
 function BudgetMetric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-astral-line bg-astral-void/40 px-3 py-2">
+    <div className="rounded-md border border-entrelinhas-line bg-entrelinhas-void/40 px-3 py-2">
       <p className="text-lg font-semibold text-stone-50">{value}</p>
       <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-stone-500">{label}</p>
     </div>
@@ -204,7 +204,7 @@ function NumberField({ label, value, onChange }: { label: string; value: number;
         min={0}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="mt-2 w-full rounded-md border border-astral-line bg-black/25 px-3 py-2 text-sm text-stone-100 outline-none focus:border-astral-gold"
+        className="mt-2 w-full rounded-md border border-entrelinhas-line bg-black/25 px-3 py-2 text-sm text-stone-100 outline-none focus:border-entrelinhas-gold"
       />
     </label>
   );

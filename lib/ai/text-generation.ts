@@ -56,7 +56,7 @@ const outputSchema = {
 } as const;
 
 const systemPrompt =
-  "Voce e o motor de copy do Astral Pessoal. Gere conteudo em portugues do Brasil para Instagram e TikTok. Linguagem direta, emocionalmente inteligente, acessivel e com apelo de crescimento organico. Nao use promessa medica, cura garantida, diagnostico psicologico ou previsao absoluta. Nao use linguagem esoterica exagerada. Retorne apenas JSON valido.";
+  "Voce e o motor de copy do Entrelinhas. Gere conteudo em portugues do Brasil para Instagram e TikTok. Linguagem direta, emocionalmente inteligente, acessivel e com apelo de crescimento organico. Nao use promessa medica, cura garantida, diagnostico psicologico ou previsao absoluta. Nao use linguagem esoterica exagerada. Retorne apenas JSON valido.";
 
 export function buildCompactTextPrompt(input: CompactGenerateCopyRequest) {
   const titleMaxWords = input.limits?.titleMaxWords ?? 12;
@@ -67,7 +67,8 @@ export function buildCompactTextPrompt(input: CompactGenerateCopyRequest) {
     `F:${input.format};cards:${input.cards};obj:${input.objective};base:${input.scienceBase}.`,
     `Tema:${input.theme};hook:${input.hookType};${input.moment};CTA:${input.ctaType}.`,
     `Tom:${tone};title<=${titleMaxWords}w;subtitle<=${subtitleMaxWords}w;tags5-8.`,
-    "Curto, claro, retencao/acao. Carrossel progride; stories C/M/F; video hook3s.",
+    "Curto;retencao/acao;slides_sem_repetir=true;1ideia/slide=true.",
+    "car=hook>id>exp>prat>vir>cta;stories=ab>ctx>con>acao>cta;video=hook3s.",
     "JSON keys: title,subtitle,slides,caption,hashtags,cta,pinnedComment,qualityNotes."
   ].join(" ");
 }
@@ -159,7 +160,7 @@ async function generateWithOpenAi(input: CompactGenerateCopyRequest, model: stri
       text: {
         format: {
           type: "json_schema",
-          name: "astral_copy",
+          name: "entrelinhas_copy",
           strict: true,
           schema: outputSchema
         }
@@ -198,8 +199,8 @@ async function generateWithOpenRouter(input: CompactGenerateCopyRequest, model: 
     headers: {
       Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
       "Content-Type": "application/json",
-      "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL ?? "https://astral-content-studio.onrender.com",
-      "X-Title": "Astral Content Studio"
+      "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL ?? "https://entrelinhas.vercel.app",
+      "X-Title": "Entrelinhas"
     },
     body: JSON.stringify({
       model,

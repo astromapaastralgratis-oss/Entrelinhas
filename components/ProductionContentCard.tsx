@@ -12,7 +12,7 @@ type ProductionContentCardProps = {
   generatingImageIndex?: number | null;
   onRegenerateCopy: () => void;
   onRegenerateVisual: () => void;
-  onGenerateImage: (promptIndex: number) => void;
+  onGenerateImage: (promptIndex: number) => void | Promise<void>;
   onStatusChange: (status: ProductionStatus) => void;
 };
 
@@ -38,6 +38,7 @@ export function ProductionContentCard({
   const missingItems = getMissingApprovalItems(Boolean(copy?.caption), hasGeneratedPost, validation.valid);
   const aiLabel = content.copy?.aiStatus?.label ?? "IA automatica";
   const previewText = copy?.subtitle ?? content.plan.strategicReason;
+  const isSequence = content.plan.format === "carrossel" || content.plan.format === "stories";
 
   async function copyText(text: string) {
     await navigator.clipboard.writeText(text);
@@ -48,8 +49,17 @@ export function ProductionContentCard({
     downloadBlob(`${content.plan.date}-${content.plan.format}-${promptIndex + 1}.png`, blob);
   }
 
+  async function generateMissingPosts() {
+    for (let index = 0; index < content.visualPrompts.length; index += 1) {
+      if (!content.visualPrompts[index]?.imageUrl) {
+        await onGenerateImage(index);
+      }
+    }
+    if (hasGeneratedPost) await onGenerateImage(0);
+  }
+
   return (
-    <article className="rounded-lg border border-astral-line bg-[#151520]/92 p-4 shadow-astral">
+    <article className="rounded-lg border border-entrelinhas-line bg-[#151520]/92 p-4 shadow-entrelinhas">
       <div className="grid gap-5 xl:grid-cols-[320px_minmax(0,1fr)]">
         <div>
           <div className="flex flex-wrap gap-2 text-xs">
@@ -57,22 +67,22 @@ export function ProductionContentCard({
             <Badge>{friendlyFormat(content.plan.format)}</Badge>
           </div>
 
-          <div className="mt-4 overflow-hidden rounded-md border border-white/10 bg-black/30">
-            {content.visualPrompts[0]?.imageUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={content.visualPrompts[0].imageUrl} alt="Post final do conteudo" className="h-72 w-full object-contain" />
-            ) : (
-              <div className="flex h-72 flex-col items-center justify-center px-6 text-center text-stone-500">
-                <ImageDown className="h-8 w-8 text-astral-violet" />
-                <p className="mt-3 text-sm">Post ainda nao gerado</p>
-              </div>
-            )}
-          </div>
+          <PostGallery prompts={content.visualPrompts} format={content.plan.format} />
 
           <div className="mt-3 grid gap-2">
             <ActionButton
-              onClick={() => onGenerateImage(0)}
-              label={generatingImageIndex === 0 ? "Gerando post..." : hasGeneratedPost ? "Refazer post" : "Gerar post"}
+              onClick={generateMissingPosts}
+              label={
+                generatingImageIndex !== null && generatingImageIndex !== undefined
+                  ? "Gerando post..."
+                  : hasGeneratedPost
+                    ? isSequence
+                      ? "Refazer carrossel"
+                      : "Refazer post"
+                    : isSequence
+                      ? "Gerar carrossel"
+                      : "Gerar post"
+              }
               icon={<ImageDown />}
             />
             {hasGeneratedPost ? <ActionButton onClick={() => downloadPost(0)} label="Baixar post" icon={<Download />} /> : null}
@@ -82,12 +92,12 @@ export function ProductionContentCard({
         <div>
           <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.18em] text-astral-gold">Texto do post</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-entrelinhas-gold">Texto do post</p>
               <h3 className="mt-2 text-xl font-semibold text-stone-50">{copy?.title ?? content.plan.theme}</h3>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-stone-300">{previewText}</p>
             </div>
-            <div className="rounded-md border border-astral-gold/30 bg-astral-gold/10 px-3 py-2 text-right">
-              <p className="text-xs uppercase tracking-[0.16em] text-astral-gold">Etapa</p>
+            <div className="rounded-md border border-entrelinhas-gold/30 bg-entrelinhas-gold/10 px-3 py-2 text-right">
+              <p className="text-xs uppercase tracking-[0.16em] text-entrelinhas-gold">Etapa</p>
               <p className="mt-1 text-sm font-semibold text-stone-50">{friendlyStatus(content.status)}</p>
             </div>
           </div>
@@ -96,7 +106,7 @@ export function ProductionContentCard({
             {copy ? (
               <>
                 <p className="whitespace-pre-line text-sm leading-6 text-stone-300">{copy.caption}</p>
-                <p className="mt-3 text-xs text-astral-gold">{copy.hashtags.join(" ")}</p>
+                <p className="mt-3 text-xs text-entrelinhas-gold">{copy.hashtags.join(" ")}</p>
                 <p className="mt-3 text-sm text-stone-200">
                   <span className="text-stone-500">Chamada para acao:</span> {copy.cta}
                 </p>
@@ -110,8 +120,8 @@ export function ProductionContentCard({
           </section>
 
           {!canApprove ? (
-            <div className="mt-3 rounded-md border border-astral-rose/25 bg-astral-rose/10 p-3 text-sm text-stone-200">
-              <p className="font-semibold text-astral-rose">Para aprovar, falta:</p>
+            <div className="mt-3 rounded-md border border-entrelinhas-rose/25 bg-entrelinhas-rose/10 p-3 text-sm text-stone-200">
+              <p className="font-semibold text-entrelinhas-rose">Para aprovar, falta:</p>
               <ul className="mt-2 list-inside list-disc space-y-1">
                 {missingItems.map((item) => (
                   <li key={item}>{item}</li>
@@ -120,7 +130,7 @@ export function ProductionContentCard({
             </div>
           ) : null}
 
-          <details className="mt-3 rounded-md border border-astral-line bg-astral-void/35 p-3 text-sm">
+          <details className="mt-3 rounded-md border border-entrelinhas-line bg-entrelinhas-void/35 p-3 text-sm">
             <summary className="cursor-pointer text-stone-200">Ver estrategia</summary>
             <div className="mt-3 grid gap-2 text-stone-400 md:grid-cols-2">
               <p>Base do conteudo: {content.plan.scienceBase}</p>
@@ -128,11 +138,11 @@ export function ProductionContentCard({
               <p>Chamada para acao: {copy?.cta ?? content.plan.ctaType}</p>
               <p>IA usada: {aiLabel}</p>
               <p className="md:col-span-2">Motivo: {content.plan.strategicReason}</p>
-              {content.copy?.cost.fallbackUsed ? <p className="text-astral-gold">Alternativa usada automaticamente.</p> : null}
+              {content.copy?.cost.fallbackUsed ? <p className="text-entrelinhas-gold">Alternativa usada automaticamente.</p> : null}
             </div>
           </details>
 
-          <details className="mt-3 rounded-md border border-astral-line bg-astral-void/35 p-3 text-sm">
+          <details className="mt-3 rounded-md border border-entrelinhas-line bg-entrelinhas-void/35 p-3 text-sm">
             <summary className="cursor-pointer text-stone-200">Estilo do post</summary>
             <VisualPromptPreview
               prompts={content.visualPrompts}
@@ -167,7 +177,7 @@ function getMissingApprovalItems(hasCaption: boolean, hasImage: boolean, isValid
   const items: string[] = [];
   if (!hasCaption) items.push("gerar ou revisar legenda");
   if (!hasImage) items.push("gerar post");
-  if (!isValid) items.push("corrigir texto sinalizado");
+  if (!isValid) items.push("corrigir texto sinalizado, como cards repetidos");
   return items.length ? items : ["revisar conteudo"];
 }
 
@@ -196,7 +206,7 @@ function friendlyStatus(status: ProductionStatus) {
 }
 
 function Badge({ children }: { children: React.ReactNode }) {
-  return <span className="rounded border border-astral-violet/25 bg-astral-violet/10 px-2 py-1 text-violet-200">{children}</span>;
+  return <span className="rounded border border-entrelinhas-violet/25 bg-entrelinhas-violet/10 px-2 py-1 text-violet-200">{children}</span>;
 }
 
 function ActionButton({
@@ -215,10 +225,44 @@ function ActionButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-astral-line bg-astral-night px-3 text-sm text-stone-100 transition hover:border-astral-gold hover:text-white disabled:cursor-not-allowed disabled:opacity-45"
+      className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-entrelinhas-line bg-entrelinhas-night px-3 text-sm text-stone-100 transition hover:border-entrelinhas-gold hover:text-white disabled:cursor-not-allowed disabled:opacity-45"
     >
       {icon}
       {label}
     </button>
+  );
+}
+
+function PostGallery({ prompts, format }: { prompts: ProductionContent["visualPrompts"]; format: string }) {
+  if (!prompts.length) {
+    return (
+      <div className="mt-4 flex h-72 flex-col items-center justify-center rounded-md border border-white/10 bg-black/30 px-6 text-center text-stone-500">
+        <ImageDown className="h-8 w-8 text-entrelinhas-violet" />
+        <p className="mt-3 text-sm">Post ainda nao gerado</p>
+      </div>
+    );
+  }
+
+  const label = format === "stories" ? "Tela" : format === "carrossel" ? "Card" : "Post";
+
+  return (
+    <div className="mt-4 grid max-h-[520px] gap-3 overflow-y-auto pr-1">
+      {prompts.map((prompt, index) => (
+        <div key={`${prompt.styleName}-${index}`} className="rounded-md border border-white/10 bg-black/30 p-2">
+          <p className="mb-2 text-xs uppercase tracking-[0.14em] text-stone-500">
+            {label} {index + 1} de {prompts.length}
+          </p>
+          {prompt.imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={prompt.imageUrl} alt={`${label} ${index + 1} do conteudo`} className="h-72 w-full object-contain" />
+          ) : (
+            <div className="flex h-72 flex-col items-center justify-center px-6 text-center text-stone-500">
+              <ImageDown className="h-8 w-8 text-entrelinhas-violet" />
+              <p className="mt-3 text-sm">{label} ainda nao gerado</p>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
   );
 }

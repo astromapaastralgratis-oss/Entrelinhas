@@ -36,7 +36,7 @@ describe("generateEditorialPlan", () => {
     expect(plan[0]).toMatchObject({
       date: "2026-04-27",
       objective: "ganhar seguidores",
-      scienceBase: "trânsito astral",
+      scienceBase: "trânsito entrelinhas",
       theme: expect.stringContaining("energia da semana"),
       ctaType: "seguir página"
     });

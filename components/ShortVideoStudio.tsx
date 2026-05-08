@@ -19,10 +19,10 @@ export function ShortVideoStudio({ initialDate = new Date() }: ShortVideoStudioP
 
   return (
     <section className="space-y-5">
-      <div className="rounded-lg border border-astral-line bg-astral-panel/86 p-5 shadow-astral">
+      <div className="rounded-lg border border-entrelinhas-line bg-entrelinhas-panel/86 p-5 shadow-entrelinhas">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <p className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-astral-gold">
+            <p className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-entrelinhas-gold">
               <Film className="h-4 w-4" />
               Reels e TikTok
             </p>
@@ -38,7 +38,7 @@ export function ShortVideoStudio({ initialDate = new Date() }: ShortVideoStudioP
               type="date"
               value={startDate}
               onChange={(event) => setStartDate(event.target.value)}
-              className="mt-2 w-full rounded-md border border-astral-line bg-black/25 px-3 py-2 text-sm text-stone-100 outline-none focus:border-astral-gold"
+              className="mt-2 w-full rounded-md border border-entrelinhas-line bg-black/25 px-3 py-2 text-sm text-stone-100 outline-none focus:border-entrelinhas-gold"
             />
           </label>
         </div>
@@ -52,7 +52,7 @@ export function ShortVideoStudio({ initialDate = new Date() }: ShortVideoStudioP
 
         <div className="mt-5 flex flex-wrap gap-2">
           {shortVideoSeries.map((series) => (
-            <span key={series} className="rounded border border-astral-violet/25 bg-astral-violet/10 px-2 py-1 text-xs text-violet-200">
+            <span key={series} className="rounded border border-entrelinhas-violet/25 bg-entrelinhas-violet/10 px-2 py-1 text-xs text-violet-200">
               {series}
             </span>
           ))}
@@ -78,7 +78,7 @@ function VideoCard({
   onCopy: (text: string) => void;
 }) {
   return (
-    <article className="rounded-lg border border-astral-line bg-[#151520]/92 p-4">
+    <article className="rounded-lg border border-entrelinhas-line bg-[#151520]/92 p-4">
       <div className="flex items-start justify-between gap-3">
         <div>
           <div className="flex flex-wrap gap-2 text-xs">
@@ -89,15 +89,15 @@ function VideoCard({
           <h2 className="mt-3 text-lg font-semibold text-stone-50">{video.videoTitle}</h2>
           <p className="mt-2 text-sm leading-6 text-stone-400">{video.strategicReason}</p>
         </div>
-        <span className="rounded-md border border-astral-teal/30 bg-astral-teal/10 px-3 py-2 text-xs text-astral-teal">
+        <span className="rounded-md border border-entrelinhas-teal/30 bg-entrelinhas-teal/10 px-3 py-2 text-xs text-entrelinhas-teal">
           hook 3s
         </span>
       </div>
 
       <section className="mt-4 rounded-md border border-white/5 bg-white/[0.035] p-3">
-        <p className="text-xs uppercase tracking-[0.18em] text-astral-teal">Hook</p>
+        <p className="text-xs uppercase tracking-[0.18em] text-entrelinhas-teal">Hook</p>
         <p className="mt-2 text-base font-semibold text-stone-50">{video.hook}</p>
-        <p className="mt-4 text-xs uppercase tracking-[0.18em] text-astral-gold">Roteiro</p>
+        <p className="mt-4 text-xs uppercase tracking-[0.18em] text-entrelinhas-gold">Roteiro</p>
         <p className="mt-2 whitespace-pre-line text-sm leading-6 text-stone-300">{video.script}</p>
       </section>
 
@@ -106,10 +106,10 @@ function VideoCard({
         <ScriptBlock title="Textos de tela" items={video.screenTexts} />
       </div>
 
-      <section className="mt-4 rounded-md border border-white/5 bg-astral-void/35 p-3">
+      <section className="mt-4 rounded-md border border-white/5 bg-entrelinhas-void/35 p-3">
         <p className="text-xs uppercase tracking-[0.18em] text-stone-500">Legenda</p>
         <p className="mt-2 whitespace-pre-line text-sm leading-6 text-stone-300">{video.caption}</p>
-        <p className="mt-3 text-xs text-astral-gold">{video.hashtags.join(" ")}</p>
+        <p className="mt-3 text-xs text-entrelinhas-gold">{video.hashtags.join(" ")}</p>
         <p className="mt-2 text-sm text-stone-200">CTA: {video.cta}</p>
         <p className="mt-1 text-sm text-stone-400">Comentário fixado: {video.pinnedComment}</p>
       </section>
@@ -126,12 +126,12 @@ function VideoCard({
 
 function ScriptBlock({ title, items }: { title: string; items: string[] }) {
   return (
-    <div className="rounded-md border border-white/5 bg-astral-void/35 p-3">
+    <div className="rounded-md border border-white/5 bg-entrelinhas-void/35 p-3">
       <p className="text-xs uppercase tracking-[0.18em] text-stone-500">{title}</p>
       <ul className="mt-2 space-y-2 text-sm leading-5 text-stone-300">
         {items.map((item) => (
           <li key={item} className="flex gap-2">
-            <RefreshCw className="mt-0.5 h-3.5 w-3.5 shrink-0 text-astral-teal" />
+            <RefreshCw className="mt-0.5 h-3.5 w-3.5 shrink-0 text-entrelinhas-teal" />
             {item}
           </li>
         ))}
@@ -142,7 +142,7 @@ function ScriptBlock({ title, items }: { title: string; items: string[] }) {
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-astral-line bg-astral-void/40 px-3 py-2">
+    <div className="rounded-md border border-entrelinhas-line bg-entrelinhas-void/40 px-3 py-2">
       <p className="text-lg font-semibold text-stone-50">{value}</p>
       <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-stone-500">{label}</p>
     </div>
@@ -150,7 +150,7 @@ function Metric({ label, value }: { label: string; value: string }) {
 }
 
 function Badge({ children }: { children: React.ReactNode }) {
-  return <span className="rounded border border-astral-violet/25 bg-astral-violet/10 px-2 py-1 text-violet-200">{children}</span>;
+  return <span className="rounded border border-entrelinhas-violet/25 bg-entrelinhas-violet/10 px-2 py-1 text-violet-200">{children}</span>;
 }
 
 function ActionButton({
@@ -166,7 +166,7 @@ function ActionButton({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-astral-line bg-astral-night px-3 text-sm text-stone-100 transition hover:border-astral-gold hover:text-white"
+      className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-entrelinhas-line bg-entrelinhas-night px-3 text-sm text-stone-100 transition hover:border-entrelinhas-gold hover:text-white"
     >
       {icon}
       {label}

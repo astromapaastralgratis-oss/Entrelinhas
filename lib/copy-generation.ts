@@ -7,11 +7,12 @@ import {
   shouldBlockForDailyLimit
 } from "@/lib/cost-control";
 import { assertValidGeneratedContent } from "@/lib/content-validation";
+import { normalizeGeneratedCopySlides } from "@/lib/slide-normalization";
 import type { EditorialPlanItem } from "@/types/content";
 import type { CopyBrief, GeneratedCopy, GenerateCopyRequest, GenerateCopyResult } from "@/types/copy";
 
 const copySystemPrompt =
-  "Você é o motor de copy do Astral Pessoal. Gere conteúdo em PT-BR para redes sociais. Linguagem direta, emocionalmente inteligente, acessível, sem promessa absoluta, sem diagnóstico, sem esoterismo exagerado. Retorne apenas JSON válido.";
+  "Você é o motor de copy do Entrelinhas. Gere conteúdo em PT-BR para redes sociais. Linguagem direta, emocionalmente inteligente, acessível, sem promessa absoluta, sem diagnóstico, sem esoterismo exagerado. Retorne apenas JSON válido.";
 
 export function generateCopyBrief(planItem: EditorialPlanItem): CopyBrief {
   return {
@@ -84,7 +85,7 @@ export async function generateCopy(request: GenerateCopyRequest): Promise<Genera
   if (request.forceMock) {
     return {
       brief,
-      copy: validateGeneratedCopy(generateFallbackCopy(brief, modePolicy.copyCompleteness), brief.cards),
+      copy: validateGeneratedCopy(generateFallbackCopy(brief, modePolicy.copyCompleteness), brief.cards, request.planItem),
       cost: baseCost,
       source: "mock"
     };
@@ -112,7 +113,7 @@ export async function generateCopy(request: GenerateCopyRequest): Promise<Genera
 
     return {
       brief,
-      copy: validateGeneratedCopy(aiResult.copy, brief.cards),
+      copy: validateGeneratedCopy(aiResult.copy, brief.cards, request.planItem),
       cost: {
         ...baseCost,
         model: aiResult.model,
@@ -135,7 +136,7 @@ export async function generateCopy(request: GenerateCopyRequest): Promise<Genera
     const message = error instanceof Error ? error.message : String(error);
     return {
       brief,
-      copy: validateGeneratedCopy(generateFallbackCopy(brief, modePolicy.copyCompleteness), brief.cards),
+      copy: validateGeneratedCopy(generateFallbackCopy(brief, modePolicy.copyCompleteness), brief.cards, request.planItem),
       cost: {
         ...baseCost,
         providerUsed: "auto",
@@ -157,7 +158,7 @@ export function parseGeneratedCopyJson(outputText: string): GeneratedCopy {
   return parseAiJson(outputText);
 }
 
-function validateGeneratedCopy(copy: GeneratedCopy, cards: number): GeneratedCopy {
+function validateGeneratedCopy(copy: GeneratedCopy, cards: number, planItem?: EditorialPlanItem): GeneratedCopy {
   const normalizedCopy: GeneratedCopy = {
     ...copy,
     slides: Array.isArray(copy.slides) ? copy.slides : [],
@@ -189,9 +190,11 @@ function validateGeneratedCopy(copy: GeneratedCopy, cards: number): GeneratedCop
     qualityNotes: normalizedCopy.qualityNotes
   };
 
-  assertValidGeneratedContent({ copy: trimmedCopy });
+  const copyWithNarrativeSlides = planItem ? normalizeGeneratedCopySlides(trimmedCopy, planItem, cards) : trimmedCopy;
 
-  return trimmedCopy;
+  assertValidGeneratedContent({ copy: copyWithNarrativeSlides });
+
+  return copyWithNarrativeSlides;
 }
 
 function generateFallbackCopy(brief: CopyBrief, completeness: "minimal" | "complete" | "variations" = "complete"): GeneratedCopy {
@@ -212,7 +215,7 @@ function generateFallbackCopy(brief: CopyBrief, completeness: "minimal" | "compl
       visualCue: `${brief.scienceBase}, ${brief.moment}, visual dark premium com texto curto`
     })),
     caption,
-    hashtags: ["#AstralPessoal", "#Autoconhecimento", "#Astrologia", "#ClarezaEmocional", "#EnergiaDoDia"],
+    hashtags: ["#EntrelinhasPessoal", "#Autoconhecimento", "#Astrologia", "#ClarezaEmocional", "#EnergiaDoDia"],
     cta: ctaText(brief.ctaType),
     pinnedComment: "Qual sinal apareceu para você hoje?",
     qualityNotes: {
@@ -265,7 +268,7 @@ function normalizeHashtags(hashtags: string[] | undefined) {
 
   return unique([
     ...clean,
-    "#AstralPessoal",
+    "#EntrelinhasPessoal",
     "#Autoconhecimento",
     "#Astrologia",
     "#ClarezaEmocional",

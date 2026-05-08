@@ -31,10 +31,10 @@ export function ProductionToolbar({
   onGenerateWeek
 }: ProductionToolbarProps) {
   return (
-    <section className="rounded-lg border border-astral-line bg-astral-panel/86 p-5 shadow-astral backdrop-blur">
+    <section className="rounded-lg border border-entrelinhas-line bg-entrelinhas-panel/86 p-5 shadow-entrelinhas backdrop-blur">
       <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">Gerar, revisar, baixar</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-entrelinhas-gold">Gerar, revisar, baixar</p>
           <h1 className="mt-2 text-3xl font-semibold text-stone-50 md:text-4xl">Conteudos de Hoje</h1>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-300">
             Crie textos, posts finais, legendas e hashtags do dia em um clique. Depois revise e baixe para postar.
@@ -45,7 +45,7 @@ export function ProductionToolbar({
           <button
             onClick={onGenerateToday}
             disabled={isGenerating}
-            className="inline-flex min-h-14 items-center justify-center gap-3 rounded-md border border-astral-gold bg-astral-gold px-5 text-base font-semibold text-black transition hover:bg-[#f4d783] disabled:cursor-wait disabled:opacity-70"
+            className="inline-flex min-h-14 items-center justify-center gap-3 rounded-md border border-entrelinhas-gold bg-entrelinhas-gold px-5 text-base font-semibold text-black transition hover:bg-[#f4d783] disabled:cursor-wait disabled:opacity-70"
             type="button"
           >
             <Wand2 className="h-5 w-5" />
@@ -53,7 +53,7 @@ export function ProductionToolbar({
           </button>
           <button
             onClick={onGenerateWeek}
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-astral-line bg-astral-night px-4 text-sm text-stone-100 transition hover:border-astral-gold"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-entrelinhas-line bg-entrelinhas-night px-4 text-sm text-stone-100 transition hover:border-entrelinhas-gold"
             type="button"
           >
             <CalendarDays className="h-4 w-4" />
@@ -73,8 +73,8 @@ export function ProductionToolbar({
                 onClick={() => onIntensityChange(option.value)}
                 className={
                   intensity === option.value
-                    ? "rounded-md border border-astral-gold bg-astral-gold/15 px-4 py-2 text-sm font-semibold text-stone-50"
-                    : "rounded-md border border-astral-line bg-astral-void/45 px-4 py-2 text-sm text-stone-300 transition hover:border-astral-gold"
+                    ? "rounded-md border border-entrelinhas-gold bg-entrelinhas-gold/15 px-4 py-2 text-sm font-semibold text-stone-50"
+                    : "rounded-md border border-entrelinhas-line bg-entrelinhas-void/45 px-4 py-2 text-sm text-stone-300 transition hover:border-entrelinhas-gold"
                 }
               >
                 {option.label}
@@ -89,7 +89,7 @@ export function ProductionToolbar({
             Baixar dia
           </button>
           <button
-            onClick={() => downloadDayZip(weeklyContents.length ? weeklyContents : contents, "astral-content-semana.zip")}
+            onClick={() => downloadDayZip(weeklyContents.length ? weeklyContents : contents, "entrelinhas-content-semana.zip")}
             className="toolbar-button"
             type="button"
           >

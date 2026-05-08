@@ -15,7 +15,7 @@ const baseInput: GenerateImageRequest = {
   title: "Energia da semana",
   subtitle: "Um sinal simples para hoje",
   cta: "Comente sua palavra",
-  scienceBase: "transito astral",
+  scienceBase: "transito entrelinhas",
   visualStyle: "Cosmic Gold Dark",
   prompt: "Arte final postavel, uma unica tela independente por post, sem grid.",
   negativePrompt: "grid, colagem",

@@ -49,11 +49,11 @@ export function PerformanceManual({ metrics, onAddMetric }: PerformanceManualPro
 
   return (
     <section className="space-y-5">
-      <div className="rounded-lg border border-astral-line bg-astral-panel/86 p-5">
+      <div className="rounded-lg border border-entrelinhas-line bg-entrelinhas-panel/86 p-5">
         <div className="flex items-center gap-2">
-          <BarChart3 className="h-5 w-5 text-astral-gold" />
+          <BarChart3 className="h-5 w-5 text-entrelinhas-gold" />
           <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">Resultados dos Posts</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-entrelinhas-gold">Resultados dos Posts</p>
             <h2 className="mt-1 text-xl font-semibold text-stone-50">Registrar resultado de publicacao</h2>
           </div>
         </div>
@@ -63,7 +63,7 @@ export function PerformanceManual({ metrics, onAddMetric }: PerformanceManualPro
           <Select label="Formato" value={draft.format} options={["feed", "carrossel", "stories", "reels", "tiktok"]} onChange={(value) => update("format", value as typeof draft.format)} />
           <Select label="Plataforma" value={draft.platform} options={["instagram", "tiktok"]} onChange={(value) => update("platform", value as typeof draft.platform)} />
           <Input label="Tema" value={draft.theme} onChange={(value) => update("theme", value)} />
-          <Select label="Ciência base" value={draft.scienceBase} options={["astrologia", "tarot", "numerologia", "elemento", "cor", "cristal", "energia emocional", "trânsito astral"]} onChange={(value) => update("scienceBase", value as typeof draft.scienceBase)} />
+          <Select label="Ciência base" value={draft.scienceBase} options={["astrologia", "tarot", "numerologia", "elemento", "cor", "cristal", "energia emocional", "trânsito entrelinhas"]} onChange={(value) => update("scienceBase", value as typeof draft.scienceBase)} />
           <Select label="Objetivo" value={draft.objective} options={["ganhar seguidores", "engajar", "levar para app", "educar", "gerar autoridade"]} onChange={(value) => update("objective", value as typeof draft.objective)} />
           <Input label="Visual style" value={draft.visualStyle} onChange={(value) => update("visualStyle", value)} />
           <Select label="Momento" value={draft.moment} options={["manhã", "tarde", "noite"]} onChange={(value) => update("moment", value as typeof draft.moment)} />
@@ -92,8 +92,8 @@ export function PerformanceManual({ metrics, onAddMetric }: PerformanceManualPro
         </button>
       </div>
 
-      <section className="rounded-lg border border-astral-line bg-astral-panel/80 p-5">
-        <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">Insights da Semana</p>
+      <section className="rounded-lg border border-entrelinhas-line bg-entrelinhas-panel/80 p-5">
+        <p className="text-xs uppercase tracking-[0.22em] text-entrelinhas-gold">Insights da Semana</p>
         <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           <Insight label="Melhor conteúdo" value={insights.bestContent?.theme ?? "-"} />
           <Insight label="Pior conteúdo" value={insights.worstContent?.theme ?? "-"} />
@@ -102,12 +102,12 @@ export function PerformanceManual({ metrics, onAddMetric }: PerformanceManualPro
           <Insight label="Melhor CTA" value={insights.bestCta ?? "-"} />
           <Insight label="Melhor momento" value={insights.bestMoment ?? "-"} />
         </div>
-        <p className="mt-4 rounded-md border border-astral-teal/25 bg-astral-teal/10 p-3 text-sm leading-6 text-stone-200">
+        <p className="mt-4 rounded-md border border-entrelinhas-teal/25 bg-entrelinhas-teal/10 p-3 text-sm leading-6 text-stone-200">
           {insights.recommendation}
         </p>
       </section>
 
-      <section className="rounded-lg border border-astral-line bg-astral-panel/80 p-5">
+      <section className="rounded-lg border border-entrelinhas-line bg-entrelinhas-panel/80 p-5">
         <h3 className="text-lg font-semibold text-stone-50">Registros manuais</h3>
         <div className="mt-4 space-y-2">
           {metrics.map((metric) => {
@@ -120,7 +120,7 @@ export function PerformanceManual({ metrics, onAddMetric }: PerformanceManualPro
                     {metric.publishedAt} · {metric.platform} · {metric.format} · {metric.scienceBase}
                   </p>
                 </div>
-                <p className="font-semibold text-astral-gold">{score.performanceScore}/100</p>
+                <p className="font-semibold text-entrelinhas-gold">{score.performanceScore}/100</p>
               </div>
             );
           })}
@@ -134,7 +134,7 @@ function Input({ label, value, onChange, type = "text" }: { label: string; value
   return (
     <label className="space-y-2">
       <span className="text-xs uppercase tracking-[0.14em] text-stone-500">{label}</span>
-      <input type={type} value={value} onChange={(event) => onChange(event.target.value)} className="h-10 w-full rounded-md border border-astral-line bg-astral-night px-3 text-sm text-stone-100 outline-none focus:border-astral-gold" />
+      <input type={type} value={value} onChange={(event) => onChange(event.target.value)} className="h-10 w-full rounded-md border border-entrelinhas-line bg-entrelinhas-night px-3 text-sm text-stone-100 outline-none focus:border-entrelinhas-gold" />
     </label>
   );
 }
@@ -147,7 +147,7 @@ function Select({ label, value, options, onChange }: { label: string; value: str
   return (
     <label className="space-y-2">
       <span className="text-xs uppercase tracking-[0.14em] text-stone-500">{label}</span>
-      <select value={value} onChange={(event) => onChange(event.target.value)} className="h-10 w-full rounded-md border border-astral-line bg-astral-night px-3 text-sm text-stone-100 outline-none focus:border-astral-gold">
+      <select value={value} onChange={(event) => onChange(event.target.value)} className="h-10 w-full rounded-md border border-entrelinhas-line bg-entrelinhas-night px-3 text-sm text-stone-100 outline-none focus:border-entrelinhas-gold">
         {options.map((option) => (
           <option key={option}>{option}</option>
         ))}
@@ -158,7 +158,7 @@ function Select({ label, value, options, onChange }: { label: string; value: str
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-astral-line bg-astral-void/40 p-3">
+    <div className="rounded-md border border-entrelinhas-line bg-entrelinhas-void/40 p-3">
       <p className="font-semibold text-stone-50">{value}</p>
       <p className="mt-1 text-[11px] uppercase tracking-[0.14em] text-stone-500">{label}</p>
     </div>

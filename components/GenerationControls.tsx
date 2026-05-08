@@ -31,15 +31,15 @@ export function GenerationControls({
   onGenerateWeek
 }: GenerationControlsProps) {
   return (
-    <section className="rounded-lg border border-astral-line bg-astral-panel/86 p-4 shadow-astral backdrop-blur">
+    <section className="rounded-lg border border-entrelinhas-line bg-entrelinhas-panel/86 p-4 shadow-entrelinhas backdrop-blur">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
         <div>
-          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-astral-gold">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-entrelinhas-gold">
             <Sparkles className="h-4 w-4" />
             Motor editorial inteligente
           </div>
           <h1 className="mt-2 text-2xl font-semibold text-stone-50 md:text-3xl">
-            Astral Content Studio
+            Entrelinhas
           </h1>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-300">
             Escolhe momento, formato, ciência base, gancho, CTA e pontuação usando regras estruturadas, sem IA.
@@ -54,7 +54,7 @@ export function GenerationControls({
               onChange={(event) =>
                 onSettingsChange({ ...settings, intensity: event.target.value as ContentIntensity })
               }
-              className="h-11 w-full rounded-md border border-astral-line bg-astral-night px-3 text-sm text-stone-100 outline-none transition focus:border-astral-gold"
+              className="h-11 w-full rounded-md border border-entrelinhas-line bg-entrelinhas-night px-3 text-sm text-stone-100 outline-none transition focus:border-entrelinhas-gold"
             >
               {intensities.map((intensity) => (
                 <option key={intensity}>{intensity}</option>
@@ -69,7 +69,7 @@ export function GenerationControls({
               onChange={(event) =>
                 onSettingsChange({ ...settings, primaryObjective: event.target.value as EditorialObjective })
               }
-              className="h-11 w-full rounded-md border border-astral-line bg-astral-night px-3 text-sm text-stone-100 outline-none transition focus:border-astral-gold"
+              className="h-11 w-full rounded-md border border-entrelinhas-line bg-entrelinhas-night px-3 text-sm text-stone-100 outline-none transition focus:border-entrelinhas-gold"
             >
               {objectives.map((objective) => (
                 <option key={objective}>{objective}</option>
@@ -83,7 +83,7 @@ export function GenerationControls({
         <button
           type="button"
           onClick={onGenerateDay}
-          className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-astral-gold px-4 text-sm font-semibold text-astral-void transition hover:bg-[#e7c783] focus:outline-none focus:ring-2 focus:ring-astral-gold/60"
+          className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-entrelinhas-gold px-4 text-sm font-semibold text-entrelinhas-void transition hover:bg-[#e7c783] focus:outline-none focus:ring-2 focus:ring-entrelinhas-gold/60"
         >
           <Wand2 className="h-4 w-4" />
           Gerar plano do dia
@@ -91,7 +91,7 @@ export function GenerationControls({
         <button
           type="button"
           onClick={onGenerateWeek}
-          className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-astral-line bg-astral-night px-4 text-sm font-semibold text-stone-100 transition hover:border-astral-violet hover:text-white focus:outline-none focus:ring-2 focus:ring-astral-violet/50"
+          className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-entrelinhas-line bg-entrelinhas-night px-4 text-sm font-semibold text-stone-100 transition hover:border-entrelinhas-violet hover:text-white focus:outline-none focus:ring-2 focus:ring-entrelinhas-violet/50"
         >
           <CalendarDays className="h-4 w-4" />
           Gerar plano da semana

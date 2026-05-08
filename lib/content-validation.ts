@@ -3,6 +3,7 @@ import type {
   GeneratedContentValidationInput,
   GeneratedContentValidationResult
 } from "@/types/content-validation";
+import { hasRepeatedSlides } from "@/lib/slide-normalization";
 
 const medicalPromisePattern =
   /\b(cura|curar|curado|curada|tratamento|diagn[oó]stico|terapia garantida|vai sarar|resolve sua ansiedade|acaba com sua dor)\b/i;
@@ -37,6 +38,14 @@ export function validateGeneratedContent(input: GeneratedContentValidationInput)
     noAbsolutePrediction: !absolutePredictionPattern.test(text),
     noPsychologicalDiagnosis: !psychologicalDiagnosisPattern.test(text),
     noGenericCopy: !genericCopyPattern.test(text),
+    noRepeatedSlides: !hasRepeatedSlides(
+      (copy?.slides ?? []).map((slide, index) => ({
+        number: slide?.number ?? index + 1,
+        title: slide?.title ?? "",
+        subtitle: slide?.subtitle ?? "",
+        visualCue: slide?.visualCue ?? ""
+      }))
+    ),
     noRepeatedTheme: !isRepeatedTheme(input),
     visualPromptHasRatio: Boolean(input.visualPrompts?.length ? input.visualPrompts.every((prompt) => Boolean(prompt.ratio)) : true),
     visualPostReady: Boolean(
@@ -56,6 +65,7 @@ export function validateGeneratedContent(input: GeneratedContentValidationInput)
     "noAbsolutePrediction",
     "noPsychologicalDiagnosis",
     "noGenericCopy",
+    "noRepeatedSlides",
     "visualPromptHasRatio",
     "visualPostReady"
   ];
@@ -99,6 +109,7 @@ const validationMessages: Record<keyof GeneratedContentValidationChecks, string>
   noAbsolutePrediction: "Conteudo contem previsao absoluta ou promessa garantida.",
   noPsychologicalDiagnosis: "Conteudo parece diagnostico psicologico.",
   noGenericCopy: "Texto generico bloqueado.",
+  noRepeatedSlides: "Cards do carrossel estao repetidos.",
   noRepeatedTheme: "Tema repetitivo sinalizado pelo historico.",
   visualPromptHasRatio: "Estilo do post sem proporcao.",
   visualPostReady: "Este post ainda precisa de ajuste antes de publicar."
@@ -112,6 +123,7 @@ const blockingMessages = new Set([
   validationMessages.noAbsolutePrediction,
   validationMessages.noPsychologicalDiagnosis,
   validationMessages.noGenericCopy,
+  validationMessages.noRepeatedSlides,
   validationMessages.visualPromptHasRatio,
   validationMessages.visualPostReady
 ]);

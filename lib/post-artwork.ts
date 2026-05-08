@@ -91,7 +91,7 @@ export function generatePostArtwork(input: GenerateImageRequest): PostArtworkRes
       stroke: palette.gold,
       panel: palette.panel
     }),
-    `<text x="${width - margin}" y="${height - margin * 0.55}" text-anchor="end" fill="${palette.gold}" opacity="0.72" font-family="Inter, Arial, sans-serif" font-size="22" letter-spacing="2">ASTRAL PESSOAL</text>`,
+    `<text x="${width - margin}" y="${height - margin * 0.55}" text-anchor="end" fill="${palette.gold}" opacity="0.72" font-family="Inter, Arial, sans-serif" font-size="22" letter-spacing="2">ENTRELINHAS PESSOAL</text>`,
     "</svg>"
   ].join("");
 

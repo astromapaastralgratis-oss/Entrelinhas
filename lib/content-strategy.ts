@@ -51,7 +51,7 @@ export const mockHistory: ContentHistoryItem[] = [
     science: "energia emocional",
     hookType: "identificação",
     theme: "clareza antes de responder",
-    cta: "Siga a Astral Pessoal para receber sua direção do dia."
+    cta: "Siga a Entrelinhas para receber sua direção do dia."
   }
 ];
 

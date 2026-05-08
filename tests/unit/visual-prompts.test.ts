@@ -40,7 +40,7 @@ const copy: GeneratedCopy = {
     { number: 3, title: "Escolha uma acao", subtitle: "Um passo pequeno ja muda o ritmo", visualCue: "estrela" }
   ],
   caption: "Legenda",
-  hashtags: ["#AstralPessoal", "#Autoconhecimento", "#Astrologia", "#ClarezaEmocional", "#EnergiaDoDia"],
+  hashtags: ["#EntrelinhasPessoal", "#Autoconhecimento", "#Astrologia", "#ClarezaEmocional", "#EnergiaDoDia"],
   cta: "Salve para consultar depois",
   pinnedComment: "Qual sinal apareceu?",
   qualityNotes: {
@@ -63,7 +63,7 @@ describe("visual prompts", () => {
   it("generates independent carousel cards without mixing styles", () => {
     const prompts = generateVisualPromptsForContent(planItem, copy);
 
-    expect(prompts).toHaveLength(3);
+    expect(prompts).toHaveLength(4);
     expect(new Set(prompts.map((prompt) => prompt.styleName)).size).toBe(1);
     expect(new Set(prompts.map((prompt) => prompt.visualMode)).size).toBe(1);
     prompts.forEach((prompt) => {
@@ -76,6 +76,25 @@ describe("visual prompts", () => {
       expect(prompt.prompt).toContain("sem grid");
       expect(prompt.negativePrompt).toContain("multiplos cards");
     });
+  });
+
+  it("replaces repeated carousel slide text before creating post prompts", () => {
+    const repeatedCopy: GeneratedCopy = {
+      ...copy,
+      slides: Array.from({ length: 6 }, (_, index) => ({
+        number: index + 1,
+        title: "Mesma frase",
+        subtitle: "Mesmo subtitulo",
+        visualCue: ""
+      }))
+    };
+
+    const prompts = generateVisualPromptsForContent(planItem, repeatedCopy);
+    const titles = prompts.map((prompt) => prompt.textBlocks.find((block) => block.type === "title")?.text);
+
+    expect(prompts).toHaveLength(6);
+    expect(new Set(titles).size).toBe(6);
+    expect(new Set(prompts.map((prompt) => prompt.styleName)).size).toBe(1);
   });
 
   it("creates a mobile-first post direction with safe text limits", () => {
@@ -102,7 +121,7 @@ describe("visual prompts", () => {
   it("selects the correct visual style by content strategy", () => {
     expect(selectPostVisualStyle({ ...planItem, scienceBase: "tarot" }).name).toBe("Tarot Premium");
     expect(selectPostVisualStyle({ ...planItem, scienceBase: "numerologia" }).name).toBe("Numerology Editorial Light");
-    expect(selectPostVisualStyle({ ...planItem, scienceBase: "astrologia", objective: "autoridade" }).name).toBe(
+    expect(selectPostVisualStyle({ ...planItem, scienceBase: "astrologia", objective: "gerar autoridade" }).name).toBe(
       "Elegant Astro Light"
     );
     expect(selectPostVisualStyle({ ...planItem, scienceBase: "energia emocional" }).name).toBe("Cosmic Gold Dark");

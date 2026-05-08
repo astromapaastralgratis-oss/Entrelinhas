@@ -27,7 +27,7 @@ export const scienceRotation: ContentScience[] = [
   "cor do dia",
   "cristal do dia",
   "energia emocional",
-  "trânsito astral da semana"
+  "trânsito entrelinhas da semana"
 ];
 
 export const pillarRotation: ContentPillar[] = [
@@ -45,7 +45,7 @@ export const hookTemplates: Record<HookType, string[]> = {
   ],
   curiosidade: [
     "A energia de hoje favorece uma escolha que quase ninguém percebe.",
-    "O detalhe astral desta semana explica por que {theme} está tão presente."
+    "O detalhe entrelinhas desta semana explica por que {theme} está tão presente."
   ],
   contraste: [
     "O que parece atraso pode ser ajuste de rota.",
@@ -53,7 +53,7 @@ export const hookTemplates: Record<HookType, string[]> = {
   ],
   salvável: [
     "Salve este ritual rápido para quando {theme} aparecer.",
-    "Checklist astral do dia para voltar ao centro em poucos minutos."
+    "Checklist entrelinhas do dia para voltar ao centro em poucos minutos."
   ],
   compartilhável: [
     "Envie para alguém que precisa transformar confusão em clareza hoje.",
@@ -82,10 +82,10 @@ export const structuresByFormat: Record<ContentFormat, PostStructure[]> = {
 };
 
 export const ctaTemplates: Record<ContentObjective, string[]> = {
-  "ganhar seguidores": ["Siga a Astral Pessoal para receber sua direção do dia."],
+  "ganhar seguidores": ["Siga a Entrelinhas para receber sua direção do dia."],
   engajamento: ["Comente a palavra que define sua energia de hoje."],
   "tráfego para app": ["Abra o app para ver sua leitura completa do dia."],
-  "venda/relatório": ["Gere seu relatório Astral Pessoal e veja seus próximos sinais."],
+  "venda/relatório": ["Gere seu relatório Entrelinhas e veja seus próximos sinais."],
   autoridade: ["Salve para consultar quando a energia da semana mudar."],
   educação: ["Compartilhe com quem está aprendendo a ler os próprios ciclos."]
 };
@@ -95,7 +95,7 @@ export const visualStyles: VisualStyle[] = [
   "editorial_dourado",
   "tarot_moderno",
   "cristal_luminoso",
-  "calendario_astral"
+  "calendario_entrelinhas"
 ];
 
 export const themeBank = [

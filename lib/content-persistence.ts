@@ -477,15 +477,15 @@ export function calendarRowToHistoryItem(row: ContentCalendarRow): EditorialHist
 export function getCtaVariant(ctaType: EditorialCtaType, usedTexts: string[]) {
   const variants: Record<EditorialCtaType, string[]> = {
     "seguir página": [
-      "Siga a Astral Pessoal para receber sua direção do dia.",
-      "Acompanhe a Astral Pessoal para mais clareza prática.",
+      "Siga a Entrelinhas para receber sua direção do dia.",
+      "Acompanhe a Entrelinhas para mais clareza prática.",
       "Siga para transformar sinais do dia em escolhas melhores."
     ],
     salvar: ["Salve para consultar quando precisar.", "Guarde este ritual para hoje.", "Salve este guia rápido."],
     compartilhar: ["Compartilhe com quem precisa desse sinal.", "Envie para alguém que sentiria isso.", "Compartilhe nos stories se fez sentido."],
     comentar: ["Comente sua palavra do dia.", "Me conta nos comentários: qual parte pegou?", "Comente o sinal que apareceu para você."],
     "acessar link na bio": ["Acesse o link na bio para ver sua leitura.", "Abra o app pelo link na bio.", "Veja seu direcionamento completo no link da bio."],
-    "gerar relatório no app": ["Gere seu relatório no app.", "Crie seu relatório Astral Pessoal.", "Abra o app e gere seu mapa de clareza."]
+    "gerar relatório no app": ["Gere seu relatório no app.", "Crie seu relatório Entrelinhas.", "Abra o app e gere seu mapa de clareza."]
   };
 
   return variants[ctaType].find((text) => !usedTexts.includes(text)) ?? variants[ctaType][0];

@@ -11,7 +11,7 @@ export type ShortVideoFormat =
   | "pov_emocional"
   | "tarot_do_dia"
   | "numero_do_dia"
-  | "transito_astral_simples"
+  | "transito_entrelinhas_simples"
   | "energia_da_semana"
   | "serie_educativa"
   | "mito_ou_verdade"
@@ -23,7 +23,7 @@ export type ShortVideoSeries =
   | "Energia do Dia"
   | "Tarot que ninguém quer ouvir"
   | "Número do dia"
-  | "O trânsito astral explicou"
+  | "O trânsito entrelinhas explicou"
   | "Sinais de que sua energia pediu pausa"
   | "Astrologia sem complicar"
   | "O que você sente tem pista";

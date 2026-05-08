@@ -42,18 +42,18 @@ create policy "generated_post_images_delete_own" on public.generated_post_images
 create index if not exists generated_post_images_post_idx on public.generated_post_images(generated_post_id, card_index);
 create index if not exists generated_post_images_user_created_idx on public.generated_post_images(user_id, created_at desc);
 
-create policy "storage_read_public_astral_assets"
+create policy "storage_read_public_entrelinhas_assets"
   on storage.objects for select
   using (bucket_id in ('posts', 'stories', 'carousels', 'reels-covers', 'exports'));
 
-create policy "storage_insert_own_astral_assets"
+create policy "storage_insert_own_entrelinhas_assets"
   on storage.objects for insert
   with check (
     bucket_id in ('posts', 'stories', 'carousels', 'reels-covers', 'exports')
     and auth.uid()::text = (storage.foldername(name))[1]
   );
 
-create policy "storage_update_own_astral_assets"
+create policy "storage_update_own_entrelinhas_assets"
   on storage.objects for update
   using (
     bucket_id in ('posts', 'stories', 'carousels', 'reels-covers', 'exports')

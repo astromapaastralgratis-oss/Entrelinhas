@@ -11,13 +11,13 @@ export function LibraryPanel({ contents }: LibraryPanelProps) {
   const generated = contents.filter((content) => content.copy);
 
   return (
-    <section className="rounded-lg border border-astral-line bg-astral-panel/80 p-5">
+    <section className="rounded-lg border border-entrelinhas-line bg-entrelinhas-panel/80 p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">Biblioteca</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-entrelinhas-gold">Biblioteca</p>
           <h2 className="mt-2 text-xl font-semibold text-stone-50">Histórico operacional</h2>
         </div>
-        <span className="rounded border border-astral-teal/25 bg-astral-teal/10 px-3 py-1 text-xs text-astral-teal">
+        <span className="rounded border border-entrelinhas-teal/25 bg-entrelinhas-teal/10 px-3 py-1 text-xs text-entrelinhas-teal">
           {contents.length} conteúdos
         </span>
       </div>
@@ -47,7 +47,7 @@ export function LibraryPanel({ contents }: LibraryPanelProps) {
 
 function Metric({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-md border border-astral-line bg-astral-void/40 p-3">
+    <div className="rounded-md border border-entrelinhas-line bg-entrelinhas-void/40 p-3">
       <p className="text-xl font-semibold text-stone-50">{value}</p>
       <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-stone-500">{label}</p>
     </div>

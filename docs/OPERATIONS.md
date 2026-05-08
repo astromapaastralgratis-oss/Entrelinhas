@@ -1,113 +1,93 @@
-# Astral Content Studio - Operacao e Deploy
+# Entrelinhas - Operação e Deploy
 
-## Variaveis obrigatorias
+Este projeto agora está orientado ao MVP do Entrelinhas: mentora executiva com IA para geração de scripts corporativos práticos.
 
-Configure no `.env.local` e no Render:
+## Stack atual
+
+- Next.js
+- React
+- Tailwind CSS
+- Supabase Auth
+- Supabase Database
+- OpenAI para geração de scripts
+- Vercel como deploy recomendado
+
+## Fluxo principal
+
+1. Usuária cria conta ou entra
+2. Preenche perfil profissional
+3. Escolhe uma situação corporativa
+4. Descreve contexto, resultado desejado, pessoas envolvidas e tom
+5. Gera script executivo
+6. Copia ou salva
+7. Consulta histórico
+
+## Variáveis obrigatórias
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-OPENAI_API_KEY=
-GEMINI_API_KEY=
-OPENROUTER_API_KEY=
-IMAGE_GENERATION_API_KEY=
 NEXT_PUBLIC_APP_URL=
 ```
 
-Variaveis recomendadas:
+## Variáveis recomendadas para IA real
 
 ```env
-AI_TEXT_PROVIDER=auto
+OPENAI_API_KEY=
 OPENAI_COPY_MODEL=gpt-5.2
-GEMINI_COPY_MODEL=gemini-2.5-flash
-OPENROUTER_COPY_MODEL=google/gemini-2.5-flash
-IMAGE_GENERATION_PROVIDER=openai
-IMAGE_GENERATION_MODEL=gpt-image-1
-IMAGE_GENERATION_ESTIMATED_COST=0.04
-AI_DAILY_COST_LIMIT_USD=1
-NEXT_PUBLIC_AI_DAILY_TOKEN_LIMIT=10000
-NEXT_PUBLIC_AI_WEEKLY_TOKEN_LIMIT=50000
 ```
 
-Nunca exponha `SUPABASE_SERVICE_ROLE_KEY` no cliente. Use apenas em rotas server-side quando necessario.
-
-## IA resiliente
-
-O modo recomendado e `AI_TEXT_PROVIDER=auto`. Nesse modo o app tenta OpenAI, Gemini e OpenRouter automaticamente, pulando provedores sem chave configurada e usando fallback local se todos falharem.
-
-- OpenAI: configure `OPENAI_API_KEY`.
-- Gemini: configure `GEMINI_API_KEY`.
-- OpenRouter: configure `OPENROUTER_API_KEY`.
-
-A tela principal mostra apenas estados simples: `IA automatica`, `Gerado com melhor IA disponivel` e `Alternativa usada automaticamente`. Os detalhes tecnicos ficam nos logs e nas tabelas de auditoria.
+Sem `OPENAI_API_KEY`, a rota de geração usa fallback local para manter o MVP navegável.
 
 ## Supabase
 
-1. Rode todas as migrations em `supabase/migrations`, incluindo `202604280002_ai_router_audit_fields.sql`.
-2. Confirme as tabelas principais: `content_calendar`, `generated_posts`, `generated_post_images`, `generation_history`, `ai_generation_usage`, `automation_settings`, `generation_cache`, `performance_metrics` e `operation_logs`.
-3. Confirme RLS ativo nas tabelas.
-4. Confirme os buckets de Storage: `posts`, `stories`, `carousels`, `reels-covers` e `exports`.
-5. Faca login no app antes de testar salvamento real. As policies usam `auth.uid()`.
-6. Em Auth URL Configuration, deixe `Site URL` igual ao dominio do Render e adicione o mesmo dominio em Redirect URLs.
+Rodar a migration:
 
-## Render
+```text
+supabase/migrations/202605070001_create_entrelinhas_schema.sql
+```
 
-1. Conecte o repositorio GitHub ao Render como Web Service.
-2. Runtime: Node.
-3. Branch: `main`.
-4. Build command: `npm install; npm run build`.
-5. Start command: `npm run start`.
-6. Configure todas as variaveis de ambiente.
-7. Clique em deploy e aguarde status `Deployed`.
-8. Abra a URL `https://astral-content-studio.onrender.com`.
-9. Atualize `NEXT_PUBLIC_APP_URL` com a URL final.
+Tabelas principais:
 
-## Fluxo diario simples
+- `profiles`
+- `generated_scripts`
+- `saved_scripts`
 
-1. Abra `Conteudos de Hoje`.
-2. Clique em `Gerar conteudos de hoje`.
-3. Em cada conteudo, clique em `Regenerar copy`.
-4. Gere o PNG individual de cada card/story/capa.
-5. Revise qualidade, CTA, legenda e comentario fixado.
-6. Clique em `Aprovar` somente quando houver copy valida e imagem gerada.
-7. Abra `Pronto para postar`.
-8. Baixe PNG, copie legenda e publique manualmente.
-9. Marque como `publicado`.
-10. Registre os numeros em `Performance Manual`.
+RLS:
 
-## Regras de seguranca operacional
+- Usuárias só podem acessar seus próprios perfis, scripts gerados e scripts salvos.
 
-- As rotas de IA exigem usuario autenticado.
-- O `userId` nunca deve vir do navegador como fonte de verdade.
-- O custo diario e calculado no servidor antes de chamar IA.
-- O fallback de imagem deve produzir PNG valido.
-- O ZIP deve incluir PNG seguro ou placeholder PNG valido.
-- O status aprovado/publicado deve ser salvo no Supabase.
+## Vercel
 
-## Erros comuns
+Configuração:
 
-### IA indisponivel
-Verifique `OPENAI_API_KEY` ou `GEMINI_API_KEY`. O fallback local deve continuar funcionando.
+```text
+Framework: Next.js
+Install Command: npm install
+Build Command: npm run build
+Output Directory: vazio
+```
 
-### Storage indisponivel
-Confirme buckets, policies e login do usuario. Sem Storage, o app usa PNG fallback para manter o fluxo.
+Depois de configurar as variáveis, cada push na branch principal gera deploy automático.
 
-### RLS bloqueando escrita
-Confirme que o usuario esta autenticado e que `auth.uid()` corresponde ao `user_id`.
+## Emails
 
-### Limite de custo atingido
-Mude para modo economico, reduza a geracao semanal ou regenere apenas um conteudo.
+Templates base estão em:
 
-## Checklist de producao
+```text
+emails/
+```
 
-- `npm run typecheck`
-- `npm run test:unit`
+Para produção, configurar domínio próprio e SMTP/transacional no Supabase.
+
+## Checklist de produção
+
 - `npm run build`
 - Supabase migrations aplicadas
-- Buckets criados
-- Variaveis no Render
-- Auth URL do Supabase apontando para o Render
-- Copy gerada
-- PNG individual baixado e aberto
-- Status aprovado/publicado persistindo apos reload
+- Supabase Auth URL configurada
+- Vercel com variáveis de ambiente
+- Cadastro testado
+- Login testado
+- Geração de script testada
+- Histórico testado
+- Perfil testado

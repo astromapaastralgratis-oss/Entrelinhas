@@ -42,7 +42,7 @@ const dayRules: Record<number, DayRule> = {
   },
   1: {
     theme: "energia da semana",
-    scienceBases: ["trânsito astral", "astrologia", "energia emocional"],
+    scienceBases: ["trânsito entrelinhas", "astrologia", "energia emocional"],
     objective: "ganhar seguidores",
     preferredFormats: ["carrossel", "reels", "feed"],
     hookTypes: ["identificação emocional", "curiosidade", "alerta simbólico"],
@@ -69,7 +69,7 @@ const dayRules: Record<number, DayRule> = {
   },
   4: {
     theme: "astrologia educativa",
-    scienceBases: ["astrologia", "trânsito astral", "elemento"],
+    scienceBases: ["astrologia", "trânsito entrelinhas", "elemento"],
     objective: "gerar autoridade",
     preferredFormats: ["carrossel", "feed", "reels"],
     hookTypes: ["microensinamento", "curiosidade", "alerta simbólico"],

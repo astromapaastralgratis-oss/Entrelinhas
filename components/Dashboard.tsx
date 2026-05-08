@@ -107,7 +107,7 @@ export function Dashboard() {
 
   useEffect(() => {
     try {
-      const saved = window.localStorage.getItem("astral-performance-metrics");
+      const saved = window.localStorage.getItem("entrelinhas-performance-metrics");
       if (saved) setPerformanceMetrics(JSON.parse(saved) as PerformanceMetrics[]);
     } catch {
       // Local persistence is only a convenience.
@@ -116,7 +116,7 @@ export function Dashboard() {
 
   useEffect(() => {
     try {
-      window.localStorage.setItem("astral-performance-metrics", JSON.stringify(performanceMetrics));
+      window.localStorage.setItem("entrelinhas-performance-metrics", JSON.stringify(performanceMetrics));
     } catch {
       // Ignore quota/privacy-mode failures without breaking the daily flow.
     }
@@ -283,7 +283,7 @@ export function Dashboard() {
 
       const session = supabase ? await supabase.auth.getSession() : null;
       const accessToken = session?.data.session?.access_token;
-      const response = await fetch("/api/generate-copy", {
+      const response = await fetch("/api/generate-executive-script", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -382,7 +382,7 @@ export function Dashboard() {
 
       const session = supabase ? await supabase.auth.getSession() : null;
       const accessToken = session?.data.session?.access_token;
-      const response = await fetch("/api/generate-image", {
+      const response = await fetch("/api/generate-executive-script", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -568,16 +568,16 @@ export function Dashboard() {
   return (
     <main className="min-h-screen px-4 py-5 text-stone-100 md:px-6 lg:px-8">
       <div className="mx-auto grid max-w-[1480px] gap-5 lg:grid-cols-[88px_minmax(0,1fr)]">
-        <aside className="hidden rounded-lg border border-astral-line bg-astral-panel/70 p-3 lg:flex lg:flex-col lg:items-center lg:justify-between">
-          <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-astral-gold/45 bg-astral-gold/10">
-            <MoonStar className="h-6 w-6 text-astral-gold" />
+        <aside className="hidden rounded-lg border border-entrelinhas-line bg-entrelinhas-panel/70 p-3 lg:flex lg:flex-col lg:items-center lg:justify-between">
+          <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-entrelinhas-gold/45 bg-entrelinhas-gold/10">
+            <MoonStar className="h-6 w-6 text-entrelinhas-gold" />
           </div>
           <div className="flex flex-col gap-4 text-stone-500">
             <Sparkles className="h-5 w-5" />
             <Download className="h-5 w-5" />
             <Settings className="h-5 w-5" />
           </div>
-          <div className="h-2 w-2 rounded-full bg-astral-teal shadow-[0_0_20px_rgba(107,212,200,0.8)]" />
+          <div className="h-2 w-2 rounded-full bg-entrelinhas-teal shadow-[0_0_20px_rgba(107,212,200,0.8)]" />
         </aside>
 
         <div className="space-y-5">
@@ -607,8 +607,8 @@ export function Dashboard() {
             <>
               <AutomationSettingsPanel settings={automationSettings} usage={automationUsage} onChange={setAutomationSettings} />
 
-              <section className="rounded-lg border border-astral-line bg-astral-panel/72 p-5">
-                <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">Operacao</p>
+              <section className="rounded-lg border border-entrelinhas-line bg-entrelinhas-panel/72 p-5">
+                <p className="text-xs uppercase tracking-[0.22em] text-entrelinhas-gold">Operacao</p>
                 <div className="mt-4 grid gap-3 md:grid-cols-5">
                   <Metric label="conteudos" value={summary.total} />
                   <Metric label="texto gerado" value={summary.generated} />
@@ -620,7 +620,7 @@ export function Dashboard() {
                   Banco de dados: {persistenceStatus === "offline" ? "aguardando configuracao" : persistenceStatus}
                 </p>
                 {budgetMessage ? (
-                  <p className="mt-2 rounded-md border border-astral-gold/30 bg-astral-gold/10 px-3 py-2 text-sm text-astral-gold">
+                  <p className="mt-2 rounded-md border border-entrelinhas-gold/30 bg-entrelinhas-gold/10 px-3 py-2 text-sm text-entrelinhas-gold">
                     {budgetMessage}
                   </p>
                 ) : null}
@@ -640,8 +640,8 @@ export function Dashboard() {
                 onGenerateWeek={handleGenerateWeek}
               />
 
-              <section className="rounded-lg border border-astral-line bg-astral-panel/72 p-4">
-                <p className="text-xs uppercase tracking-[0.22em] text-astral-gold">IA automatica</p>
+              <section className="rounded-lg border border-entrelinhas-line bg-entrelinhas-panel/72 p-4">
+                <p className="text-xs uppercase tracking-[0.22em] text-entrelinhas-gold">IA automatica</p>
                 <p className="mt-2 text-sm text-stone-400">
                   {isGeneratingDay
                     ? "Gerando textos e posts com IA automatica..."
@@ -668,7 +668,7 @@ export function Dashboard() {
                 ))}
               </section>
 
-              <details className="rounded-lg border border-astral-line bg-astral-panel/72 p-4">
+              <details className="rounded-lg border border-entrelinhas-line bg-entrelinhas-panel/72 p-4">
                 <summary className="cursor-pointer text-sm font-semibold text-stone-100">Ver planejamento da semana</summary>
                 <div className="mt-4">
                   <WeeklyCalendar plan={weeklyPlan} />
@@ -734,7 +734,7 @@ function attachCalendarIds(
 
 function Metric({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-md border border-astral-line bg-astral-void/40 px-3 py-2 text-center">
+    <div className="rounded-md border border-entrelinhas-line bg-entrelinhas-void/40 px-3 py-2 text-center">
       <p className="text-xl font-semibold text-stone-50">{value}</p>
       <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-stone-500">{label}</p>
     </div>
@@ -756,7 +756,7 @@ function NavButton({
       onClick={onClick}
       className={
         active
-          ? "toolbar-button border-astral-gold bg-astral-gold/10 text-stone-50"
+          ? "toolbar-button border-entrelinhas-gold bg-entrelinhas-gold/10 text-stone-50"
           : "toolbar-button text-stone-300"
       }
     >
