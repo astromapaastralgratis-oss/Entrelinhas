@@ -69,7 +69,7 @@ http://localhost:3001/**
 Produção:
 
 ```text
-https://entrelinhas.vercel.app/**
+https://entrelinhas-eosin.vercel.app/**
 ```
 
 Preview Vercel, se usar:

@@ -1,7 +1,7 @@
 create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text,
-  current_role text,
+  "current_role" text,
   industry text,
   career_goal text,
   preferred_style text,

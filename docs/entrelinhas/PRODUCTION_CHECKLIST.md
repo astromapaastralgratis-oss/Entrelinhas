@@ -25,7 +25,7 @@ Variáveis:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
-NEXT_PUBLIC_APP_URL=https://entrelinhas.vercel.app
+NEXT_PUBLIC_APP_URL=https://entrelinhas-eosin.vercel.app
 OPENAI_API_KEY=
 OPENAI_COPY_MODEL=gpt-5.2
 ```
