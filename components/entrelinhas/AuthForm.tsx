@@ -51,7 +51,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       : await supabase.auth.signInWithPassword({ email, password });
 
     if (result.error) {
-      setError("Nao foi possivel entrar com esses dados. Confira email e senha e tente novamente.");
+      setError(getAuthErrorMessage(result.error.message, isSignup));
       setLoading(false);
       return;
     }
@@ -65,6 +65,12 @@ export function AuthForm({ mode }: AuthFormProps) {
           updated_at: new Date().toISOString()
         });
       }
+      if (!result.data.session) {
+        setError("Conta criada. Confira seu email para confirmar o acesso antes de entrar.");
+        setLoading(false);
+        return;
+      }
+
       router.push("/raio-x");
       router.refresh();
       return;
@@ -149,4 +155,36 @@ export function AuthForm({ mode }: AuthFormProps) {
       </section>
     </main>
   );
+}
+
+function getAuthErrorMessage(message: string, isSignup: boolean) {
+  const normalized = message.toLowerCase();
+
+  if (normalized.includes("already registered") || normalized.includes("already exists") || normalized.includes("user already")) {
+    return "Este email ja esta cadastrado. Entre com sua senha ou use a recuperacao de acesso.";
+  }
+
+  if (normalized.includes("password") && (normalized.includes("weak") || normalized.includes("short") || normalized.includes("6"))) {
+    return "Use uma senha mais forte, com pelo menos 6 caracteres.";
+  }
+
+  if (normalized.includes("invalid email") || normalized.includes("email address")) {
+    return "Confira o email informado. Ele precisa estar em um formato valido.";
+  }
+
+  if (normalized.includes("email signups are disabled") || normalized.includes("signup is disabled") || normalized.includes("signups not allowed")) {
+    return "O cadastro por email esta temporariamente indisponivel. Tente novamente mais tarde.";
+  }
+
+  if (normalized.includes("rate limit") || normalized.includes("too many")) {
+    return "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.";
+  }
+
+  if (normalized.includes("invalid login") || normalized.includes("invalid credentials")) {
+    return "Email ou senha nao conferem. Revise os dados ou recupere sua senha.";
+  }
+
+  return isSignup
+    ? "Nao foi possivel criar sua conta agora. Confira os dados e tente novamente."
+    : "Nao foi possivel entrar com esses dados. Confira email e senha e tente novamente.";
 }

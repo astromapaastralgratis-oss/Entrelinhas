@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Compass, Crown, Route, Sparkles } from "lucide-react";
-import { BrandAvatar, BrandLogo } from "@/components/entrelinhas/BrandAssets";
+import { BrandAvatar } from "@/components/entrelinhas/BrandAssets";
 
 const pillars = [
   {
@@ -26,51 +26,65 @@ const pillars = [
 ];
 
 const steps = [
-  "Faca seu Raio-X Executivo",
-  "Compartilhe uma situacao corporativa",
-  "Receba seu direcionamento estrategico",
-  "Aplique seu plano de acao"
+  "Você faz seu Raio-X Executivo",
+  "Você traz uma situação real",
+  "Você recebe uma leitura executiva",
+  "Você sai com um script aplicável"
 ];
 
-const brandLines = [
-  "Estrategia tambem e saber como ocupar espaco.",
-  "Influencia e construida antes da decisao.",
-  "Evolucao profissional exige movimentos bem escolhidos."
+const situations = [
+  "Quando você precisa se posicionar sem parecer defensiva.",
+  "Quando sente que entrega muito, mas é pouco lembrada.",
+  "Quando precisa dizer não com firmeza.",
+  "Quando precisa lidar com conflito, exposição ou julgamento.",
+  "Quando quer crescer com mais influência e presença."
 ];
 
 export function LandingPage() {
   return (
     <main className="brand-surface min-h-screen overflow-hidden text-entrelinhas-ivory">
-      <section className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-5 py-6 sm:px-8 lg:px-10">
-        <header className="flex items-center justify-between">
-          <Link href="/" className="block w-44 sm:w-60">
-            <BrandLogo priority />
+      <section className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-5 py-4 sm:px-8 lg:px-10">
+        <header className="sticky top-4 z-20 flex items-center justify-between rounded-2xl border border-entrelinhas-gold/12 bg-entrelinhas-void/58 px-3 py-2.5 shadow-entrelinhas backdrop-blur-xl sm:px-4">
+          <Link href="/" className="flex items-center gap-3">
+            <BrandAvatar className="h-9 w-9 sm:h-10 sm:w-10" size={44} priority />
+            <span className="text-base font-semibold tracking-[0.18em] text-entrelinhas-goldLight sm:text-lg">
+              Entrelinhas
+            </span>
           </Link>
           <div className="flex items-center gap-2">
-            <Link className="rounded-lg px-3 py-2 text-sm font-semibold text-entrelinhas-muted transition duration-300 hover:text-white" href="/proposito">
-              Proposito
+            <Link className="hidden rounded-lg px-3 py-2 text-sm font-semibold text-entrelinhas-muted transition duration-300 hover:text-white sm:inline-flex" href="/proposito">
+              Propósito
             </Link>
             <Link className="rounded-lg px-3 py-2 text-sm font-semibold text-entrelinhas-muted transition duration-300 hover:text-white" href="/login">
               Entrar
             </Link>
+            <Link className="hidden rounded-xl border border-entrelinhas-gold/20 bg-entrelinhas-gold/10 px-3 py-2 text-xs font-bold text-entrelinhas-goldLight transition duration-300 hover:border-entrelinhas-gold/40 hover:bg-entrelinhas-gold/16 sm:inline-flex" href="/signup">
+              Fazer Raio-X
+            </Link>
           </div>
         </header>
 
-        <div className="grid flex-1 items-center gap-10 py-12 lg:grid-cols-[0.92fr_1.08fr] lg:py-14">
-          <div className="brand-fade-in max-w-4xl">
-            <BrandAvatar className="mb-8 h-20 w-20 sm:h-24 sm:w-24" size={128} priority />
+        <div className="relative grid flex-1 items-center gap-10 py-14 lg:grid-cols-[0.9fr_1.1fr] lg:py-16">
+          <div className="pointer-events-none absolute left-1/2 top-20 h-72 w-72 -translate-x-1/2 rounded-full bg-entrelinhas-blueLight/10 blur-3xl" />
+          <div className="brand-fade-in relative max-w-4xl">
+            <div className="mb-8 flex w-fit items-center gap-3 rounded-full border border-entrelinhas-gold/14 bg-entrelinhas-navy/45 px-3 py-2 backdrop-blur-xl">
+              <BrandAvatar className="h-8 w-8" size={36} priority />
+              <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-entrelinhas-gold">
+                Presença • influência • evolução
+              </span>
+            </div>
             <h1 className="max-w-4xl text-5xl font-semibold leading-[0.98] text-white sm:text-6xl lg:text-7xl">
-              Ascensao executiva se constroi com presenca, estrategia e evolucao.
+              Para mulheres que querem crescer sem se perder de si.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-entrelinhas-muted sm:text-xl">
-              Receba direcionamentos estrategicos para lidar com situacoes corporativas reais, fortalecer sua influencia e acelerar sua evolucao profissional.
+              Uma leitura executiva para fortalecer presença, influência e posicionamento em situações reais da vida corporativa.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link className="inline-flex items-center justify-center gap-2 rounded-xl bg-entrelinhas-gold px-6 py-4 text-sm font-bold text-entrelinhas-ink shadow-gold transition duration-300 hover:-translate-y-0.5 hover:bg-entrelinhas-goldLight" href="/signup">
                 Fazer meu Raio-X Executivo <ArrowRight size={18} />
               </Link>
               <Link className="inline-flex items-center justify-center rounded-xl border border-entrelinhas-gold/22 bg-entrelinhas-navy/45 px-6 py-4 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:border-entrelinhas-gold/45 hover:bg-entrelinhas-night/70" href="/proposito">
-                Conhecer a mentoria
+                Conhecer o propósito
               </Link>
             </div>
           </div>
@@ -100,7 +114,7 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className="grid gap-5 pb-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
+        <section className="grid gap-5 pb-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch">
           <div className="glass-panel p-5 sm:p-6">
             <h2 className="text-3xl font-semibold leading-tight text-white">Como funciona</h2>
             <div className="mt-5 grid gap-3">
@@ -116,12 +130,12 @@ export function LandingPage() {
           </div>
 
           <div className="glass-panel p-5 sm:p-6">
-            <h2 className="text-3xl font-semibold leading-tight text-white">Frases de direcao</h2>
+            <h2 className="text-3xl font-semibold leading-tight text-white">Situações que o Entrelinhas ajuda você a conduzir</h2>
             <div className="mt-5 space-y-3">
-              {brandLines.map((line) => (
-                <div key={line} className="flex gap-3 rounded-2xl border border-entrelinhas-gold/12 bg-[#071525]/60 p-4">
+              {situations.map((situation) => (
+                <div key={situation} className="flex gap-3 rounded-2xl border border-entrelinhas-gold/12 bg-[#071525]/60 p-4">
                   <CheckCircle2 className="mt-1 shrink-0 text-entrelinhas-gold" size={19} />
-                  <p className="text-sm font-semibold leading-6 text-white/88">{line}</p>
+                  <p className="text-sm font-semibold leading-6 text-white/88">{situation}</p>
                 </div>
               ))}
             </div>
