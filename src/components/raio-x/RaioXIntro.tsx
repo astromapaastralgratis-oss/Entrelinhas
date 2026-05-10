@@ -15,7 +15,7 @@ export function RaioXIntro({ onStart }: RaioXIntroProps) {
             Competencia tecnica abre portas. Presenca executiva sustenta espaco.
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-7 text-entrelinhas-muted sm:text-lg">
-            Uma leitura estrategica sobre como voce ocupa conversas, sustenta posicoes e amplia influencia com maturidade.
+            Uma analise estrategica sobre como voce ocupa conversas, sustenta posicoes e amplia influencia com maturidade.
           </p>
           <button
             onClick={onStart}
@@ -28,12 +28,12 @@ export function RaioXIntro({ onStart }: RaioXIntroProps) {
         <aside className="editorial-panel p-5">
           <div className="rounded-[1.75rem] border border-entrelinhas-gold/18 bg-entrelinhas-panel/70 p-5">
             <BrandAvatar className="h-20 w-20" size={96} />
-            <h2 className="mt-5 text-2xl font-semibold text-white">Presenca nao e volume. E leitura, timing e clareza.</h2>
+            <h2 className="mt-5 text-2xl font-semibold text-white">Presenca nao e volume. E timing, criterio e clareza.</h2>
             <div className="mt-6 space-y-4">
               {[
-                { icon: Target, title: "Leitura de espaco", text: "O corporativo nem sempre reconhece quem entrega mais. Muitas vezes reconhece quem se posiciona melhor." },
+                { icon: Target, title: "Estrategia de espaco", text: "O corporativo nem sempre reconhece quem entrega mais. Muitas vezes reconhece quem se posiciona melhor." },
                 { icon: ShieldCheck, title: "Firmeza elegante", text: "Firmeza nao e dureza. E clareza sem excesso de justificativa." },
-                { icon: Sparkles, title: "Repertorio aplicado", text: "Voce sai com forcas, riscos e proximos movimentos para sustentar presenca em conversas reais." }
+                { icon: Sparkles, title: "Repertorio aplicado", text: "Voce sai com fortalezas, riscos e proximos movimentos para sustentar presenca em contextos reais." }
               ].map((item) => {
                 const Icon = item.icon;
                 return (

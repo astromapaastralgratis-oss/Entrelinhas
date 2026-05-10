@@ -3,16 +3,16 @@ import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { BrandAvatar, BrandLogo } from "@/components/entrelinhas/BrandAssets";
 
 const principles = [
-  "Presenca executiva se constroi no modo como voce sustenta clareza quando existe pressao.",
-  "O Entrelinhas transforma vivencias corporativas reais em repertorio pratico.",
-  "Nossa mentoria combina maturidade corporativa, inteligencia relacional e linguagem aplicada."
+  "Estrategia tambem e saber como ocupar espaco.",
+  "Influencia e construida antes da decisao.",
+  "Presenca executiva muda a forma como voce e percebida."
 ];
 
 const commitments = [
-  "Nomear o que acontece no trabalho com mais precisao.",
-  "Preparar falas firmes, humanas e elegantes.",
-  "Fortalecer presenca sem transformar posicionamento em confronto.",
-  "Criar repertorio para reunioes, limites, reconhecimento e negociacoes."
+  "Direcionamento estrategico para situacoes corporativas reais.",
+  "Repertorio executivo para decisoes, limites e reconhecimento.",
+  "Conducao profissional com maturidade, criterio e visao de negocio.",
+  "Evolucao continua para ampliar influencia ao longo da carreira."
 ];
 
 export default function PropositoPage() {
@@ -31,15 +31,15 @@ export default function PropositoPage() {
         <div className="grid flex-1 items-center gap-8 py-12 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="brand-fade-in">
             <BrandAvatar className="mb-6 h-20 w-20" size={128} priority />
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-entrelinhas-gold">Nosso proposito</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-entrelinhas-gold">PRESENCA • ESTRATEGIA • EVOLUCAO</p>
             <h1 className="mt-4 max-w-3xl text-5xl font-semibold leading-[1.02] text-white sm:text-6xl">
-              Ajudar mulheres a ocupar espaco com clareza, repertorio e presenca.
+              Uma plataforma para mulheres que querem crescer com inteligencia executiva.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-entrelinhas-muted">
-              Para conversas corporativas que pedem postura: discordar, pedir reconhecimento, definir limites e sustentar uma posicao.
+              O Entrelinhas transforma vivencias corporativas reais em direcao, repertorio e maturidade profissional.
             </p>
             <Link className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-entrelinhas-gold px-6 py-4 text-sm font-bold text-entrelinhas-ink shadow-gold transition duration-300 hover:-translate-y-0.5 hover:bg-entrelinhas-goldLight sm:w-auto" href="/signup">
-              Comecar pelo Raio-X Executivo <ArrowRight size={18} />
+              Fazer meu Raio-X Executivo <ArrowRight size={18} />
             </Link>
           </div>
 
@@ -59,8 +59,8 @@ export default function PropositoPage() {
           <div className="glass-panel p-5 sm:p-6">
             <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">O que entregamos</p>
-                <h2 className="mt-3 text-3xl font-semibold leading-tight text-white">Menos improviso. Mais presenca aplicada.</h2>
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">O que sustenta a mentoria</p>
+                <h2 className="mt-3 text-3xl font-semibold leading-tight text-white">Ambicao elegante, pensamento estrategico e crescimento sustentavel.</h2>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
                 {commitments.map((commitment) => (

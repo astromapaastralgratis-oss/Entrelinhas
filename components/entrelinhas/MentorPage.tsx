@@ -76,8 +76,8 @@ export function MentorPage() {
   }
 
   async function copyResponse() {
-    await navigator.clipboard.writeText(response);
-    setStatus("Pronto. Sua fala foi copiada.");
+    await navigator.clipboard.writeText(formatResponseForDisplay(response));
+    setStatus("Pronto. Seu direcionamento foi copiado.");
   }
 
   async function saveResponse() {
@@ -109,12 +109,12 @@ export function MentorPage() {
         <div className="flex items-center gap-4">
           <BrandAvatar className="h-14 w-14" size={72} />
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Mentoria aplicada</p>
-            <h1 className="mt-2 text-3xl font-semibold leading-tight text-white sm:text-5xl">Trabalhar uma situacao real</h1>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Direcionamento estrategico</p>
+            <h1 className="mt-2 text-3xl font-semibold leading-tight text-white sm:text-5xl">Conduzir uma situacao real</h1>
           </div>
         </div>
         <p className="mt-4 max-w-xl text-sm leading-6 text-entrelinhas-muted sm:text-base">
-          Traga o contexto. O Entrelinhas organiza postura, fala e proximo movimento para uma conversa com presenca.
+          Traga o contexto. O Entrelinhas organiza postura, posicionamento e proximo movimento para uma conducao com presenca.
         </p>
 
         <form onSubmit={generate} className="editorial-panel mt-6 space-y-4 p-5">
@@ -156,8 +156,8 @@ export function MentorPage() {
       <section className="editorial-panel min-h-[34rem] p-5">
         <div className="flex flex-col justify-between gap-3 border-b border-entrelinhas-gold/12 pb-4 sm:flex-row sm:items-center">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-muted">Scripts executivos</p>
-            <h2 className="mt-1 text-2xl font-semibold text-white">{response ? situation : "Sua fala estrategica aparece aqui"}</h2>
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-muted">Plano de acao</p>
+            <h2 className="mt-1 text-2xl font-semibold text-white">{response ? situation : "Seu direcionamento aparece aqui"}</h2>
           </div>
           <div className="flex gap-2">
             <button disabled={!response} onClick={copyResponse} className="inline-flex items-center gap-2 rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy/35 px-4 py-3 text-sm font-semibold text-white transition duration-300 hover:border-entrelinhas-gold/40 disabled:opacity-40">
@@ -172,13 +172,13 @@ export function MentorPage() {
         {loading ? (
           <div className="flex min-h-[24rem] flex-col items-center justify-center text-center text-entrelinhas-muted">
             <BrandAvatar className="mb-4 h-16 w-16 animate-pulse" size={80} />
-            <p className="max-w-xs leading-7">Organizando postura, fala e proximo passo.</p>
+            <p className="max-w-xs leading-7">Organizando postura, posicionamento e proximo passo.</p>
           </div>
         ) : response ? (
           <div className="mt-5 space-y-3">
             {parseExecutiveScriptSections(response).map((section) => (
               <article key={section.title} className="rounded-xl border border-entrelinhas-gold/10 bg-entrelinhas-navy/45 p-4">
-                <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-entrelinhas-gold sm:text-sm">{section.title}</h3>
+                <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-entrelinhas-gold sm:text-sm">{displaySectionTitle(section.title)}</h3>
                 <p className="mt-3 whitespace-pre-line text-sm leading-6 text-white/88 sm:leading-7">{section.body}</p>
               </article>
             ))}
@@ -186,10 +186,26 @@ export function MentorPage() {
         ) : (
           <div className="flex min-h-[24rem] flex-col items-center justify-center text-center text-entrelinhas-muted">
             <Clipboard className="mb-4 text-entrelinhas-gold" size={38} />
-            <p className="max-w-xs leading-7">Traga uma situacao concreta. A mentoria devolve uma fala com presenca, limite e maturidade.</p>
+            <p className="max-w-xs leading-7">Traga uma situacao concreta. A mentoria devolve direcao, limite e maturidade executiva.</p>
           </div>
         )}
       </section>
     </div>
   );
+}
+
+function displaySectionTitle(title: string) {
+  const normalized = title.toLowerCase();
+  if (normalized.includes("leitura")) return "Direcionamento estrategico";
+  if (normalized.includes("script")) return "Plano de acao";
+  if (normalized.includes("curta")) return "Versao objetiva";
+  if (normalized.includes("pronto")) return "Plano de acao";
+  return title.replace("O que NAO dizer", "O que evitar").replace("O que NÃƒO dizer", "O que evitar");
+}
+
+function formatResponseForDisplay(content: string) {
+  return parseExecutiveScriptSections(content)
+    .filter((section) => section.body && section.body !== "Ainda nao gerado.")
+    .map((section, index) => `${index + 1}. ${displaySectionTitle(section.title)}\n${section.body}`)
+    .join("\n\n");
 }

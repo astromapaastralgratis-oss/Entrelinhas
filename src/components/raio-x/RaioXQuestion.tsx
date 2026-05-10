@@ -40,7 +40,7 @@ export function RaioXQuestion({
           <ArrowLeft size={17} /> Voltar
         </button>
 
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Leitura {currentIndex + 1}</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Etapa {currentIndex + 1}</p>
         <h1 className="mt-4 text-3xl font-semibold leading-tight text-white sm:text-4xl">{question.text}</h1>
 
         <div className="mt-7 space-y-3">

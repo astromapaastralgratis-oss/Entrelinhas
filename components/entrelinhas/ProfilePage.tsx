@@ -63,10 +63,10 @@ export function ProfilePage() {
 
   return (
     <div className="brand-fade-in mx-auto max-w-3xl">
-      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Perfil</p>
-      <h1 className="mt-3 text-3xl font-semibold leading-tight text-white sm:text-5xl">Contexto profissional</h1>
+      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Contexto</p>
+      <h1 className="mt-3 text-3xl font-semibold leading-tight text-white sm:text-5xl">Contexto executivo</h1>
       <p className="mt-3 text-sm leading-6 text-entrelinhas-muted sm:text-base">
-        Use poucos detalhes. Eles ajudam a calibrar tom, postura e objetivo.
+        Use poucos detalhes. Eles ajudam a calibrar postura, criterio e objetivo profissional.
       </p>
       {executivePresenceName ? (
         <div className="mt-5 rounded-2xl border border-entrelinhas-gold/22 bg-entrelinhas-gold/[0.08] px-4 py-3 text-sm font-semibold leading-6 text-entrelinhas-goldLight">

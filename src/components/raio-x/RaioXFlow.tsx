@@ -80,7 +80,7 @@ export function RaioXFlow() {
         .maybeSingle();
 
       if (profileError) {
-        setSavedResultError("Nao conseguimos recuperar sua ultima leitura. Voce pode refazer o Raio-X agora.");
+        setSavedResultError("Nao conseguimos recuperar seu ultimo direcionamento. Voce pode refazer o Raio-X agora.");
         setCheckingSavedResult(false);
         return;
       }
@@ -104,7 +104,7 @@ export function RaioXFlow() {
         .maybeSingle();
 
       if (error) {
-        setSavedResultError("Nao conseguimos recuperar sua ultima leitura. Voce pode refazer o Raio-X agora.");
+        setSavedResultError("Nao conseguimos recuperar seu ultimo direcionamento. Voce pode refazer o Raio-X agora.");
         setCheckingSavedResult(false);
         return;
       }
@@ -112,7 +112,7 @@ export function RaioXFlow() {
       const restoredResult = restoreExecutivePresenceResult(data);
 
       if (!restoredResult) {
-        setSavedResultError("Sua leitura anterior precisa ser atualizada. Refaca o Raio-X para receber um resultado novo.");
+        setSavedResultError("Seu direcionamento anterior precisa ser atualizado. Refaca o Raio-X para receber um resultado novo.");
         setCheckingSavedResult(false);
         return;
       }
@@ -122,7 +122,7 @@ export function RaioXFlow() {
       setStage("summary");
       setCheckingSavedResult(false);
     } catch {
-      setSavedResultError("Nao conseguimos recuperar sua ultima leitura. Voce pode refazer o Raio-X agora.");
+      setSavedResultError("Nao conseguimos recuperar seu ultimo direcionamento. Voce pode refazer o Raio-X agora.");
       setCheckingSavedResult(false);
     }
   }
@@ -196,7 +196,7 @@ export function RaioXFlow() {
       timers.current.push(loadingTimer);
     } catch {
       setResult(null);
-      setSavedResultError("Nao conseguimos gravar sua leitura com seguranca. Refaca o Raio-X para concluir sua entrada.");
+      setSavedResultError("Nao conseguimos gravar seu direcionamento com seguranca. Refaca o Raio-X para concluir sua entrada.");
       setStage("summary");
     }
   }

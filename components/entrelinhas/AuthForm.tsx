@@ -103,9 +103,9 @@ export function AuthForm({ mode }: AuthFormProps) {
 
         <form onSubmit={handleSubmit} className="editorial-panel brand-fade-in rounded-3xl p-6 sm:p-7">
           <BrandAvatar className="mb-5 h-16 w-16" size={96} />
-          <h1 className="text-3xl font-semibold text-white">{isSignup ? "Comece pelo seu Raio-X" : "Entrar"}</h1>
+          <h1 className="text-3xl font-semibold text-white">{isSignup ? "Comece pelo seu Raio-X Executivo" : "Entrar"}</h1>
           <p className="mt-2 text-sm leading-6 text-entrelinhas-muted">
-            {isSignup ? "Sua jornada de presenca comeca por uma leitura estrategica." : "Entre para continuar sua jornada de presenca executiva."}
+            {isSignup ? "Sua jornada comeca por uma analise estrategica de presenca, influencia e conducao profissional." : "Entre para continuar sua evolucao executiva."}
           </p>
 
           <div className="mt-7 space-y-4">

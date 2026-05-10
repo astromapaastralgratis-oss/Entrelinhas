@@ -11,7 +11,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
       "Comunicacao direta, objetiva e orientada a acao. Funciona bem quando ha urgencia, mas precisa de calibragem para nao soar dura em ambientes sensiveis.",
     strengths: ["Clareza de decisao", "Coragem para se posicionar", "Capacidade de destravar impasses"],
     risks: ["Acelerar antes de ler o contexto politico", "Ser percebida como inflexivel", "Reduzir espaco para contribuicoes do grupo"],
-    evolutionPoint: "Aprender a combinar firmeza com leitura de ambiente antes de definir a rota.",
+    evolutionPoint: "Aprender a combinar firmeza com percepcao de ambiente antes de definir a rota.",
     avoidPhrases: ["Isso e obvio.", "Vamos decidir logo.", "Nao vejo por que discutir tanto."],
     startUsingPhrases: [
       "Minha recomendacao e esta, considerando impacto e prazo.",
@@ -29,7 +29,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
     executiveSabotage:
       "O risco e transformar competencia em controle. Quando voce decide rapido demais, pessoas podem concordar por conveniencia e nao por alinhamento real.",
     corporateExpectation:
-      "Sua proxima versao precisa manter a firmeza, mas mostrar mais leitura de contexto. O corporativo espera que voce conduza decisoes dificeis com direcao, escuta e criterio de adesao.",
+      "Sua proxima versao precisa manter a firmeza, mas mostrar mais visao de contexto. O corporativo espera que voce conduza decisoes dificeis com direcao, escuta e criterio de adesao.",
     presenceMicroAdjustments: [
       "Antes de defender uma rota, nomeie o criterio que sustenta sua recomendacao.",
       "Inclua uma pergunta de alinhamento antes de fechar a decisao.",
@@ -44,7 +44,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
       "Semana 1: pratique abrir reunioes com criterio, impacto e proposta em ate tres frases.",
       "Semana 2: antes de discordar, valide o objetivo comum e depois apresente sua recomendacao.",
       "Semana 3: conduza uma conversa dificil usando pergunta de alinhamento antes do fechamento.",
-      "Semana 4: revise uma decisao recente e identifique onde faltou leitura politica, nao tecnica."
+      "Semana 4: revise uma decisao recente e identifique onde faltou criterio politico, nao tecnica."
     ]
   },
   strategic_influencer: {
@@ -77,7 +77,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
     corporateExpectation:
       "Sua proxima versao precisa transformar presenca e narrativa em fechamento. O corporativo espera que voce influencie com clareza de tese, impacto e pedido.",
     presenceMicroAdjustments: [
-      "Abra sua fala pela tese antes de contextualizar.",
+      "Abra sua posicao pela tese antes de contextualizar.",
       "Finalize toda apresentacao com pedido, dono e proximo passo.",
       "Use menos explicacao preparatoria e mais afirmacao de direcao."
     ],
@@ -101,7 +101,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
       "Sua presenca e percebida na forma como reduz ruidos e cria espaco para alinhamentos dificeis. Voce entende relacoes, timing e contexto emocional.",
     communicationPattern:
       "Comunicacao cuidadosa, mediadora e empatica. Precisa cuidar para que diplomacia nao vire adiamento de posicionamento.",
-    strengths: ["Leitura politica", "Mediacao de tensao", "Construcao de confianca"],
+    strengths: ["Criterio politico", "Mediacao de tensao", "Construcao de confianca"],
     risks: ["Evitar confronto necessario", "Suavizar demais pedidos importantes", "Assumir custo emocional que nao e seu"],
     evolutionPoint: "Transformar sensibilidade em posicionamento claro, sem perder elegancia.",
     avoidPhrases: ["Desculpa incomodar.", "Nao sei se faz sentido.", "Talvez eu esteja exagerando."],
@@ -111,7 +111,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
       "Para preservar a relacao e o resultado, precisamos alinhar expectativas."
     ],
     recommendedPractices: ["Nomear fatos antes de sentimentos", "Preparar limites por escrito", "Usar perguntas que conduzem decisao"],
-    recommendedReadings: ["Comunicacao nao violenta no trabalho", "Negociacao em contextos sensiveis", "Leitura politica corporativa"],
+    recommendedReadings: ["Comunicacao nao violenta no trabalho", "Negociacao em contextos sensiveis", "Criterio politico corporativa"],
     recommendedTrainings: ["Treino de conversas dificeis", "Treino de limites com elegancia", "Treino de feedback assertivo"],
     firstScriptSuggestions: ["Feedback dificil", "Definir limites", "Responder feedback injusto"],
     perceivedByOthers:
@@ -119,7 +119,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
     pressurePattern:
       "Sob pressao, voce tende a proteger a relacao antes de proteger sua posicao. Isso evita rupturas, mas pode deslocar sua necessidade para segundo plano.",
     executiveSabotage:
-      "Voce pode se sabotar quando espera o momento perfeito para falar. Em ambientes executivos, a ausencia de posicao tambem comunica uma posicao.",
+      "Voce pode se sabotar quando espera o momento perfeito para posicaor. Em ambientes executivos, a ausencia de posicao tambem comunica uma posicao.",
     corporateExpectation:
       "Sua proxima versao precisa sustentar conversas sensiveis sem reduzir a propria clareza. O corporativo espera cuidado, mas tambem direcao.",
     presenceMicroAdjustments: [
@@ -165,7 +165,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
     pressurePattern:
       "Sob pressao, voce pode buscar mais informacao para se sentir segura. Esse movimento protege a qualidade, mas pode reduzir sua velocidade de influencia.",
     executiveSabotage:
-      "A sabotagem aparece quando voce confunde rigor com permissao para falar. No ambiente executivo, uma recomendacao bem delimitada vale mais que uma explicacao completa.",
+      "A sabotagem aparece quando voce confunde rigor com permissao para posicaor. No ambiente executivo, uma recomendacao bem delimitada vale mais que uma explicacao completa.",
     corporateExpectation:
       "Sua proxima versao precisa assumir recomendacoes com os dados disponiveis. O corporativo espera criterio, mas tambem direcao.",
     presenceMicroAdjustments: [
@@ -174,7 +174,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
       "Troque excesso de ressalvas por nivel de confianca e proximo passo."
     ],
     internalScriptsToChange: [
-      { from: "Preciso ter certeza antes de falar.", to: "Posso recomendar com clareza dentro do nivel de informacao disponivel." },
+      { from: "Preciso ter certeza antes de posicaor.", to: "Posso recomendar com clareza dentro do nivel de informacao disponivel." },
       { from: "Se eu explicar tudo, vao entender.", to: "Se eu sintetizar bem, vao decidir melhor." },
       { from: "Ainda falta analisar.", to: "Ja existe base suficiente para propor um caminho." }
     ],
@@ -213,7 +213,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
     executiveSabotage:
       "Voce pode se sabotar quando ocupa tanto espaco que reduz a participacao estrategica de outras pessoas. Lideranca forte tambem sabe criar protagonismo ao redor.",
     corporateExpectation:
-      "Sua proxima versao precisa mobilizar com mais leitura de poder, resistencia e timing. O corporativo espera direcao com capacidade de construir coalizao.",
+      "Sua proxima versao precisa mobilizar com mais criterio sobre poder, resistencia e timing. O corporativo espera direcao com capacidade de construir coalizao.",
     presenceMicroAdjustments: [
       "Antes de propor acao, pergunte qual risco ainda nao foi dito.",
       "Nomeie o objetivo comum antes de assumir a conducao.",
@@ -241,7 +241,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
       "Comunicacao objetiva e estruturada. Ganha impacto quando traduz analise em decisao sem excesso de justificativa.",
     strengths: ["Criterio para decidir", "Firmeza com racional", "Capacidade de reduzir ambiguidade"],
     risks: ["Soar rigida", "Demorar quando busca seguranca total", "Subestimar fatores relacionais"],
-    evolutionPoint: "Incluir leitura politica e timing na mesma qualidade da analise.",
+    evolutionPoint: "Incluir criterio politico e timing na mesma qualidade da analise.",
     avoidPhrases: ["Os dados provam que este e o unico caminho.", "Nao faz sentido considerar outra opcao.", "Eu ja analisei isso."],
     startUsingPhrases: [
       "Minha recomendacao considera impacto, risco e custo de reversao.",
@@ -253,7 +253,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
     recommendedTrainings: ["Treino de discordancia com lideranca", "Treino de defesa de recomendacao", "Treino de sintese para diretoria"],
     firstScriptSuggestions: ["Discordar do lider", "Reuniao importante", "Feedback dificil"],
     perceivedByOthers:
-      "Voce tende a ser percebida como alguem segura, criteriosa e capaz de sustentar decisoes complexas. Quando inclui leitura humana na decisao, sua firmeza parece estrategia, nao rigidez.",
+      "Voce tende a ser percebida como alguem segura, criteriosa e capaz de sustentar decisoes complexas. Quando inclui percepcao humana na decisao, sua firmeza parece estrategia, nao rigidez.",
     pressurePattern:
       "Sob pressao, voce busca reduzir ambiguidade por criterio e controle de risco. Isso protege a decisao, mas pode deixar pouco espaco para percepcoes menos mensuraveis.",
     executiveSabotage:
@@ -271,7 +271,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
       { from: "Nao posso abrir margem para questionamento.", to: "Questionamentos bem conduzidos fortalecem a recomendacao." }
     ],
     thirtyDayEvolutionPlan: [
-      "Semana 1: acrescente leitura de stakeholders a uma recomendacao importante.",
+      "Semana 1: acrescente mapeamento de stakeholders a uma recomendacao importante.",
       "Semana 2: pratique apresentar uma decisao com dois trade-offs claros.",
       "Semana 3: antecipe uma objecao politica e prepare resposta curta.",
       "Semana 4: conduza uma conversa em que voce recomenda sem tentar provar demais."
@@ -280,7 +280,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
   diplomatic_articulator: {
     id: "diplomatic_articulator",
     name: "Articuladora Diplomatica",
-    shortDescription: "Voce combina influencia com leitura relacional para criar alinhamento.",
+    shortDescription: "Voce combina influencia com inteligencia relacional para criar alinhamento.",
     executiveReading:
       "Seu padrao sugere habilidade para circular entre interesses diferentes, ajustar mensagem e construir adesao sem confronto desnecessario.",
     communicationPattern:
@@ -331,12 +331,12 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
       "Seu padrao indica uma presenca consultiva: voce escuta, organiza nuances e tende a oferecer recomendacoes ponderadas.",
     communicationPattern:
       "Comunicacao cuidadosa, fundamentada e confiavel. Precisa evitar excesso de cautela quando a situacao pede decisao.",
-    strengths: ["Escuta qualificada", "Analise de contexto", "Conselho confiavel"],
+    strengths: ["Escuta qualificada", "Analise de contexto", "Direcao confiavel"],
     risks: ["Suavizar demais recomendacoes", "Demorar para se posicionar", "Assumir papel de apoio mesmo quando deveria liderar"],
     evolutionPoint: "Transformar ponderacao em autoridade visivel.",
     avoidPhrases: ["Posso estar errada, mas...", "So queria trazer um ponto.", "Talvez valha refletir depois."],
     startUsingPhrases: [
-      "Minha leitura e cuidadosa, mas objetiva.",
+      "Minha avaliacao e cuidadosa, mas objetiva.",
       "Considerando fatos e contexto, recomendo este caminho.",
       "Vejo um risco relacional e um risco operacional que precisamos enderecar."
     ],
@@ -347,9 +347,9 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
     perceivedByOthers:
       "Voce tende a ser percebida como alguem confiavel, ponderada e segura para temas delicados. Quando transforma cuidado em recomendacao, sua presenca deixa de ser bastidor e vira referencia.",
     pressurePattern:
-      "Sob pressao, voce busca considerar variaveis e impactos antes de falar. Isso protege a qualidade, mas pode atrasar sua entrada em conversas onde sua leitura e necessaria.",
+      "Sob pressao, voce busca considerar variaveis e impactos antes de posicaor. Isso protege a qualidade, mas pode atrasar sua entrada em conversas onde seu direcionamento e necessaria.",
     executiveSabotage:
-      "Voce pode se sabotar quando se coloca como apoio mesmo tendo leitura suficiente para liderar. Sua cautela precisa servir a decisao, nao substituir sua voz.",
+      "Voce pode se sabotar quando se coloca como apoio mesmo tendo criterio suficiente para liderar. Sua cautela precisa servir a decisao, nao substituir sua voz.",
     corporateExpectation:
       "Sua proxima versao precisa mostrar autoridade calma. O corporativo espera que voce preserve cuidado, mas assuma recomendacoes com mais visibilidade.",
     presenceMicroAdjustments: [
@@ -359,7 +359,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
     ],
     internalScriptsToChange: [
       { from: "Nao quero parecer incisiva demais.", to: "Autoridade calma tambem pode ser direta." },
-      { from: "Preciso pensar mais para nao errar.", to: "Minha leitura ja tem valor suficiente para orientar o proximo passo." },
+      { from: "Preciso pensar mais para nao errar.", to: "Minha avaliacao ja tem valor suficiente para orientar o proximo passo." },
       { from: "Sou melhor apoiando.", to: "Posso apoiar e liderar a qualidade da decisao." }
     ],
     thirtyDayEvolutionPlan: [
@@ -393,7 +393,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
     perceivedByOthers:
       "Voce pode ser percebida como cuidadosa, responsavel e facil de trabalhar. Quando nao explicita limites, essa disponibilidade pode ser confundida com permissao para absorver mais do que deveria.",
     pressurePattern:
-      "Sob pressao, voce tende a justificar, suavizar ou esperar mais um pouco antes de sustentar um limite. O desconforto da conversa pode parecer maior que o custo de nao falar.",
+      "Sob pressao, voce tende a justificar, suavizar ou esperar mais um pouco antes de sustentar um limite. O desconforto da conversa pode parecer maior que o custo de nao posicaor.",
     executiveSabotage:
       "A sabotagem esta em pedir licenca para ocupar um espaco que sua entrega ja justifica. Excesso de explicacao pode reduzir a forca da sua mensagem.",
     corporateExpectation:
@@ -451,7 +451,7 @@ export const executivePresenceProfiles: Record<ExecutivePresenceProfileId, Execu
     ],
     internalScriptsToChange: [
       { from: "Preciso explicar tudo para convencer.", to: "Preciso destacar o que muda a decisao." },
-      { from: "A complexidade justifica uma fala longa.", to: "Minha autoridade aparece quando simplifico sem empobrecer." },
+      { from: "A complexidade justifica uma exposicao longa.", to: "Minha autoridade aparece quando simplifico sem empobrecer." },
       { from: "Se trouxer mais dados, vao concordar.", to: "Dados precisam servir a uma tese clara." }
     ],
     thirtyDayEvolutionPlan: [

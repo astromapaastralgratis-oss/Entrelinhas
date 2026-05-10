@@ -11,10 +11,10 @@ import { BrandAvatar, BrandLogo } from "@/components/entrelinhas/BrandAssets";
 
 const navItems = [
   { label: "Home", href: "/dashboard", icon: Home },
-  { label: "Mentora", href: "/mentor", icon: WandSparkles },
-  { label: "Scripts", href: "/scripts", icon: Library },
-  { label: "Historico", href: "/history", icon: History },
-  { label: "Perfil", href: "/profile", icon: User }
+  { label: "Direcionamento", href: "/mentor", icon: WandSparkles },
+  { label: "Repertorio", href: "/scripts", icon: Library },
+  { label: "Jornada", href: "/history", icon: History },
+  { label: "Contexto", href: "/profile", icon: User }
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -133,7 +133,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="editorial-panel brand-fade-in max-w-sm rounded-3xl p-6">
           <BrandAvatar className="mx-auto h-16 w-16" size={96} priority />
           <p className="mt-4 text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Entrelinhas</p>
-          <p className="mt-2 text-sm leading-6 text-entrelinhas-muted">Preparando seu espaco de decisao.</p>
+          <p className="mt-2 text-sm leading-6 text-entrelinhas-muted">Preparando sua jornada de evolucao.</p>
         </div>
       </div>
     );
@@ -169,7 +169,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <BrandAvatar className="h-12 w-12" size={96} />
             <div>
               <p className="text-xs uppercase tracking-[0.18em] text-entrelinhas-gold">Presenca</p>
-              <p className="text-sm font-semibold text-white">Influencia e evolucao</p>
+              <p className="text-sm font-semibold text-white">Estrategia e evolucao</p>
             </div>
           </div>
 

@@ -106,7 +106,7 @@ export function AdminPage() {
   }
 
   async function setDailyLimit(user: AdminUser) {
-    const value = window.prompt("Novo limite diario de scripts com IA para esta usuaria:", user.dailyAiScriptLimit?.toString() ?? "");
+    const value = window.prompt("Novo limite diario de geracoes para esta usuaria:", user.dailyAiScriptLimit?.toString() ?? "");
     if (value === null) return;
     await updateUser(user, { action: "set_limit", dailyAiScriptLimit: value }, "Limite da usuaria atualizado.");
   }
@@ -119,7 +119,7 @@ export function AdminPage() {
 
   async function deleteUserPermanently(user: AdminUser) {
     const confirmed = window.confirm(
-      `Excluir permanentemente ${user.fullName || user.email || "esta usuaria"}?\n\nEsta acao remove a conta, perfil, Raio-X, scripts, limites e historico vinculado. Nao sera possivel recuperar.`
+      `Excluir permanentemente ${user.fullName || user.email || "esta usuaria"}?\n\nEsta acao remove a conta, perfil, Raio-X, direcionamentos, limites e jornada vinculada. Nao sera possivel recuperar.`
     );
     if (!confirmed) return;
 
@@ -139,7 +139,7 @@ export function AdminPage() {
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Administracao</p>
           <h1 className="mt-3 text-3xl font-semibold text-white sm:text-5xl">Operacao do Entrelinhas</h1>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-entrelinhas-muted">
-            Acompanhe usuarias, acesso, uso estimado e limites operacionais do MVP.
+            Acompanhe usuarias, acesso, uso estimado e limites operacionais.
           </p>
         </div>
         <button onClick={loadAdminData} className="inline-flex items-center justify-center gap-2 rounded-xl border border-entrelinhas-gold/18 bg-entrelinhas-navy/55 px-4 py-3 text-sm font-semibold text-white transition hover:border-entrelinhas-gold/45">
@@ -180,8 +180,8 @@ export function AdminPage() {
                 </div>
                 <p className="mt-1 break-all text-sm text-entrelinhas-muted">{user.email}</p>
                 <div className="mt-4 grid gap-3 text-sm sm:grid-cols-2 xl:grid-cols-5">
-                  <Metric label="scripts" value={user.totalScripts} />
-                  <Metric label="IA hoje" value={user.aiToday} />
+                  <Metric label="direcoes" value={user.totalScripts} />
+                  <Metric label="uso hoje" value={user.aiToday} />
                   <Metric label="tokens hoje" value={user.dailyTokensEstimate} />
                   <Metric label="tokens totais" value={user.totalTokensEstimate} />
                   <Metric label="limite diario" value={user.dailyAiScriptLimit ?? "padrao"} />
@@ -191,11 +191,11 @@ export function AdminPage() {
                 </p>
                 {user.recentScripts.length ? (
                   <div className="mt-4 rounded-xl border border-entrelinhas-gold/10 bg-entrelinhas-navy/35 p-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-entrelinhas-muted">Historico recente</p>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-entrelinhas-muted">Jornada recente</p>
                     <div className="mt-2 space-y-2">
                       {user.recentScripts.map((script) => (
                         <p key={`${script.createdAt}-${script.situation}`} className="text-xs leading-5 text-white/75">
-                          {new Date(script.createdAt).toLocaleDateString("pt-BR")} · {script.situation} · {script.generationMode ?? "sem modo"} · {script.totalTokensEstimate ?? 0} tokens
+                          {new Date(script.createdAt).toLocaleDateString("pt-BR")} · {script.situation} · {script.totalTokensEstimate ?? 0} tokens
                         </p>
                       ))}
                     </div>

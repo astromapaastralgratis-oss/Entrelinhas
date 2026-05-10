@@ -23,7 +23,7 @@ export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPla
           <div className="flex items-center gap-4">
             <BrandAvatar className="h-14 w-14" size={72} />
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Sua leitura estrategica</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Seu direcionamento estrategico</p>
               <h1 className="mt-1 text-3xl font-semibold leading-tight text-white sm:text-4xl">{result.profile.name}</h1>
             </div>
           </div>
@@ -53,7 +53,7 @@ export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPla
               onClick={onViewReading}
               className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-entrelinhas-gold px-5 py-4 text-sm font-bold text-entrelinhas-ink shadow-gold transition duration-300 hover:-translate-y-0.5 hover:bg-entrelinhas-goldLight"
             >
-              Ver leitura <ArrowRight size={17} />
+              Ver direcao <ArrowRight size={17} />
             </button>
             <button
               onClick={onViewPlan}

@@ -3,7 +3,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Entrelinhas",
-  description: "Mentora executiva com IA para conversas corporativas difíceis."
+  description: "Plataforma premium de mentoria executiva feminina para presenca, estrategia e evolucao profissional.",
+  icons: {
+    icon: "/brand/entrelinhas-app-icon.png",
+    apple: "/brand/entrelinhas-app-icon.png"
+  }
 };
 
 export default function RootLayout({

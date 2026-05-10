@@ -17,7 +17,7 @@ export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
         <div className="border-b border-entrelinhas-gold/12 bg-entrelinhas-navy/35 p-5 sm:p-7">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Plano</p>
           <h1 className="mt-2 max-w-3xl text-3xl font-semibold leading-tight text-white sm:text-4xl">
-            Transforme sua leitura em presenca praticada.
+            Transforme seu direcionamento em presenca praticada.
           </h1>
         </div>
 
@@ -31,7 +31,7 @@ export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
           <PlanList icon={Target} title="Microajustes De Presenca" items={profile.presenceMicroAdjustments} featured />
           <PlanList icon={Sparkles} title="Plano De Evolucao Executiva - 30 dias" items={profile.thirtyDayEvolutionPlan} featured className="lg:col-span-2" />
           <PlanList icon={Lightbulb} title="Praticas De Repertorio" items={profile.recommendedPractices} />
-          <PlanList icon={BookOpen} title="Leituras" items={profile.recommendedReadings} />
+          <PlanList icon={BookOpen} title="Referencias" items={profile.recommendedReadings} />
           <PlanList icon={Dumbbell} title="Treinos" items={profile.recommendedTrainings} />
           <PlanList icon={MessageSquareText} title="Situacoes Para Treinar" items={profile.firstScriptSuggestions} />
 
@@ -45,7 +45,7 @@ export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
                 href={mentorHref}
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-entrelinhas-gold px-5 py-4 text-sm font-bold text-entrelinhas-ink shadow-gold transition duration-300 hover:-translate-y-0.5 hover:bg-entrelinhas-goldLight"
               >
-                Gerar meu primeiro script personalizado <ArrowRight size={18} />
+                Receber direcionamento personalizado <ArrowRight size={18} />
               </Link>
             </div>
           </article>

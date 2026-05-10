@@ -13,7 +13,7 @@ export const executivePresenceQuestions: ExecutivePresenceQuestion[] = [
   },
   {
     id: "q02",
-    text: "Quando alguém interrompe sua fala, sua reação mais natural é:",
+    text: "Quando alguém interrompe sua posicao, sua reação mais natural é:",
     options: [
       { id: "q02_o1", text: "Retomar a palavra com firmeza e concluir seu raciocínio.", traitKey: "direction" },
       { id: "q02_o2", text: "Usar uma frase elegante para recuperar atenção sem perder presença.", traitKey: "influence" },
@@ -133,11 +133,11 @@ export const executivePresenceQuestions: ExecutivePresenceQuestion[] = [
   },
   {
     id: "q14",
-    text: "Quando precisa falar em público no trabalho, você se apoia mais em:",
+    text: "Quando precisa posicaor em público no trabalho, você se apoia mais em:",
     options: [
       { id: "q14_o1", text: "Clareza de mensagem e presença firme.", traitKey: "direction" },
       { id: "q14_o2", text: "Energia, conexão e capacidade de engajar.", traitKey: "influence" },
-      { id: "q14_o3", text: "Leitura do ambiente e adaptação ao público.", traitKey: "diplomacy" },
+      { id: "q14_o3", text: "Percepcao do ambiente e adaptação ao público.", traitKey: "diplomacy" },
       { id: "q14_o4", text: "Estrutura lógica e domínio do conteúdo.", traitKey: "precision" }
     ]
   },
@@ -197,7 +197,7 @@ export const executivePresenceQuestions: ExecutivePresenceQuestion[] = [
     options: [
       { id: "q20_o1", text: "Capacidade de decidir, se posicionar e sustentar limites.", traitKey: "direction" },
       { id: "q20_o2", text: "Influência, visibilidade e capacidade de mobilizar pessoas.", traitKey: "influence" },
-      { id: "q20_o3", text: "Leitura política, negociação e conversas de alta sensibilidade.", traitKey: "diplomacy" },
+      { id: "q20_o3", text: "Criterio politico, negociacao e conversas de alta sensibilidade.", traitKey: "diplomacy" },
       { id: "q20_o4", text: "Pensamento estruturado, análise e recomendações mais sólidas.", traitKey: "precision" }
     ]
   }

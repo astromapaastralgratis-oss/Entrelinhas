@@ -9,8 +9,8 @@ type RaioXResultTabsProps = {
 
 const tabs = [
   { id: "summary", label: "Resumo", icon: Sparkles },
-  { id: "reading", label: "Leitura", icon: BookOpenText },
-  { id: "plan", label: "Plano", icon: ClipboardList }
+  { id: "reading", label: "Direcao", icon: BookOpenText },
+  { id: "plan", label: "Evolucao", icon: ClipboardList }
 ] satisfies Array<{ id: RaioXResultView; label: string; icon: typeof Sparkles }>;
 
 export function RaioXResultTabs({ activeView, onChange }: RaioXResultTabsProps) {

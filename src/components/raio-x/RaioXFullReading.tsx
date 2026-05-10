@@ -12,10 +12,10 @@ export function RaioXFullReading({ result }: RaioXFullReadingProps) {
   return (
     <section className="brand-fade-in mx-auto max-w-5xl">
       <div className="editorial-panel overflow-hidden">
-        <Header title="Leitura executiva" subtitle={profile.name} />
+        <Header title="Direcao executiva" subtitle={profile.name} />
 
         <div className="grid gap-4 p-5 sm:p-7 lg:grid-cols-2">
-          <ReadingCard icon={Sparkles} title="Sua Leitura Executiva" className="lg:col-span-2">
+          <ReadingCard icon={Sparkles} title="Sua Direcao Executiva" className="lg:col-span-2">
             <p className="max-w-3xl text-base leading-7 text-white/90 sm:text-lg">{profile.shortDescription}</p>
             <p className="mt-4 max-w-3xl leading-7 text-entrelinhas-muted">{profile.executiveReading}</p>
           </ReadingCard>
@@ -129,7 +129,7 @@ function ScriptShiftCard({ items }: { items: { from: string; to: string }[] }) {
         <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-blue/18 text-entrelinhas-muted">
           <MessageSquareQuote size={19} />
         </span>
-        <h2 className="text-lg font-semibold text-white">Scripts Internos Que Precisam Mudar</h2>
+        <h2 className="text-lg font-semibold text-white">Padroes Internos Que Precisam Evoluir</h2>
       </div>
       <div className="mt-4 grid gap-3 lg:grid-cols-3">
         {items.map((item) => (

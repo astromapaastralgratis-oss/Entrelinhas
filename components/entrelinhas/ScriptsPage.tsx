@@ -20,10 +20,10 @@ export function ScriptsPage() {
 
   return (
     <div className="brand-fade-in">
-      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Scripts executivos</p>
+      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Repertorio executivo</p>
       <h1 className="mt-3 text-3xl font-semibold leading-tight text-white sm:text-5xl">Repertorio rapido</h1>
       <p className="mt-3 max-w-xl text-sm leading-6 text-entrelinhas-muted sm:text-base">
-        Frases para momentos em que clareza, limite e elegancia precisam aparecer juntas.
+        Direcionamentos curtos para momentos em que clareza, limite e elegancia precisam aparecer juntas.
       </p>
       {copied ? <p className="mt-5 rounded-xl border border-entrelinhas-gold/22 bg-entrelinhas-gold/[0.08] px-4 py-3 text-sm text-entrelinhas-goldLight">Pronto. {copied} foi copiado.</p> : null}
 
@@ -39,7 +39,7 @@ export function ScriptsPage() {
                   <div key={key} className="rounded-xl border border-entrelinhas-gold/10 bg-entrelinhas-navy/45 p-4">
                     <div className="flex items-center justify-between gap-3">
                       <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-entrelinhas-gold sm:text-sm">{label}</h3>
-                      <button onClick={() => copy(content, `${script.title} (${label})`)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-entrelinhas-gold/12 bg-entrelinhas-navy/35 text-entrelinhas-muted transition duration-300 hover:border-entrelinhas-gold/45 hover:text-white" aria-label={`Copiar versao ${label}`}>
+                      <button onClick={() => copy(content, `${script.title} (${label})`)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-entrelinhas-gold/12 bg-entrelinhas-navy/35 text-entrelinhas-muted transition duration-300 hover:border-entrelinhas-gold/45 hover:text-white" aria-label={`Copiar direcao ${label}`}>
                         <Copy size={16} />
                       </button>
                     </div>

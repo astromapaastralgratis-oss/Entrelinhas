@@ -3,6 +3,7 @@
 import { Copy, History } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { parseExecutiveScriptSections } from "@/lib/entrelinhas";
 
 type GeneratedScript = {
   id: string;
@@ -31,14 +32,14 @@ export function HistoryPage() {
   }, []);
 
   async function copy(item: GeneratedScript) {
-    await navigator.clipboard.writeText(item.ai_response);
+    await navigator.clipboard.writeText(formatResponseForDisplay(item.ai_response));
     setCopiedId(item.id);
   }
 
   return (
     <div className="brand-fade-in">
-      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Historico</p>
-      <h1 className="mt-3 text-3xl font-semibold leading-tight text-white sm:text-5xl">Conversas preparadas</h1>
+      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Jornada</p>
+      <h1 className="mt-3 text-3xl font-semibold leading-tight text-white sm:text-5xl">Direcionamentos anteriores</h1>
       <div className="mt-6 space-y-4">
         {items.length ? items.map((item) => (
           <article key={item.id} className="editorial-panel p-5">
@@ -52,15 +53,22 @@ export function HistoryPage() {
                 <Copy size={17} /> {copiedId === item.id ? "Copiado" : "Copiar"}
               </button>
             </div>
-            <p className="mt-4 line-clamp-5 whitespace-pre-line text-sm leading-6 text-white/80 sm:leading-7">{item.ai_response}</p>
+            <p className="mt-4 line-clamp-5 whitespace-pre-line text-sm leading-6 text-white/80 sm:leading-7">{formatResponseForDisplay(item.ai_response)}</p>
           </article>
         )) : (
           <div className="editorial-panel flex min-h-72 flex-col items-center justify-center p-6 text-center text-entrelinhas-muted">
             <History className="mb-4 text-entrelinhas-gold" size={38} />
-            <p className="max-w-xs leading-7">Suas conversas preparadas aparecerao aqui depois do primeiro script.</p>
+            <p className="max-w-xs leading-7">Seus direcionamentos aparecerao aqui depois da primeira situacao trabalhada.</p>
           </div>
         )}
       </div>
     </div>
   );
+}
+
+function formatResponseForDisplay(content: string) {
+  return parseExecutiveScriptSections(content)
+    .filter((section) => section.body && section.body !== "Ainda nao gerado.")
+    .map((section, index) => `${index + 1}. ${section.title}\n${section.body}`)
+    .join("\n\n");
 }
