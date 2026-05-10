@@ -1,0 +1,146 @@
+import { AlertTriangle, CheckCircle2, MessageSquareQuote, ShieldCheck, Sparkles, Target, TrendingUp } from "lucide-react";
+import type { ReactNode } from "react";
+import type { ExecutivePresenceResult } from "@/src/types/executivePresence";
+
+type RaioXFullReadingProps = {
+  result: ExecutivePresenceResult;
+};
+
+export function RaioXFullReading({ result }: RaioXFullReadingProps) {
+  const { profile } = result;
+
+  return (
+    <section className="mx-auto max-w-5xl">
+      <div className="glass-panel overflow-hidden">
+        <Header title="Leitura executiva" subtitle={profile.name} />
+
+        <div className="grid gap-4 p-5 sm:p-7 lg:grid-cols-2">
+          <ReadingCard icon={Sparkles} title="Sua Leitura Executiva" className="lg:col-span-2">
+            <p className="max-w-3xl text-base leading-7 text-white/90 sm:text-lg">{profile.shortDescription}</p>
+            <p className="mt-4 max-w-3xl leading-7 text-entrelinhas-muted">{profile.executiveReading}</p>
+          </ReadingCard>
+
+          <ReadingCard icon={ShieldCheck} title="Como Voce E Percebida" className="lg:col-span-2">
+            <p className="max-w-3xl leading-7 text-entrelinhas-muted">{profile.perceivedByOthers}</p>
+          </ReadingCard>
+
+          <ListCard icon={CheckCircle2} title="Suas Fortalezas" items={profile.strengths} tone="gold" />
+          <ListCard icon={AlertTriangle} title="O Que Reduz Sua Influencia" items={profile.risks} tone="purple" />
+
+          <ReadingCard icon={MessageSquareQuote} title="Seu Padrao Sob Pressao">
+            <p className="leading-7 text-entrelinhas-muted">{profile.pressurePattern}</p>
+          </ReadingCard>
+
+          <ReadingCard icon={Target} title="Onde Voce Pode Estar Se Sabotando">
+            <p className="leading-7 text-entrelinhas-muted">{profile.executiveSabotage}</p>
+          </ReadingCard>
+
+          <ReadingCard icon={MessageSquareQuote} title="Como Voce Se Comunica">
+            <p className="leading-7 text-entrelinhas-muted">{profile.communicationPattern}</p>
+          </ReadingCard>
+
+          <ReadingCard icon={Target} title="O Que O Corporativo Espera Da Sua Proxima Versao">
+            <p className="leading-7 text-entrelinhas-muted">{profile.corporateExpectation}</p>
+          </ReadingCard>
+
+          <ScriptShiftCard items={profile.internalScriptsToChange} />
+          <ListCard icon={TrendingUp} title="Frases Para Sustentar Presenca" items={profile.startUsingPhrases} tone="gold" className="lg:col-span-2" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Header({ title, subtitle }: { title: string; subtitle: string }) {
+  return (
+    <div className="border-b border-entrelinhas-champagne/10 bg-white/[0.028] p-5 sm:p-7">
+      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">{title}</p>
+      <h1 className="mt-2 text-3xl font-semibold leading-tight text-white sm:text-4xl">{subtitle}</h1>
+    </div>
+  );
+}
+
+function ReadingCard({
+  icon: Icon,
+  title,
+  children,
+  className = ""
+}: {
+  icon: typeof Sparkles;
+  title: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <article className={`rounded-2xl border border-entrelinhas-champagne/10 bg-white/[0.035] p-5 ${className}`}>
+      <div className="flex items-center gap-3">
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-entrelinhas-gold/25 bg-entrelinhas-gold/10 text-entrelinhas-gold">
+          <Icon size={19} />
+        </span>
+        <h2 className="text-lg font-semibold text-white">{title}</h2>
+      </div>
+      <div className="mt-4">{children}</div>
+    </article>
+  );
+}
+
+function ListCard({
+  icon: Icon,
+  title,
+  items,
+  tone,
+  className = ""
+}: {
+  icon: typeof Sparkles;
+  title: string;
+  items: string[];
+  tone: "gold" | "purple" | "muted";
+  className?: string;
+}) {
+  const iconClass = {
+    gold: "border-entrelinhas-gold/25 bg-entrelinhas-gold/10 text-entrelinhas-gold",
+    purple: "border-entrelinhas-wineLight/30 bg-entrelinhas-wine/25 text-entrelinhas-bronzeLight",
+    muted: "border-white/10 bg-white/[0.055] text-entrelinhas-muted"
+  }[tone];
+
+  return (
+    <article className={`rounded-2xl border border-entrelinhas-champagne/10 bg-white/[0.035] p-5 ${className}`}>
+      <div className="flex items-center gap-3">
+        <span className={`flex h-10 w-10 items-center justify-center rounded-xl border ${iconClass}`}>
+          <Icon size={19} />
+        </span>
+        <h2 className="text-lg font-semibold text-white">{title}</h2>
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+        {items.map((item) => (
+          <div key={item} className="rounded-xl border border-entrelinhas-champagne/10 bg-[#0a0d14]/78 px-4 py-3 text-sm leading-6 text-white/86">
+            {item}
+          </div>
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function ScriptShiftCard({ items }: { items: { from: string; to: string }[] }) {
+  return (
+    <article className="rounded-2xl border border-entrelinhas-champagne/10 bg-white/[0.035] p-5 lg:col-span-2">
+      <div className="flex items-center gap-3">
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.055] text-entrelinhas-muted">
+          <MessageSquareQuote size={19} />
+        </span>
+        <h2 className="text-lg font-semibold text-white">Scripts Internos Que Precisam Mudar</h2>
+      </div>
+      <div className="mt-4 grid gap-3 lg:grid-cols-3">
+        {items.map((item) => (
+          <div key={`${item.from}-${item.to}`} className="rounded-xl border border-entrelinhas-champagne/10 bg-[#0a0d14]/78 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-entrelinhas-muted">De</p>
+            <p className="mt-2 text-sm leading-6 text-white/72">{item.from}</p>
+            <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-entrelinhas-gold">Para</p>
+            <p className="mt-2 text-sm leading-6 text-white/90">{item.to}</p>
+          </div>
+        ))}
+      </div>
+    </article>
+  );
+}

@@ -1,3 +1,5 @@
+import { buildDeterministicExecutiveScript } from "@/src/lib/entrelinhas";
+
 export const situationOptions = [
   "Reunião importante",
   "Negociação salarial",
@@ -73,18 +75,7 @@ export const quickScripts = [
 ];
 
 export function buildFallbackExecutiveScript(input: ExecutiveScriptInput) {
-  const situation = input.situation || "situação corporativa";
-  const tone = input.tone || "Executivo";
-  return [
-    `1. Leitura estratégica\nVocê está diante de ${situation.toLowerCase()}, uma situação que pede clareza, controle emocional e uma frase de abertura que organize a conversa. O ponto central não é provar valor; é conduzir a percepção de valor com maturidade.`,
-    `2. Risco da situação\nO risco é entrar reativa, justificar demais ou permitir que a conversa seja definida pela tensão do momento. Isso pode reduzir sua autoridade mesmo quando você tem razão.`,
-    `3. Melhor postura\nUse tom ${tone.toLowerCase()}, fale em fatos observáveis, impacto no trabalho e próximo passo. Seja breve, específica e mantenha o eixo na decisão que precisa ser tomada.`,
-    `4. O que NÃO dizer\nEvite: "você sempre", "isso é injusto", "ninguém me escuta" ou qualquer frase que coloque a outra pessoa na defensiva antes de você estabelecer o ponto.`,
-    `5. Script pronto para usar\n"Quero trazer esse ponto com objetividade. O que aconteceu foi: ${input.context || "[descreva o fato principal em uma frase]"}. O impacto disso é que ${input.desiredOutcome || "precisamos alinhar expectativa e próximo passo"}. Minha proposta é seguirmos com clareza sobre responsabilidades, critérios e decisão. Para mim, o melhor encaminhamento agora é definirmos o combinado e quem fica responsável por cada parte."`,
-    `6. Versão curta\n"Quero alinhar isso com clareza: aconteceu [fato], o impacto foi [impacto] e minha proposta é [próximo passo]."`,
-    `7. Versão mais firme\n"Preciso ser direta: esse ponto afeta meu escopo, minha contribuição e a qualidade da decisão. Quero que alinhemos fatos, responsabilidades e próximos passos antes de seguir."`,
-    `8. Próximo passo recomendado\nAntes da conversa, escreva três fatos objetivos, uma evidência de impacto e uma proposta concreta. Depois, registre o combinado por mensagem para reduzir ambiguidade.`
-  ].join("\n\n");
+  return buildDeterministicExecutiveScript(input);
 }
 
 export function parseExecutiveScriptSections(content: string) {

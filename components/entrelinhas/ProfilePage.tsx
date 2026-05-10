@@ -43,21 +43,28 @@ export function ProfilePage() {
 
   async function save(event: FormEvent) {
     event.preventDefault();
-    const user = (await supabase?.auth.getUser())?.data.user;
+    if (!supabase) {
+      setStatus("Não conseguimos salvar agora. Tente novamente em instantes.");
+      return;
+    }
+
+    const user = (await supabase.auth.getUser()).data.user;
     if (!user) return;
-    await supabase?.from("profiles").upsert({
+    const { error } = await supabase.from("profiles").upsert({
       id: user.id,
       ...profile,
       updated_at: new Date().toISOString()
     });
-    setStatus("Perfil salvo.");
+    setStatus(error ? "Não conseguimos salvar agora. Tente novamente em instantes." : "Perfil salvo.");
   }
 
   return (
     <div className="mx-auto max-w-3xl">
       <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Perfil</p>
-      <h1 className="mt-3 text-4xl font-semibold text-white sm:text-5xl">Contexto profissional</h1>
-      <p className="mt-3 text-entrelinhas-muted">Essas informações ajudam a mentora a calibrar postura, linguagem e objetivo de carreira.</p>
+      <h1 className="mt-3 text-3xl font-semibold leading-tight text-white sm:text-5xl">Contexto profissional</h1>
+      <p className="mt-3 text-sm leading-6 text-entrelinhas-muted sm:text-base">
+        Use poucos detalhes. Eles ajudam a calibrar tom, postura e objetivo.
+      </p>
 
       <form onSubmit={save} className="glass-panel mt-6 space-y-4 p-5">
         <User className="text-entrelinhas-gold" size={26} />
@@ -78,7 +85,7 @@ export function ProfilePage() {
           <textarea rows={4} value={profile.career_goal} onChange={(event) => updateField("career_goal", event.target.value)} className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3 text-white outline-none focus:border-entrelinhas-gold/60" />
         </label>
         <label className="block">
-          <span className="text-sm font-semibold text-white/85">Estilo de comunicação preferido</span>
+          <span className="text-sm font-semibold text-white/85">Estilo preferido</span>
           <select value={profile.preferred_style} onChange={(event) => updateField("preferred_style", event.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-[#0c111d] px-4 py-3 text-white outline-none focus:border-entrelinhas-gold/60">
             <option>Diplomático</option>
             <option>Firme</option>

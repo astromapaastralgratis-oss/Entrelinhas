@@ -1,4 +1,11 @@
 import type {
+  ConfidenceLevel,
+  ExecutivePresenceAnswer,
+  ExecutivePresenceProfileId,
+  ExecutivePresenceScores,
+  TraitKey
+} from "@/src/types/executivePresence";
+import type {
   ContentIntensity,
   EditorialCtaType,
   EditorialFormat,
@@ -180,6 +187,11 @@ export type GeneratedScriptRow = {
   people_involved: string | null;
   tone: string | null;
   ai_response: string;
+  generation_mode: "ai_compact" | "deterministic_fallback" | string | null;
+  fallback_used: boolean | null;
+  prompt_tokens_estimate: number | null;
+  completion_tokens_estimate: number | null;
+  total_tokens_estimate: number | null;
   created_at: string;
 };
 
@@ -190,6 +202,18 @@ export type SavedScriptRow = {
   situation: string | null;
   tone: string | null;
   content: string;
+  created_at: string;
+};
+
+export type ExecutivePresenceResultRow = {
+  id: string;
+  user_id: string;
+  profile_id: ExecutivePresenceProfileId | string;
+  primary_trait: TraitKey | string;
+  secondary_trait: TraitKey | string | null;
+  confidence_level: ConfidenceLevel | string | null;
+  scores: ExecutivePresenceScores;
+  answers: ExecutivePresenceAnswer[];
   created_at: string;
 };
 
@@ -252,6 +276,15 @@ export type Database = {
           created_at?: string;
         };
         Update: Partial<Omit<SavedScriptRow, "id" | "created_at" | "user_id">>;
+        Relationships: [];
+      };
+      executive_presence_results: {
+        Row: ExecutivePresenceResultRow;
+        Insert: Omit<ExecutivePresenceResultRow, "id" | "created_at"> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<Omit<ExecutivePresenceResultRow, "id" | "created_at" | "user_id">>;
         Relationships: [];
       };
       content_calendar: {

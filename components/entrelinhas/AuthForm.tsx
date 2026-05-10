@@ -24,7 +24,7 @@ export function AuthForm({ mode }: AuthFormProps) {
     setError(null);
 
     if (!supabase || !isSupabaseConfigured) {
-      setError("Supabase ainda não está configurado. Preencha NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY.");
+      setError("Não conseguimos abrir sua conta agora. Tente novamente em alguns instantes.");
       return;
     }
 
@@ -34,12 +34,12 @@ export function AuthForm({ mode }: AuthFormProps) {
       : await supabase.auth.signInWithPassword({ email, password });
 
     if (result.error) {
-      setError(result.error.message);
+      setError("Não foi possível entrar com esses dados. Confira email e senha e tente novamente.");
       setLoading(false);
       return;
     }
 
-    router.push("/dashboard");
+    router.push(isSignup ? "/raio-x" : "/dashboard");
     router.refresh();
   }
 
@@ -57,7 +57,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         <form onSubmit={handleSubmit} className="glass-panel p-6 sm:p-7">
           <h1 className="text-3xl font-semibold text-white">{isSignup ? "Comece grátis" : "Entrar"}</h1>
           <p className="mt-2 text-sm leading-6 text-entrelinhas-muted">
-            {isSignup ? "Crie sua conta para gerar scripts executivos." : "Acesse sua mentora executiva de bolso."}
+            {isSignup ? "Comece pelo seu Raio-X e prepare conversas com mais clareza." : "Entre para continuar seus scripts e diagnósticos."}
           </p>
 
           <div className="mt-7 space-y-4">

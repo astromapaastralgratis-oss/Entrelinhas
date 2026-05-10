@@ -1,0 +1,96 @@
+import Link from "next/link";
+import { ArrowRight, BookOpen, Dumbbell, Lightbulb, MessageSquareText, Sparkles, Target } from "lucide-react";
+import type { ExecutivePresenceResult } from "@/src/types/executivePresence";
+
+type RaioXDevelopmentPlanProps = {
+  result: ExecutivePresenceResult;
+};
+
+export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
+  const { profile } = result;
+  const firstSuggestion = profile.firstScriptSuggestions[0];
+  const mentorHref = firstSuggestion ? `/mentor?situation=${encodeURIComponent(firstSuggestion)}` : "/mentor";
+
+  return (
+    <section className="mx-auto max-w-5xl">
+      <div className="glass-panel overflow-hidden">
+        <div className="border-b border-entrelinhas-champagne/10 bg-white/[0.028] p-5 sm:p-7">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Plano</p>
+          <h1 className="mt-2 max-w-3xl text-3xl font-semibold leading-tight text-white sm:text-4xl">
+            Transforme sua leitura em presenca praticada.
+          </h1>
+        </div>
+
+        <div className="grid gap-4 p-5 sm:p-7 lg:grid-cols-[0.9fr_1.1fr]">
+          <article className="rounded-2xl border border-entrelinhas-gold/25 bg-entrelinhas-gold/10 p-5 shadow-bronze">
+            <Sparkles className="text-entrelinhas-gold" size={24} />
+            <h2 className="mt-4 text-xl font-semibold text-white">Proximo movimento</h2>
+            <p className="mt-3 leading-7 text-entrelinhas-goldLight">{profile.evolutionPoint}</p>
+          </article>
+
+          <PlanList icon={Target} title="Microajustes De Presenca" items={profile.presenceMicroAdjustments} featured />
+          <PlanList icon={Sparkles} title="Plano De Evolucao Executiva - 30 dias" items={profile.thirtyDayEvolutionPlan} featured className="lg:col-span-2" />
+          <PlanList icon={Lightbulb} title="Praticas De Repertorio" items={profile.recommendedPractices} />
+          <PlanList icon={BookOpen} title="Leituras" items={profile.recommendedReadings} />
+          <PlanList icon={Dumbbell} title="Treinos" items={profile.recommendedTrainings} />
+          <PlanList icon={MessageSquareText} title="Situacoes Para Treinar" items={profile.firstScriptSuggestions} />
+
+          <article className="rounded-2xl border border-entrelinhas-champagne/10 bg-white/[0.035] p-5 lg:col-span-2">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-muted">Primeira pratica</p>
+                <h2 className="mt-2 text-2xl font-semibold text-white">Prepare uma conversa alinhada ao seu novo posicionamento.</h2>
+              </div>
+              <Link
+                href={mentorHref}
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-entrelinhas-gold px-5 py-4 text-sm font-bold text-entrelinhas-ink shadow-gold transition hover:-translate-y-0.5 hover:bg-entrelinhas-goldLight"
+              >
+                Gerar meu primeiro script personalizado <ArrowRight size={18} />
+              </Link>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PlanList({
+  icon: Icon,
+  title,
+  items,
+  featured = false,
+  className = ""
+}: {
+  icon: typeof Sparkles;
+  title: string;
+  items: string[];
+  featured?: boolean;
+  className?: string;
+}) {
+  const articleClass = featured
+    ? "border-entrelinhas-gold/20 bg-entrelinhas-gold/[0.075]"
+    : "border-entrelinhas-champagne/10 bg-white/[0.035]";
+
+  const iconClass = featured
+    ? "border-entrelinhas-gold/25 bg-entrelinhas-gold/10 text-entrelinhas-gold"
+    : "border-entrelinhas-bronze/25 bg-entrelinhas-bronze/10 text-entrelinhas-bronzeLight";
+
+  return (
+    <article className={`rounded-2xl border ${articleClass} p-5 ${className}`}>
+      <div className="flex items-center gap-3">
+        <span className={`flex h-10 w-10 items-center justify-center rounded-xl border ${iconClass}`}>
+          <Icon size={19} />
+        </span>
+        <h2 className="text-lg font-semibold text-white">{title}</h2>
+      </div>
+      <div className="mt-4 space-y-3">
+        {items.map((item) => (
+          <div key={item} className="rounded-xl border border-entrelinhas-champagne/10 bg-[#0a0d14]/78 px-4 py-3 text-sm leading-6 text-white/86">
+            {item}
+          </div>
+        ))}
+      </div>
+    </article>
+  );
+}
