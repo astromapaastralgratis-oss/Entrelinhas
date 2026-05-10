@@ -28,19 +28,19 @@ export function RaioXQuestion({
   isAdvancing
 }: RaioXQuestionProps) {
   return (
-    <section className="mx-auto max-w-3xl">
+    <section className="brand-fade-in mx-auto max-w-3xl">
       <RaioXProgress current={currentIndex + 1} total={totalQuestions} />
 
-      <div className="mt-7 glass-panel p-5 sm:p-7">
+      <div className="mt-7 editorial-panel p-5 sm:p-7">
         <button
           onClick={onBack}
           disabled={!canGoBack || isAdvancing}
-          className="mb-6 inline-flex items-center gap-2 rounded-xl border border-entrelinhas-champagne/10 px-4 py-2.5 text-sm font-semibold text-entrelinhas-muted transition hover:border-entrelinhas-bronze/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
+          className="mb-6 inline-flex items-center gap-2 rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy/35 px-4 py-2.5 text-sm font-semibold text-entrelinhas-muted transition duration-300 hover:border-entrelinhas-gold/35 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
         >
           <ArrowLeft size={17} /> Voltar
         </button>
 
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Pergunta {currentIndex + 1}</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Leitura {currentIndex + 1}</p>
         <h1 className="mt-4 text-3xl font-semibold leading-tight text-white sm:text-4xl">{question.text}</h1>
 
         <div className="mt-7 space-y-3">
@@ -53,12 +53,12 @@ export function RaioXQuestion({
                 key={option.id}
                 onClick={() => onSelect(option.id)}
                 disabled={isAdvancing}
-                className={`group flex w-full items-start justify-between gap-4 rounded-2xl border p-4 text-left transition duration-200 sm:p-5 ${
+                className={`group flex w-full items-start justify-between gap-4 rounded-2xl border p-4 text-left transition duration-300 sm:p-5 ${
                   isSelected
-                    ? "border-entrelinhas-gold bg-entrelinhas-gold/14 text-white shadow-gold"
+                    ? "border-entrelinhas-gold/75 bg-entrelinhas-blue/34 text-white shadow-gold"
                     : wasSaved
-                      ? "border-entrelinhas-bronze/45 bg-entrelinhas-bronze/10 text-white"
-                      : "border-entrelinhas-champagne/10 bg-white/[0.045] text-white/88 hover:border-entrelinhas-bronze/40 hover:bg-white/[0.07]"
+                      ? "border-entrelinhas-bronze/45 bg-entrelinhas-blue/20 text-white"
+                      : "border-entrelinhas-gold/10 bg-entrelinhas-navy/50 text-white/88 hover:border-entrelinhas-gold/28 hover:bg-entrelinhas-night/58"
                 }`}
               >
                 <span className="text-sm leading-7 sm:text-base">{option.text}</span>

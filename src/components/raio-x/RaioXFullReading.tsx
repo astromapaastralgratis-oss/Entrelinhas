@@ -10,8 +10,8 @@ export function RaioXFullReading({ result }: RaioXFullReadingProps) {
   const { profile } = result;
 
   return (
-    <section className="mx-auto max-w-5xl">
-      <div className="glass-panel overflow-hidden">
+    <section className="brand-fade-in mx-auto max-w-5xl">
+      <div className="editorial-panel overflow-hidden">
         <Header title="Leitura executiva" subtitle={profile.name} />
 
         <div className="grid gap-4 p-5 sm:p-7 lg:grid-cols-2">
@@ -25,7 +25,7 @@ export function RaioXFullReading({ result }: RaioXFullReadingProps) {
           </ReadingCard>
 
           <ListCard icon={CheckCircle2} title="Suas Fortalezas" items={profile.strengths} tone="gold" />
-          <ListCard icon={AlertTriangle} title="O Que Reduz Sua Influencia" items={profile.risks} tone="purple" />
+          <ListCard icon={AlertTriangle} title="O Que Reduz Sua Influencia" items={profile.risks} tone="blue" />
 
           <ReadingCard icon={MessageSquareQuote} title="Seu Padrao Sob Pressao">
             <p className="leading-7 text-entrelinhas-muted">{profile.pressurePattern}</p>
@@ -53,7 +53,7 @@ export function RaioXFullReading({ result }: RaioXFullReadingProps) {
 
 function Header({ title, subtitle }: { title: string; subtitle: string }) {
   return (
-    <div className="border-b border-entrelinhas-champagne/10 bg-white/[0.028] p-5 sm:p-7">
+    <div className="border-b border-entrelinhas-gold/12 bg-entrelinhas-navy/35 p-5 sm:p-7">
       <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">{title}</p>
       <h1 className="mt-2 text-3xl font-semibold leading-tight text-white sm:text-4xl">{subtitle}</h1>
     </div>
@@ -72,9 +72,9 @@ function ReadingCard({
   className?: string;
 }) {
   return (
-    <article className={`rounded-2xl border border-entrelinhas-champagne/10 bg-white/[0.035] p-5 ${className}`}>
+    <article className={`rounded-[1.5rem] border border-entrelinhas-gold/10 bg-entrelinhas-navy/45 p-5 ${className}`}>
       <div className="flex items-center gap-3">
-        <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-entrelinhas-gold/25 bg-entrelinhas-gold/10 text-entrelinhas-gold">
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-entrelinhas-gold/22 bg-entrelinhas-gold/10 text-entrelinhas-gold">
           <Icon size={19} />
         </span>
         <h2 className="text-lg font-semibold text-white">{title}</h2>
@@ -94,17 +94,17 @@ function ListCard({
   icon: typeof Sparkles;
   title: string;
   items: string[];
-  tone: "gold" | "purple" | "muted";
+  tone: "gold" | "blue" | "muted";
   className?: string;
 }) {
   const iconClass = {
     gold: "border-entrelinhas-gold/25 bg-entrelinhas-gold/10 text-entrelinhas-gold",
-    purple: "border-entrelinhas-wineLight/30 bg-entrelinhas-wine/25 text-entrelinhas-bronzeLight",
+    blue: "border-entrelinhas-blueLight/25 bg-entrelinhas-blue/20 text-entrelinhas-blueLight",
     muted: "border-white/10 bg-white/[0.055] text-entrelinhas-muted"
   }[tone];
 
   return (
-    <article className={`rounded-2xl border border-entrelinhas-champagne/10 bg-white/[0.035] p-5 ${className}`}>
+    <article className={`rounded-[1.5rem] border border-entrelinhas-gold/10 bg-entrelinhas-navy/45 p-5 ${className}`}>
       <div className="flex items-center gap-3">
         <span className={`flex h-10 w-10 items-center justify-center rounded-xl border ${iconClass}`}>
           <Icon size={19} />
@@ -113,7 +113,7 @@ function ListCard({
       </div>
       <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
         {items.map((item) => (
-          <div key={item} className="rounded-xl border border-entrelinhas-champagne/10 bg-[#0a0d14]/78 px-4 py-3 text-sm leading-6 text-white/86">
+          <div key={item} className="rounded-xl border border-entrelinhas-gold/10 bg-entrelinhas-void/45 px-4 py-3 text-sm leading-6 text-white/86">
             {item}
           </div>
         ))}
@@ -124,16 +124,16 @@ function ListCard({
 
 function ScriptShiftCard({ items }: { items: { from: string; to: string }[] }) {
   return (
-    <article className="rounded-2xl border border-entrelinhas-champagne/10 bg-white/[0.035] p-5 lg:col-span-2">
+    <article className="rounded-[1.5rem] border border-entrelinhas-gold/10 bg-entrelinhas-navy/45 p-5 lg:col-span-2">
       <div className="flex items-center gap-3">
-        <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.055] text-entrelinhas-muted">
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-blue/18 text-entrelinhas-muted">
           <MessageSquareQuote size={19} />
         </span>
         <h2 className="text-lg font-semibold text-white">Scripts Internos Que Precisam Mudar</h2>
       </div>
       <div className="mt-4 grid gap-3 lg:grid-cols-3">
         {items.map((item) => (
-          <div key={`${item.from}-${item.to}`} className="rounded-xl border border-entrelinhas-champagne/10 bg-[#0a0d14]/78 p-4">
+          <div key={`${item.from}-${item.to}`} className="rounded-xl border border-entrelinhas-gold/10 bg-entrelinhas-void/45 p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-entrelinhas-muted">De</p>
             <p className="mt-2 text-sm leading-6 text-white/72">{item.from}</p>
             <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-entrelinhas-gold">Para</p>

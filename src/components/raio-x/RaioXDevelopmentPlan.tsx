@@ -12,9 +12,9 @@ export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
   const mentorHref = firstSuggestion ? `/mentor?situation=${encodeURIComponent(firstSuggestion)}` : "/mentor";
 
   return (
-    <section className="mx-auto max-w-5xl">
-      <div className="glass-panel overflow-hidden">
-        <div className="border-b border-entrelinhas-champagne/10 bg-white/[0.028] p-5 sm:p-7">
+    <section className="brand-fade-in mx-auto max-w-5xl">
+      <div className="editorial-panel overflow-hidden">
+        <div className="border-b border-entrelinhas-gold/12 bg-entrelinhas-navy/35 p-5 sm:p-7">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Plano</p>
           <h1 className="mt-2 max-w-3xl text-3xl font-semibold leading-tight text-white sm:text-4xl">
             Transforme sua leitura em presenca praticada.
@@ -22,7 +22,7 @@ export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
         </div>
 
         <div className="grid gap-4 p-5 sm:p-7 lg:grid-cols-[0.9fr_1.1fr]">
-          <article className="rounded-2xl border border-entrelinhas-gold/25 bg-entrelinhas-gold/10 p-5 shadow-bronze">
+          <article className="rounded-[1.5rem] border border-entrelinhas-gold/22 bg-entrelinhas-gold/[0.08] p-5">
             <Sparkles className="text-entrelinhas-gold" size={24} />
             <h2 className="mt-4 text-xl font-semibold text-white">Proximo movimento</h2>
             <p className="mt-3 leading-7 text-entrelinhas-goldLight">{profile.evolutionPoint}</p>
@@ -35,7 +35,7 @@ export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
           <PlanList icon={Dumbbell} title="Treinos" items={profile.recommendedTrainings} />
           <PlanList icon={MessageSquareText} title="Situacoes Para Treinar" items={profile.firstScriptSuggestions} />
 
-          <article className="rounded-2xl border border-entrelinhas-champagne/10 bg-white/[0.035] p-5 lg:col-span-2">
+          <article className="rounded-[1.5rem] border border-entrelinhas-gold/12 bg-entrelinhas-panel/55 p-5 lg:col-span-2">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-muted">Primeira pratica</p>
@@ -43,7 +43,7 @@ export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
               </div>
               <Link
                 href={mentorHref}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-entrelinhas-gold px-5 py-4 text-sm font-bold text-entrelinhas-ink shadow-gold transition hover:-translate-y-0.5 hover:bg-entrelinhas-goldLight"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-entrelinhas-gold px-5 py-4 text-sm font-bold text-entrelinhas-ink shadow-gold transition duration-300 hover:-translate-y-0.5 hover:bg-entrelinhas-goldLight"
               >
                 Gerar meu primeiro script personalizado <ArrowRight size={18} />
               </Link>
@@ -69,15 +69,15 @@ function PlanList({
   className?: string;
 }) {
   const articleClass = featured
-    ? "border-entrelinhas-gold/20 bg-entrelinhas-gold/[0.075]"
-    : "border-entrelinhas-champagne/10 bg-white/[0.035]";
+    ? "border-entrelinhas-gold/18 bg-entrelinhas-blue/22"
+    : "border-entrelinhas-gold/10 bg-entrelinhas-navy/45";
 
   const iconClass = featured
     ? "border-entrelinhas-gold/25 bg-entrelinhas-gold/10 text-entrelinhas-gold"
-    : "border-entrelinhas-bronze/25 bg-entrelinhas-bronze/10 text-entrelinhas-bronzeLight";
+    : "border-entrelinhas-blueLight/22 bg-entrelinhas-blue/20 text-entrelinhas-blueLight";
 
   return (
-    <article className={`rounded-2xl border ${articleClass} p-5 ${className}`}>
+    <article className={`rounded-[1.5rem] border ${articleClass} p-5 ${className}`}>
       <div className="flex items-center gap-3">
         <span className={`flex h-10 w-10 items-center justify-center rounded-xl border ${iconClass}`}>
           <Icon size={19} />
@@ -86,7 +86,7 @@ function PlanList({
       </div>
       <div className="mt-4 space-y-3">
         {items.map((item) => (
-          <div key={item} className="rounded-xl border border-entrelinhas-champagne/10 bg-[#0a0d14]/78 px-4 py-3 text-sm leading-6 text-white/86">
+          <div key={item} className="rounded-xl border border-entrelinhas-gold/10 bg-entrelinhas-void/45 px-4 py-3 text-sm leading-6 text-white/86">
             {item}
           </div>
         ))}

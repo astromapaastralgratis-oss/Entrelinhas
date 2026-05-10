@@ -36,28 +36,28 @@ export function HistoryPage() {
   }
 
   return (
-    <div>
-      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Histórico</p>
+    <div className="brand-fade-in">
+      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Historico</p>
       <h1 className="mt-3 text-3xl font-semibold leading-tight text-white sm:text-5xl">Conversas preparadas</h1>
       <div className="mt-6 space-y-4">
         {items.length ? items.map((item) => (
-          <article key={item.id} className="glass-panel p-5">
+          <article key={item.id} className="editorial-panel p-5">
             <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
               <div>
                 <p className="text-sm text-entrelinhas-muted">{new Date(item.created_at).toLocaleString("pt-BR")}</p>
                 <h2 className="mt-2 text-xl font-semibold leading-snug text-white sm:text-2xl">{item.situation}</h2>
                 <p className="mt-1 text-sm font-semibold text-entrelinhas-gold">{item.tone}</p>
               </div>
-              <button onClick={() => copy(item)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:border-entrelinhas-gold/50">
+              <button onClick={() => copy(item)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy/35 px-4 py-3 text-sm font-semibold text-white transition duration-300 hover:border-entrelinhas-gold/45">
                 <Copy size={17} /> {copiedId === item.id ? "Copiado" : "Copiar"}
               </button>
             </div>
             <p className="mt-4 line-clamp-5 whitespace-pre-line text-sm leading-6 text-white/80 sm:leading-7">{item.ai_response}</p>
           </article>
         )) : (
-          <div className="glass-panel flex min-h-72 flex-col items-center justify-center p-6 text-center text-entrelinhas-muted">
+          <div className="editorial-panel flex min-h-72 flex-col items-center justify-center p-6 text-center text-entrelinhas-muted">
             <History className="mb-4 text-entrelinhas-gold" size={38} />
-            <p className="max-w-xs leading-7">Suas conversas preparadas aparecerão aqui depois do primeiro script.</p>
+            <p className="max-w-xs leading-7">Suas conversas preparadas aparecerao aqui depois do primeiro script.</p>
           </div>
         )}
       </div>

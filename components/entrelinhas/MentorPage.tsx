@@ -5,6 +5,7 @@ import { Clipboard, Copy, Loader2, Save, WandSparkles } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { parseExecutiveScriptSections, situationOptions, toneOptions } from "@/lib/entrelinhas";
 import { supabase } from "@/lib/supabase";
+import { BrandAvatar } from "@/components/entrelinhas/BrandAssets";
 
 export function MentorPage() {
   const searchParams = useSearchParams();
@@ -40,7 +41,7 @@ export function MentorPage() {
       const data = await result.json();
 
       if (!data.response) {
-        setStatus("Não conseguimos preparar sua orientação agora. Tente novamente em alguns instantes.");
+        setStatus("Nao conseguimos preparar sua orientacao agora. Tente novamente em alguns instantes.");
         return;
       }
 
@@ -65,10 +66,10 @@ export function MentorPage() {
           });
         }
       } catch {
-        // Manter a experiência fluida mesmo se o registro não for salvo.
+        // Manter a experiencia fluida mesmo se o registro nao for salvo.
       }
     } catch {
-      setStatus("Não conseguimos preparar sua orientação agora. Tente novamente em alguns instantes.");
+      setStatus("Nao conseguimos preparar sua orientacao agora. Tente novamente em alguns instantes.");
     } finally {
       setLoading(false);
     }
@@ -81,13 +82,13 @@ export function MentorPage() {
 
   async function saveResponse() {
     if (!supabase) {
-      setStatus("Não conseguimos salvar agora. Sua orientação continua disponível aqui.");
+      setStatus("Nao conseguimos salvar agora. Sua orientacao continua disponivel aqui.");
       return;
     }
 
     const user = (await supabase.auth.getUser()).data.user;
     if (!user || !response) {
-      setStatus("Entre na sua conta para guardar esta orientação.");
+      setStatus("Entre na sua conta para guardar esta orientacao.");
       return;
     }
 
@@ -99,79 +100,84 @@ export function MentorPage() {
       content: response
     });
 
-    setStatus(error ? "Não conseguimos salvar agora. Sua orientação continua disponível aqui." : "Orientação salva para consultar depois.");
+    setStatus(error ? "Nao conseguimos salvar agora. Sua orientacao continua disponivel aqui." : "Orientacao salva para consultar depois.");
   }
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[0.82fr_1.18fr]">
+    <div className="brand-fade-in grid gap-6 xl:grid-cols-[0.82fr_1.18fr]">
       <section>
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Mentoria aplicada</p>
-        <h1 className="mt-3 text-3xl font-semibold leading-tight text-white sm:text-5xl">Trabalhar uma situação real</h1>
-        <p className="mt-3 max-w-xl text-sm leading-6 text-entrelinhas-muted sm:text-base">
-          Traga o contexto. O Entrelinhas transforma tensão corporativa em postura, fala e próximo passo.
+        <div className="flex items-center gap-4">
+          <BrandAvatar className="h-14 w-14" size={72} />
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Mentoria aplicada</p>
+            <h1 className="mt-2 text-3xl font-semibold leading-tight text-white sm:text-5xl">Trabalhar uma situacao real</h1>
+          </div>
+        </div>
+        <p className="mt-4 max-w-xl text-sm leading-6 text-entrelinhas-muted sm:text-base">
+          Traga o contexto. O Entrelinhas organiza postura, fala e proximo movimento para uma conversa com presenca.
         </p>
 
-        <form onSubmit={generate} className="glass-panel mt-6 space-y-4 p-5">
+        <form onSubmit={generate} className="editorial-panel mt-6 space-y-4 p-5">
           <label className="block">
-            <span className="text-sm font-semibold text-white/85">Situação</span>
-            <select value={situation} onChange={(event) => setSituation(event.target.value)} className="mt-2 w-full rounded-xl border border-entrelinhas-champagne/10 bg-[#0a0d14] px-4 py-3 text-white outline-none transition focus:border-entrelinhas-gold/55">
+            <span className="text-sm font-semibold text-white/85">Situacao</span>
+            <select value={situation} onChange={(event) => setSituation(event.target.value)} className="mt-2 w-full rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy px-4 py-3 text-white outline-none transition duration-300 focus:border-entrelinhas-gold/55">
               {situationOptions.map((option) => <option key={option}>{option}</option>)}
             </select>
           </label>
           <label className="block">
             <span className="text-sm font-semibold text-white/85">O que aconteceu?</span>
-            <textarea required value={context} onChange={(event) => setContext(event.target.value)} rows={4} className="mt-2 w-full resize-none rounded-xl border border-entrelinhas-champagne/10 bg-white/[0.045] px-4 py-3 text-white outline-none transition placeholder:text-entrelinhas-muted/55 focus:border-entrelinhas-gold/55" placeholder="Conte os fatos principais, sem se explicar demais." />
+            <textarea required value={context} onChange={(event) => setContext(event.target.value)} rows={4} className="mt-2 w-full resize-none rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy/65 px-4 py-3 text-white outline-none transition duration-300 placeholder:text-entrelinhas-muted/55 focus:border-entrelinhas-gold/55" placeholder="Conte os fatos principais, sem se explicar demais." />
           </label>
           <label className="block">
-            <span className="text-sm font-semibold text-white/85">Que posição você quer sustentar?</span>
-            <input value={desiredOutcome} onChange={(event) => setDesiredOutcome(event.target.value)} className="mt-2 w-full rounded-xl border border-entrelinhas-champagne/10 bg-white/[0.045] px-4 py-3 text-white outline-none transition placeholder:text-entrelinhas-muted/55 focus:border-entrelinhas-gold/55" placeholder="Ex: recuperar crédito, estabelecer limite, negociar reconhecimento" />
+            <span className="text-sm font-semibold text-white/85">Que posicao voce quer sustentar?</span>
+            <input value={desiredOutcome} onChange={(event) => setDesiredOutcome(event.target.value)} className="mt-2 w-full rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy/65 px-4 py-3 text-white outline-none transition duration-300 placeholder:text-entrelinhas-muted/55 focus:border-entrelinhas-gold/55" placeholder="Ex: recuperar credito, estabelecer limite, negociar reconhecimento" />
           </label>
           <label className="block">
-            <span className="text-sm font-semibold text-white/85">Quem está na conversa?</span>
-            <input value={peopleInvolved} onChange={(event) => setPeopleInvolved(event.target.value)} className="mt-2 w-full rounded-xl border border-entrelinhas-champagne/10 bg-white/[0.045] px-4 py-3 text-white outline-none transition placeholder:text-entrelinhas-muted/55 focus:border-entrelinhas-gold/55" placeholder="Líder, pares, cliente, diretoria..." />
+            <span className="text-sm font-semibold text-white/85">Quem esta na conversa?</span>
+            <input value={peopleInvolved} onChange={(event) => setPeopleInvolved(event.target.value)} className="mt-2 w-full rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy/65 px-4 py-3 text-white outline-none transition duration-300 placeholder:text-entrelinhas-muted/55 focus:border-entrelinhas-gold/55" placeholder="Lider, pares, cliente, diretoria..." />
           </label>
           <div>
             <span className="text-sm font-semibold text-white/85">Tom</span>
             <div className="mt-2 grid grid-cols-3 gap-2">
               {toneOptions.map((option) => (
-                <button type="button" key={option} onClick={() => setTone(option)} className={`rounded-xl border px-2 py-3 text-sm font-bold transition ${tone === option ? "border-entrelinhas-gold/70 bg-entrelinhas-gold/90 text-entrelinhas-ink shadow-gold" : "border-entrelinhas-champagne/10 bg-white/[0.04] text-entrelinhas-muted hover:border-entrelinhas-bronze/35 hover:text-white"}`}>
+                <button type="button" key={option} onClick={() => setTone(option)} className={`rounded-xl border px-2 py-3 text-sm font-bold transition duration-300 ${tone === option ? "border-entrelinhas-gold/70 bg-entrelinhas-gold/90 text-entrelinhas-ink shadow-gold" : "border-entrelinhas-gold/12 bg-entrelinhas-navy/58 text-entrelinhas-muted hover:border-entrelinhas-gold/35 hover:text-white"}`}>
                   {option}
                 </button>
               ))}
             </div>
           </div>
-          <button disabled={loading} className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-entrelinhas-gold px-5 py-4 text-sm font-bold text-entrelinhas-ink shadow-gold transition hover:bg-entrelinhas-goldLight disabled:opacity-70">
+          <button disabled={loading} className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-entrelinhas-gold px-5 py-4 text-sm font-bold text-entrelinhas-ink shadow-gold transition duration-300 hover:bg-entrelinhas-goldLight disabled:opacity-70">
             {loading ? <Loader2 className="animate-spin" size={18} /> : <WandSparkles size={18} />}
-            {loading ? "Preparando sua orientação" : "Receber orientação executiva"}
+            {loading ? "Organizando sua orientacao" : "Receber orientacao executiva"}
           </button>
         </form>
       </section>
 
-      <section className="glass-panel min-h-[34rem] p-5">
-        <div className="flex flex-col justify-between gap-3 border-b border-white/10 pb-4 sm:flex-row sm:items-center">
+      <section className="editorial-panel min-h-[34rem] p-5">
+        <div className="flex flex-col justify-between gap-3 border-b border-entrelinhas-gold/12 pb-4 sm:flex-row sm:items-center">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-muted">Orientação executiva</p>
-            <h2 className="mt-1 text-2xl font-semibold text-white">{response ? situation : "Sua fala estratégica aparece aqui"}</h2>
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-muted">Scripts executivos</p>
+            <h2 className="mt-1 text-2xl font-semibold text-white">{response ? situation : "Sua fala estrategica aparece aqui"}</h2>
           </div>
           <div className="flex gap-2">
-            <button disabled={!response} onClick={copyResponse} className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:border-entrelinhas-gold/50 disabled:opacity-40">
+            <button disabled={!response} onClick={copyResponse} className="inline-flex items-center gap-2 rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy/35 px-4 py-3 text-sm font-semibold text-white transition duration-300 hover:border-entrelinhas-gold/40 disabled:opacity-40">
               <Copy size={17} /> Copiar
             </button>
-            <button disabled={!response} onClick={saveResponse} className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:border-entrelinhas-gold/50 disabled:opacity-40">
+            <button disabled={!response} onClick={saveResponse} className="inline-flex items-center gap-2 rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy/35 px-4 py-3 text-sm font-semibold text-white transition duration-300 hover:border-entrelinhas-gold/40 disabled:opacity-40">
               <Save size={17} /> Salvar
             </button>
           </div>
         </div>
-        {status ? <p className="mt-4 rounded-xl border border-entrelinhas-gold/25 bg-entrelinhas-gold/10 px-4 py-3 text-sm text-entrelinhas-goldLight">{status}</p> : null}
+        {status ? <p className="mt-4 rounded-xl border border-entrelinhas-gold/22 bg-entrelinhas-gold/[0.08] px-4 py-3 text-sm text-entrelinhas-goldLight">{status}</p> : null}
         {loading ? (
           <div className="flex min-h-[24rem] flex-col items-center justify-center text-center text-entrelinhas-muted">
-            <WandSparkles className="mb-4 animate-pulse text-entrelinhas-gold" size={38} />
-            <p className="max-w-xs leading-7">Organizando postura, fala e próximo passo.</p>
+            <BrandAvatar className="mb-4 h-16 w-16 animate-pulse" size={80} />
+            <p className="max-w-xs leading-7">Organizando postura, fala e proximo passo.</p>
           </div>
         ) : response ? (
           <div className="mt-5 space-y-3">
             {parseExecutiveScriptSections(response).map((section) => (
-              <article key={section.title} className="rounded-xl border border-entrelinhas-champagne/10 bg-white/[0.035] p-4">
+              <article key={section.title} className="rounded-xl border border-entrelinhas-gold/10 bg-entrelinhas-navy/45 p-4">
                 <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-entrelinhas-gold sm:text-sm">{section.title}</h3>
                 <p className="mt-3 whitespace-pre-line text-sm leading-6 text-white/88 sm:leading-7">{section.body}</p>
               </article>
@@ -180,7 +186,7 @@ export function MentorPage() {
         ) : (
           <div className="flex min-h-[24rem] flex-col items-center justify-center text-center text-entrelinhas-muted">
             <Clipboard className="mb-4 text-entrelinhas-gold" size={38} />
-            <p className="max-w-xs leading-7">Traga uma situação concreta. A mentoria devolve uma fala com presença, limite e maturidade.</p>
+            <p className="max-w-xs leading-7">Traga uma situacao concreta. A mentoria devolve uma fala com presenca, limite e maturidade.</p>
           </div>
         )}
       </section>

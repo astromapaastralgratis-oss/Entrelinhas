@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { situationOptions } from "@/lib/entrelinhas";
 import { getActiveExecutivePresenceProfile, hasActiveExecutivePresence } from "@/src/lib/entrelinhas";
+import { BrandAvatar, BrandLogo } from "@/components/entrelinhas/BrandAssets";
 
 export function DashboardPage() {
   const [name, setName] = useState("executiva");
@@ -33,21 +34,35 @@ export function DashboardPage() {
   }, []);
 
   return (
-    <div>
-      <div className="flex flex-col gap-4">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Mentoria</p>
-          <h1 className="mt-3 text-3xl font-semibold leading-tight text-white sm:text-5xl">Ola, {name}.</h1>
-          <p className="mt-3 max-w-xl text-sm leading-6 text-entrelinhas-muted sm:text-base">
-            Um espaco para praticar presenca executiva, repertorio e posicionamento profissional.
-          </p>
-        </div>
-        <Link href="/mentor" className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-entrelinhas-gold px-5 py-4 text-sm font-bold text-entrelinhas-ink shadow-gold transition hover:bg-entrelinhas-goldLight sm:w-fit">
-          Trabalhar uma situacao real <ArrowRight size={18} />
-        </Link>
-      </div>
+    <div className="space-y-7">
+      <section className="editorial-panel overflow-hidden rounded-[1.75rem] p-5 sm:p-7 lg:p-8">
+        <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+          <div>
+            <BrandLogo className="max-w-xs" priority />
+            <p className="mt-8 text-sm font-semibold uppercase tracking-[0.2em] text-entrelinhas-gold">Sua jornada de presenca</p>
+            <h1 className="mt-3 max-w-3xl text-4xl font-semibold leading-[1.02] text-white sm:text-5xl lg:text-6xl">
+              Ola, {name}.
+            </h1>
+            <p className="mt-4 max-w-2xl text-base leading-7 text-entrelinhas-muted sm:text-lg">
+              Presenca executiva se pratica nas conversas que pedem clareza, criterio e postura.
+            </p>
+            <Link href="/mentor" className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-entrelinhas-gold px-5 py-4 text-sm font-bold text-entrelinhas-ink shadow-gold transition duration-300 hover:-translate-y-0.5 hover:bg-entrelinhas-goldLight sm:w-fit">
+              Trabalhar uma situacao real <ArrowRight size={18} />
+            </Link>
+          </div>
 
-      <div className="mt-6 grid gap-4 md:grid-cols-[0.95fr_1.05fr]">
+          <div className="relative mx-auto w-full max-w-sm">
+            <div className="absolute inset-6 rounded-full bg-entrelinhas-blueLight/10 blur-3xl" />
+            <BrandAvatar className="relative mx-auto h-44 w-44 sm:h-56 sm:w-56" size={256} priority />
+            <div className="relative mt-5 rounded-2xl border border-entrelinhas-gold/18 bg-[#071525]/78 p-4 text-center">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Raio-X Executivo</p>
+              <p className="mt-2 text-lg font-semibold text-white">{executivePresenceName ?? "Sua leitura estrategica"}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="grid gap-4 md:grid-cols-[0.95fr_1.05fr]">
         <article className="glass-panel p-5">
           <Goal className="text-entrelinhas-gold" size={23} />
           <p className="mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-entrelinhas-muted">Direcao profissional</p>
@@ -59,16 +74,16 @@ export function DashboardPage() {
 
         <Link
           href="/raio-x"
-          className="group rounded-2xl border border-white/10 bg-white/[0.045] p-5 shadow-entrelinhas transition hover:border-entrelinhas-gold/30 hover:bg-white/[0.065]"
+          className="group rounded-2xl border border-entrelinhas-gold/15 bg-[#08182A]/82 p-5 shadow-entrelinhas transition duration-300 hover:-translate-y-0.5 hover:border-entrelinhas-gold/30 hover:bg-[#0B2742]/82"
         >
           <div className="flex gap-4">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-entrelinhas-bronze/25 bg-entrelinhas-bronze/10 text-entrelinhas-bronzeLight">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-entrelinhas-gold/20 bg-[#0B2742] text-entrelinhas-gold">
               <ScanLine size={21} />
             </span>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-entrelinhas-muted">Raio-X Executivo</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-entrelinhas-muted">Sua leitura estrategica</p>
               <h2 className="mt-2 text-xl font-semibold leading-snug text-white">
-                {executivePresenceName ?? "Uma leitura estrategica sobre como sua presenca sustenta espaco."}
+                {executivePresenceName ?? "Raio-X Executivo"}
               </h2>
               <span className="mt-4 inline-flex items-center justify-center rounded-xl border border-entrelinhas-gold/35 px-4 py-3 text-sm font-bold text-entrelinhas-gold transition group-hover:border-entrelinhas-gold/70">
                 {hasExecutivePresenceResult ? "Rever minha leitura" : "Fazer meu Raio-X"}
@@ -78,14 +93,14 @@ export function DashboardPage() {
         </Link>
       </div>
 
-      <section className="mt-8">
-        <h2 className="text-2xl font-semibold text-white">Praticas de posicionamento</h2>
+      <section>
+        <h2 className="text-2xl font-semibold text-white">Scripts executivos</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {situationOptions.map((situation) => (
             <Link key={situation} href={`/mentor?situation=${encodeURIComponent(situation)}`} className="glass-card group min-h-32 p-4">
               <MessageSquareText className="text-entrelinhas-gold transition group-hover:text-entrelinhas-goldLight" size={23} />
               <h3 className="mt-4 text-base font-semibold leading-snug text-white sm:text-lg">{situation}</h3>
-              <p className="mt-2 text-sm leading-6 text-entrelinhas-muted">Construir repertorio</p>
+              <p className="mt-2 text-sm leading-6 text-entrelinhas-muted">Repertorio personalizado</p>
             </Link>
           ))}
         </div>

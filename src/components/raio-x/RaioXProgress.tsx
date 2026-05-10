@@ -14,9 +14,9 @@ export function RaioXProgress({ current, total }: RaioXProgressProps) {
           {current}/{total}
         </span>
       </div>
-      <div className="h-2 overflow-hidden rounded-full border border-entrelinhas-champagne/10 bg-white/[0.045]">
+      <div className="h-2 overflow-hidden rounded-full border border-entrelinhas-gold/12 bg-entrelinhas-navy/60">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-entrelinhas-gold via-entrelinhas-bronzeLight to-entrelinhas-wineLight transition-all duration-500 ease-out"
+          className="h-full rounded-full bg-gradient-to-r from-entrelinhas-blueLight via-entrelinhas-gold to-entrelinhas-goldLight transition-all duration-700 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>
