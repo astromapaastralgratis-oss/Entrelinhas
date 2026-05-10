@@ -2,7 +2,7 @@ import { adminErrorResponse, requireAdminRequest } from "@/lib/admin";
 
 export async function PATCH(request: Request, { params }: { params: { userId: string } }) {
   try {
-    const { serviceClient } = await requireAdminRequest(request);
+    const { userId: adminUserId, serviceClient } = await requireAdminRequest(request);
     const body = await request.json();
     const userId = params.userId;
 
@@ -48,6 +48,22 @@ export async function PATCH(request: Request, { params }: { params: { userId: st
       const redirectTo = `${process.env.NEXT_PUBLIC_APP_URL ?? new URL(request.url).origin}/update-password`;
       const { error } = await serviceClient.auth.resetPasswordForEmail(email, { redirectTo });
       if (error) throw error;
+      return Response.json({ ok: true });
+    }
+
+    if (body.action === "delete_user") {
+      if (userId === adminUserId) {
+        return Response.json({ error: "Voce nao pode excluir sua propria conta administrativa." }, { status: 400 });
+      }
+
+      await Promise.all([
+        serviceClient.from("user_script_limits").delete().eq("user_id", userId),
+        serviceClient.from("profiles").delete().eq("id", userId)
+      ]);
+
+      const { error } = await serviceClient.auth.admin.deleteUser(userId);
+      if (error) throw error;
+
       return Response.json({ ok: true });
     }
 

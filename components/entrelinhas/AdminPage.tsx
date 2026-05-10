@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { RefreshCw, Save, ShieldOff, ShieldCheck } from "lucide-react";
+import { RefreshCw, Save, ShieldOff, ShieldCheck, Trash2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 type AdminUser = {
@@ -117,6 +117,21 @@ export function AdminPage() {
     await updateUser(user, { action: "set_password", password }, "Senha temporaria atualizada.");
   }
 
+  async function deleteUserPermanently(user: AdminUser) {
+    const confirmed = window.confirm(
+      `Excluir permanentemente ${user.fullName || user.email || "esta usuaria"}?\n\nEsta acao remove a conta, perfil, Raio-X, scripts, limites e historico vinculado. Nao sera possivel recuperar.`
+    );
+    if (!confirmed) return;
+
+    const typed = window.prompt("Para confirmar a exclusao permanente, digite EXCLUIR:");
+    if (typed !== "EXCLUIR") {
+      setStatus("Exclusao cancelada.");
+      return;
+    }
+
+    await updateUser(user, { action: "delete_user" }, "Usuaria excluida permanentemente.");
+  }
+
   return (
     <div className="brand-fade-in">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -200,6 +215,9 @@ export function AdminPage() {
                     <ShieldOff size={16} /> Desativar
                   </button>
                 )}
+                <button onClick={() => deleteUserPermanently(user)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-red-500/40 bg-red-950/35 px-3 py-2 text-sm font-semibold text-red-100 hover:border-red-300/60">
+                  <Trash2 size={16} /> Excluir
+                </button>
               </div>
             </div>
           </article>
