@@ -41,9 +41,14 @@ export function LandingPage() {
             </span>
             <span className="text-base font-semibold tracking-[0.08em] text-white">ENTRELINHAS</span>
           </Link>
-          <Link className="rounded-lg px-3 py-2 text-sm font-semibold text-entrelinhas-muted transition hover:text-white" href="/login">
-            Entrar na mentoria
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link className="rounded-lg px-3 py-2 text-sm font-semibold text-entrelinhas-muted transition hover:text-white" href="/proposito">
+              Proposito
+            </Link>
+            <Link className="rounded-lg px-3 py-2 text-sm font-semibold text-entrelinhas-muted transition hover:text-white" href="/login">
+              Entrar na mentoria
+            </Link>
+          </div>
         </header>
 
         <div className="grid flex-1 items-center gap-9 py-10 lg:grid-cols-[0.95fr_1.05fr] lg:py-14">

@@ -20,6 +20,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const router = useRouter();
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [checkingRaioX, setCheckingRaioX] = useState(false);
 
   useEffect(() => {
     if (!supabase || !isSupabaseConfigured) {
@@ -61,12 +62,35 @@ export function AppShell({ children }: { children: ReactNode }) {
     };
   }, [router]);
 
+  useEffect(() => {
+    if (!supabase || !user || pathname === "/raio-x") return;
+
+    let active = true;
+    setCheckingRaioX(true);
+
+    supabase
+      .from("executive_presence_results")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .then(({ count, error }) => {
+        if (!active) return;
+        setCheckingRaioX(false);
+        if (!error && (count ?? 0) === 0) {
+          router.replace("/raio-x");
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [pathname, router, user]);
+
   async function signOut() {
     await supabase?.auth.signOut();
     router.push("/");
   }
 
-  if (loading) {
+  if (loading || checkingRaioX) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-entrelinhas-void px-6 text-center text-entrelinhas-ivory">
         <div className="glass-panel max-w-sm p-6">
