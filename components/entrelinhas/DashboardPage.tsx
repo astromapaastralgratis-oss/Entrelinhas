@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { situationOptions } from "@/lib/entrelinhas";
 import { getActiveExecutivePresenceProfile, hasActiveExecutivePresence } from "@/src/lib/entrelinhas";
-import { BrandAvatar, BrandLogo } from "@/components/entrelinhas/BrandAssets";
+import { BrandAvatar, BrandLockup } from "@/components/entrelinhas/BrandAssets";
 
 export function DashboardPage() {
   const [name, setName] = useState("executiva");
@@ -38,7 +38,7 @@ export function DashboardPage() {
       <section className="editorial-panel overflow-hidden rounded-[1.75rem] p-5 sm:p-7 lg:p-8">
         <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
           <div>
-            <BrandLogo className="max-w-xs" priority />
+            <BrandLockup priority avatarClassName="h-12 w-12" size={88} textClassName="text-lg" />
             <p className="mt-8 text-sm font-semibold uppercase tracking-[0.2em] text-entrelinhas-gold">Sua jornada executiva</p>
             <h1 className="mt-3 max-w-3xl text-4xl font-semibold leading-[1.02] text-white sm:text-5xl lg:text-6xl">
               Ola, {name}.

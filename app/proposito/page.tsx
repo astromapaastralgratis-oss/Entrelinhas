@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
-import { BrandAvatar, BrandLogo } from "@/components/entrelinhas/BrandAssets";
+import { BrandAvatar, BrandLockup } from "@/components/entrelinhas/BrandAssets";
 
 const principles = [
   "Estrategia tambem e saber como ocupar espaco.",
@@ -20,8 +20,8 @@ export default function PropositoPage() {
     <main className="brand-surface min-h-screen overflow-hidden text-entrelinhas-ivory">
       <section className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 py-6 sm:px-8 lg:px-10">
         <header className="flex items-center justify-between">
-          <Link href="/" className="block w-44 sm:w-56">
-            <BrandLogo priority />
+          <Link href="/" className="rounded-2xl border border-entrelinhas-gold/12 bg-[#08182A]/42 p-2.5 transition duration-300 hover:border-entrelinhas-gold/28">
+            <BrandLockup priority avatarClassName="h-10 w-10" size={72} textClassName="text-base" />
           </Link>
           <Link className="rounded-lg px-3 py-2 text-sm font-semibold text-entrelinhas-muted transition duration-300 hover:text-white" href="/login">
             Entrar

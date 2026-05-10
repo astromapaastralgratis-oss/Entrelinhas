@@ -68,7 +68,7 @@ export function LandingPage() {
           <div className="pointer-events-none absolute left-1/2 top-20 h-72 w-72 -translate-x-1/2 rounded-full bg-entrelinhas-blueLight/10 blur-3xl" />
           <div className="brand-fade-in relative max-w-4xl">
             <div className="mb-8 flex w-fit items-center gap-3 rounded-full border border-entrelinhas-gold/14 bg-entrelinhas-navy/45 px-3 py-2 backdrop-blur-xl">
-              <BrandAvatar className="h-8 w-8" size={36} priority />
+              <Sparkles className="h-4 w-4 text-entrelinhas-gold" />
               <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-entrelinhas-gold">
                 Presença • influência • evolução
               </span>
@@ -160,7 +160,9 @@ function StrategicPreview() {
   return (
     <div className="editorial-panel brand-fade-in p-5 sm:p-6">
       <div className="flex items-center gap-4 border-b border-entrelinhas-gold/12 pb-5">
-        <BrandAvatar className="h-16 w-16" size={96} />
+        <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-entrelinhas-gold/18 bg-[#0B2742]/78 text-entrelinhas-gold">
+          <Compass size={24} />
+        </span>
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-entrelinhas-gold">previa do seu direcionamento estrategico</p>
           <p className="mt-1 text-xl font-semibold text-white">Conducao executiva</p>

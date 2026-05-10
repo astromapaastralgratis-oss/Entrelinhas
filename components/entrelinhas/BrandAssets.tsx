@@ -11,6 +11,14 @@ type BrandAvatarProps = {
   priority?: boolean;
 };
 
+type BrandLockupProps = {
+  className?: string;
+  avatarClassName?: string;
+  textClassName?: string;
+  priority?: boolean;
+  size?: number;
+};
+
 export function BrandLogo({ className = "", priority = false }: BrandLogoProps) {
   return (
     <Image
@@ -34,6 +42,26 @@ export function BrandAvatar({ className = "", size = 96, priority = false }: Bra
       priority={priority}
       className={`rounded-full border border-entrelinhas-gold/35 object-cover shadow-brand ${className}`}
     />
+  );
+}
+
+export function BrandLockup({
+  className = "",
+  avatarClassName = "h-10 w-10",
+  textClassName = "text-base",
+  priority = false,
+  size = 64
+}: BrandLockupProps) {
+  return (
+    <div className={`flex items-center gap-3 ${className}`}>
+      <BrandAvatar className={avatarClassName} size={size} priority={priority} />
+      <div className="min-w-0">
+        <p className={`font-semibold tracking-[0.16em] text-entrelinhas-goldLight ${textClassName}`}>Entrelinhas</p>
+        <p className="mt-0.5 hidden text-[10px] font-semibold uppercase tracking-[0.18em] text-entrelinhas-muted sm:block">
+          Presenca • Estrategia • Evolucao
+        </p>
+      </div>
+    </div>
   );
 }
 

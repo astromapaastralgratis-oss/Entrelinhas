@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
-import { BrandAvatar, BrandLogo } from "@/components/entrelinhas/BrandAssets";
+import { BrandLockup } from "@/components/entrelinhas/BrandAssets";
 
 export function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -30,11 +30,10 @@ export function ForgotPasswordPage() {
   return (
     <main className="brand-surface flex min-h-screen items-center justify-center px-5 py-10 text-entrelinhas-ivory">
       <section className="w-full max-w-md">
-        <Link href="/" className="mx-auto mb-8 block max-w-xs">
-          <BrandLogo priority />
+        <Link href="/" className="mx-auto mb-8 flex w-fit justify-center">
+          <BrandLockup priority avatarClassName="h-11 w-11" size={72} textClassName="text-lg" />
         </Link>
         <form onSubmit={sendReset} className="editorial-panel brand-fade-in rounded-3xl p-6 sm:p-7">
-          <BrandAvatar className="mb-5 h-16 w-16" size={96} />
           <h1 className="text-3xl font-semibold text-white">Redefinir senha</h1>
           <p className="mt-2 text-sm leading-6 text-entrelinhas-muted">
             Informe seu email para receber um link seguro de acesso.

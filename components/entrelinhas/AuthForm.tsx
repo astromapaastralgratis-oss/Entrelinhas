@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { hasActiveExecutivePresence } from "@/src/lib/entrelinhas";
-import { BrandAvatar, BrandLogo } from "@/components/entrelinhas/BrandAssets";
+import { BrandLockup } from "@/components/entrelinhas/BrandAssets";
 
 type AuthFormProps = {
   mode: "login" | "signup";
@@ -19,10 +19,12 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [fullName, setFullName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const submittingRef = useRef(false);
   const isSignup = mode === "signup";
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
+    if (submittingRef.current) return;
     setError(null);
 
     if (!supabase || !isSupabaseConfigured) {
@@ -30,6 +32,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       return;
     }
 
+    submittingRef.current = true;
     setLoading(true);
 
     if (isSignup) {
@@ -39,6 +42,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         if (data.allowed === false) {
           setError("As vagas de acesso estao temporariamente fechadas.");
           setLoading(false);
+          submittingRef.current = false;
           return;
         }
       } catch {
@@ -53,6 +57,7 @@ export function AuthForm({ mode }: AuthFormProps) {
     if (result.error) {
       setError(getAuthErrorMessage(result.error.message, isSignup));
       setLoading(false);
+      submittingRef.current = false;
       return;
     }
 
@@ -68,6 +73,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       if (!result.data.session) {
         setError("Conta criada. Confira seu email para confirmar o acesso antes de entrar.");
         setLoading(false);
+        submittingRef.current = false;
         return;
       }
 
@@ -93,6 +99,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       await supabase.auth.signOut();
       setError("Seu acesso esta temporariamente indisponivel.");
       setLoading(false);
+      submittingRef.current = false;
       return;
     }
 
@@ -103,12 +110,11 @@ export function AuthForm({ mode }: AuthFormProps) {
   return (
     <main className="brand-surface flex min-h-screen items-center justify-center px-5 py-10 text-entrelinhas-ivory">
       <section className="w-full max-w-md">
-        <Link href="/" className="mx-auto mb-8 block max-w-xs">
-          <BrandLogo priority />
+        <Link href="/" className="mx-auto mb-8 flex w-fit justify-center">
+          <BrandLockup priority avatarClassName="h-11 w-11" size={72} textClassName="text-lg" />
         </Link>
 
         <form onSubmit={handleSubmit} className="editorial-panel brand-fade-in rounded-3xl p-6 sm:p-7">
-          <BrandAvatar className="mb-5 h-16 w-16" size={96} />
           <h1 className="text-3xl font-semibold text-white">{isSignup ? "Comece pelo seu Raio-X Executivo" : "Entrar"}</h1>
           <p className="mt-2 text-sm leading-6 text-entrelinhas-muted">
             {isSignup ? "Sua jornada comeca por uma analise estrategica de presenca, influencia e conducao profissional." : "Entre para continuar sua evolucao executiva."}
@@ -176,8 +182,14 @@ function getAuthErrorMessage(message: string, isSignup: boolean) {
     return "O cadastro por email esta temporariamente indisponivel. Tente novamente mais tarde.";
   }
 
-  if (normalized.includes("rate limit") || normalized.includes("too many")) {
-    return "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.";
+  if (
+    normalized.includes("rate limit") ||
+    normalized.includes("too many") ||
+    normalized.includes("over_email_send_rate_limit") ||
+    normalized.includes("email rate limit") ||
+    normalized.includes("security purposes")
+  ) {
+    return "O envio de acesso ficou temporariamente limitado. Aguarde alguns minutos e tente novamente.";
   }
 
   if (normalized.includes("invalid login") || normalized.includes("invalid credentials")) {

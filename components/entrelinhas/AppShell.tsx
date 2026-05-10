@@ -7,7 +7,7 @@ import { ReactNode, useEffect, useState } from "react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { hasActiveExecutivePresence } from "@/src/lib/entrelinhas";
-import { BrandAvatar, BrandLogo } from "@/components/entrelinhas/BrandAssets";
+import { BrandAvatar, BrandLockup } from "@/components/entrelinhas/BrandAssets";
 
 const navItems = [
   { label: "Home", href: "/dashboard", icon: Home },
@@ -161,8 +161,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="brand-surface fixed inset-0 -z-10" />
       <div className="mx-auto flex min-h-screen w-full max-w-7xl">
         <aside className="hidden w-72 shrink-0 border-r border-entrelinhas-gold/15 bg-[#071525]/78 px-5 py-6 backdrop-blur-xl lg:block">
-          <Link href="/dashboard" className="block">
-            <BrandLogo className="max-w-[13.5rem]" priority />
+          <Link href="/dashboard" className="block rounded-2xl border border-entrelinhas-gold/12 bg-[#08182A]/50 p-3 transition duration-300 hover:border-entrelinhas-gold/28 hover:bg-[#0B2742]/50">
+            <BrandLockup priority avatarClassName="h-11 w-11" size={80} textClassName="text-base" />
           </Link>
 
           <div className="mt-8 flex items-center gap-3 rounded-2xl border border-entrelinhas-gold/15 bg-[#08182A]/70 p-3">
