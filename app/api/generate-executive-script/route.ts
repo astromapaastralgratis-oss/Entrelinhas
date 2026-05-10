@@ -37,7 +37,13 @@ export async function POST(request: Request) {
   const fallbackSections = buildDeterministicExecutiveSections(input, executivePresence);
   const fallbackResponse = composeExecutiveScript(fallbackSections);
   const fallbackPromptText = "deterministic_fallback";
-  const dailyAiLimitReached = authContext ? hasReachedDailyAiLimit(authContext.dailyAiUsage, getDailyAiScriptLimit()) : false;
+  if (authContext?.accountStatus === "disabled") {
+    return NextResponse.json({ error: "Acesso temporariamente indisponivel." }, { status: 403 });
+  }
+
+  const dailyAiLimitReached = authContext
+    ? hasReachedDailyAiLimit(authContext.dailyAiUsage, authContext.dailyAiLimit ?? getDailyAiScriptLimit())
+    : false;
 
   if (dailyAiLimitReached || !process.env.OPENAI_API_KEY) {
     const metadata = buildMentorEconomicsMetadata({
@@ -164,10 +170,10 @@ async function loadAuthContext(request: Request) {
     const user = userData.user;
     if (!user) return null;
 
-    const [{ data: profile }, { count }] = await Promise.all([
+    const [{ data: profile }, { count }, { data: scriptLimit }] = await Promise.all([
       client
         .from("profiles")
-        .select("executive_presence_profile_id")
+        .select("executive_presence_profile_id, account_status")
         .eq("id", user.id)
         .maybeSingle(),
       client
@@ -175,12 +181,19 @@ async function loadAuthContext(request: Request) {
         .select("id", { count: "exact", head: true })
         .eq("user_id", user.id)
         .eq("generation_mode", "ai_compact")
-        .gte("created_at", getUtcDayStart().toISOString())
+        .gte("created_at", getUtcDayStart().toISOString()),
+      client
+        .from("user_script_limits")
+        .select("daily_ai_script_limit")
+        .eq("user_id", user.id)
+        .maybeSingle()
     ]);
 
     return {
       userId: user.id,
       dailyAiUsage: count ?? 0,
+      dailyAiLimit: scriptLimit?.daily_ai_script_limit ?? null,
+      accountStatus: profile?.account_status ?? "active",
       executivePresence: buildCompactExecutivePresenceContext(
         profile?.executive_presence_profile_id ? { profile_id: profile.executive_presence_profile_id } : null
       )

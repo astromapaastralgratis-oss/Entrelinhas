@@ -31,6 +31,21 @@ export function AuthForm({ mode }: AuthFormProps) {
     }
 
     setLoading(true);
+
+    if (isSignup) {
+      try {
+        const availability = await fetch("/api/signup-availability");
+        const data = await availability.json();
+        if (data.allowed === false) {
+          setError("As vagas de acesso estao temporariamente fechadas.");
+          setLoading(false);
+          return;
+        }
+      } catch {
+        // Se a checagem falhar, mantemos o fluxo para nao bloquear uma conta valida.
+      }
+    }
+
     const result = isSignup
       ? await supabase.auth.signUp({ email, password, options: { data: { full_name: fullName } } })
       : await supabase.auth.signInWithPassword({ email, password });
@@ -64,9 +79,16 @@ export function AuthForm({ mode }: AuthFormProps) {
 
     const { data: profile } = await supabase
       .from("profiles")
-      .select("active_executive_presence_result_id, executive_presence_profile_id, executive_presence_completed_at")
+      .select("active_executive_presence_result_id, executive_presence_profile_id, executive_presence_completed_at, account_status")
       .eq("id", user.id)
       .maybeSingle();
+
+    if (profile?.account_status === "disabled") {
+      await supabase.auth.signOut();
+      setError("Seu acesso esta temporariamente indisponivel.");
+      setLoading(false);
+      return;
+    }
 
     router.push(hasActiveExecutivePresence(profile) ? "/dashboard" : "/raio-x");
     router.refresh();
@@ -116,6 +138,13 @@ export function AuthForm({ mode }: AuthFormProps) {
               {isSignup ? "Entrar" : "Comecar pelo Raio-X"}
             </Link>
           </p>
+          {!isSignup ? (
+            <p className="mt-3 text-center text-sm">
+              <Link className="font-semibold text-entrelinhas-gold hover:text-entrelinhas-goldLight" href="/forgot-password">
+                Esqueci minha senha
+              </Link>
+            </p>
+          ) : null}
         </form>
       </section>
     </main>

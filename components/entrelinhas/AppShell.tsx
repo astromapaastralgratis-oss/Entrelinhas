@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, History, Library, LogOut, User, WandSparkles } from "lucide-react";
+import { Home, History, Library, LogOut, ShieldCheck, User, WandSparkles } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
@@ -23,6 +23,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [checkingRaioX, setCheckingRaioX] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     if (!supabase || !isSupabaseConfigured) {
@@ -65,23 +66,29 @@ export function AppShell({ children }: { children: ReactNode }) {
   }, [router]);
 
   useEffect(() => {
-    if (pathname === "/raio-x") {
+    if (pathname === "/raio-x" || pathname === "/admin") {
       setCheckingRaioX(false);
       return;
     }
     if (!supabase || !user) return;
 
     let active = true;
+    const client = supabase;
     setCheckingRaioX(true);
 
-    supabase
+    client
       .from("profiles")
-      .select("active_executive_presence_result_id, executive_presence_profile_id, executive_presence_completed_at")
+      .select("active_executive_presence_result_id, executive_presence_profile_id, executive_presence_completed_at, account_status")
       .eq("id", user.id)
       .maybeSingle()
       .then(({ data, error }) => {
         if (!active) return;
         setCheckingRaioX(false);
+        if (!error && data?.account_status === "disabled") {
+          client.auth.signOut();
+          router.replace("/login");
+          return;
+        }
         if (!error && !hasActiveExecutivePresence(data)) {
           router.replace("/raio-x");
         }
@@ -96,6 +103,29 @@ export function AppShell({ children }: { children: ReactNode }) {
     await supabase?.auth.signOut();
     router.push("/");
   }
+
+  useEffect(() => {
+    if (!supabase || !user) return;
+
+    let active = true;
+    supabase.auth.getSession().then(async ({ data }) => {
+      const token = data.session?.access_token;
+      if (!token) return;
+      try {
+        const response = await fetch("/api/admin/me", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!active) return;
+        setIsAdmin(response.ok);
+      } catch {
+        if (active) setIsAdmin(false);
+      }
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [user]);
 
   if (loading || checkingRaioX) {
     return (
@@ -124,6 +154,8 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   if (!user) return null;
 
+  const visibleNavItems = isAdmin ? [...navItems, { label: "Admin", href: "/admin", icon: ShieldCheck }] : navItems;
+
   return (
     <main className="min-h-screen bg-entrelinhas-void text-entrelinhas-ivory">
       <div className="brand-surface fixed inset-0 -z-10" />
@@ -142,7 +174,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
 
           <nav className="mt-8 space-y-2">
-            {navItems.map((item) => {
+            {visibleNavItems.map((item) => {
               const Icon = item.icon;
               const active = pathname === item.href;
               return (
@@ -179,8 +211,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       </div>
 
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-entrelinhas-gold/15 bg-[#050A12]/94 px-2 py-2 backdrop-blur-xl lg:hidden">
-        <div className="mx-auto grid max-w-lg grid-cols-5">
-          {navItems.map((item) => {
+        <div className="mx-auto grid max-w-lg" style={{ gridTemplateColumns: `repeat(${visibleNavItems.length}, minmax(0, 1fr))` }}>
+          {visibleNavItems.map((item) => {
             const Icon = item.icon;
             const active = pathname === item.href;
             return (

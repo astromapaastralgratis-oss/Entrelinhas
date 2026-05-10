@@ -174,6 +174,9 @@ export type ProfileRow = {
   industry: string | null;
   career_goal: string | null;
   preferred_style: string | null;
+  account_status: string;
+  disabled_at: string | null;
+  disabled_reason: string | null;
   active_executive_presence_result_id: string | null;
   executive_presence_profile_id: ExecutivePresenceProfileId | string | null;
   executive_presence_completed_at: string | null;
@@ -220,6 +223,18 @@ export type ExecutivePresenceResultRow = {
   created_at: string;
 };
 
+export type AppSettingsRow = {
+  key: string;
+  value: Record<string, unknown>;
+  updated_at: string;
+};
+
+export type UserScriptLimitRow = {
+  user_id: string;
+  daily_ai_script_limit: number | null;
+  updated_at: string;
+};
+
 export type AutomationSettingsRow = {
   user_id: string;
   daily_generation_limit: number;
@@ -257,6 +272,9 @@ export type Database = {
           industry?: string | null;
           career_goal?: string | null;
           preferred_style?: string | null;
+          account_status?: string;
+          disabled_at?: string | null;
+          disabled_reason?: string | null;
           active_executive_presence_result_id?: string | null;
           executive_presence_profile_id?: ExecutivePresenceProfileId | string | null;
           executive_presence_completed_at?: string | null;
@@ -291,6 +309,21 @@ export type Database = {
           created_at?: string;
         };
         Update: Partial<Omit<ExecutivePresenceResultRow, "id" | "created_at" | "user_id">>;
+        Relationships: [];
+      };
+      app_settings: {
+        Row: AppSettingsRow;
+        Insert: AppSettingsRow;
+        Update: Partial<Omit<AppSettingsRow, "key">>;
+        Relationships: [];
+      };
+      user_script_limits: {
+        Row: UserScriptLimitRow;
+        Insert: Pick<UserScriptLimitRow, "user_id"> & {
+          daily_ai_script_limit?: number | null;
+          updated_at?: string;
+        };
+        Update: Partial<Omit<UserScriptLimitRow, "user_id">>;
         Relationships: [];
       };
       content_calendar: {
