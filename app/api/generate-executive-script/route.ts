@@ -164,13 +164,11 @@ async function loadAuthContext(request: Request) {
     const user = userData.user;
     if (!user) return null;
 
-    const [{ data: executivePresenceRow }, { count }] = await Promise.all([
+    const [{ data: profile }, { count }] = await Promise.all([
       client
-      .from("executive_presence_results")
-      .select("profile_id")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(1)
+        .from("profiles")
+        .select("executive_presence_profile_id")
+        .eq("id", user.id)
         .maybeSingle(),
       client
         .from("generated_scripts")
@@ -183,7 +181,9 @@ async function loadAuthContext(request: Request) {
     return {
       userId: user.id,
       dailyAiUsage: count ?? 0,
-      executivePresence: buildCompactExecutivePresenceContext(executivePresenceRow)
+      executivePresence: buildCompactExecutivePresenceContext(
+        profile?.executive_presence_profile_id ? { profile_id: profile.executive_presence_profile_id } : null
+      )
     };
   } catch {
     return null;

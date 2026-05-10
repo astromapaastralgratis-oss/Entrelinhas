@@ -3,20 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import { AlertTriangle } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import { executivePresenceProfiles } from "@/src/data/executivePresenceProfiles";
 import { executivePresenceQuestions } from "@/src/data/executivePresenceQuestions";
 import { calculateExecutivePresenceResult } from "@/src/utils/calculateExecutivePresenceResult";
 import { shuffleArray } from "@/src/utils/shuffleArray";
 import type {
-  ConfidenceLevel,
   ExecutivePresenceAnswer,
   ExecutivePresenceOption,
-  ExecutivePresenceProfileId,
-  ExecutivePresenceResult,
-  ExecutivePresenceScores,
-  TraitKey
+  ExecutivePresenceResult
 } from "@/src/types/executivePresence";
-import type { ExecutivePresenceResultRow } from "@/types/database";
+import { hasActiveExecutivePresence, restoreExecutivePresenceResult } from "@/src/lib/entrelinhas";
 import { RaioXIntro } from "@/src/components/raio-x/RaioXIntro";
 import { RaioXLoading } from "@/src/components/raio-x/RaioXLoading";
 import { RaioXQuestion } from "@/src/components/raio-x/RaioXQuestion";
@@ -26,8 +21,6 @@ import { RaioXResultSummary } from "@/src/components/raio-x/RaioXResultSummary";
 import { RaioXResultTabs, type RaioXResultView } from "@/src/components/raio-x/RaioXResultTabs";
 
 type FlowStage = "intro" | "question" | "loading" | "summary";
-const traitKeys: TraitKey[] = ["direction", "influence", "diplomacy", "precision"];
-const confidenceLevels: ConfidenceLevel[] = ["low", "medium", "high"];
 
 function createShuffledOptionsByQuestion() {
   return executivePresenceQuestions.reduce<Record<string, ExecutivePresenceOption[]>>((accumulator, question) => {
@@ -61,11 +54,11 @@ export function RaioXFlow() {
   }
 
   useEffect(() => {
-    loadLatestSavedResult();
+    loadActiveSavedResult();
     return () => clearTimers();
   }, []);
 
-  async function loadLatestSavedResult() {
+  async function loadActiveSavedResult() {
     if (!supabase) {
       setCheckingSavedResult(false);
       return;
@@ -80,29 +73,46 @@ export function RaioXFlow() {
         return;
       }
 
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("active_executive_presence_result_id, executive_presence_profile_id, executive_presence_completed_at")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (profileError) {
+        setSavedResultError("Nao conseguimos recuperar sua ultima leitura. Voce pode refazer o Raio-X agora.");
+        setCheckingSavedResult(false);
+        return;
+      }
+
+      if (!profile || !hasActiveExecutivePresence(profile)) {
+        setCheckingSavedResult(false);
+        return;
+      }
+
+      const activeResultId = profile.active_executive_presence_result_id;
+      if (!activeResultId) {
+        setCheckingSavedResult(false);
+        return;
+      }
+
       const { data, error } = await supabase
         .from("executive_presence_results")
         .select("*")
+        .eq("id", activeResultId)
         .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(1)
         .maybeSingle();
 
       if (error) {
-        setSavedResultError("Não conseguimos recuperar sua última leitura. Você pode refazer o Raio-X agora.");
+        setSavedResultError("Nao conseguimos recuperar sua ultima leitura. Voce pode refazer o Raio-X agora.");
         setCheckingSavedResult(false);
         return;
       }
 
-      if (!data) {
-        setCheckingSavedResult(false);
-        return;
-      }
-
-      const restoredResult = restoreSavedResult(data);
+      const restoredResult = restoreExecutivePresenceResult(data);
 
       if (!restoredResult) {
-        setSavedResultError("Sua leitura anterior precisa ser atualizada. Refaça o Raio-X para receber um resultado novo.");
+        setSavedResultError("Sua leitura anterior precisa ser atualizada. Refaca o Raio-X para receber um resultado novo.");
         setCheckingSavedResult(false);
         return;
       }
@@ -112,7 +122,7 @@ export function RaioXFlow() {
       setStage("summary");
       setCheckingSavedResult(false);
     } catch {
-      setSavedResultError("Não conseguimos recuperar sua última leitura. Você pode refazer o Raio-X agora.");
+      setSavedResultError("Nao conseguimos recuperar sua ultima leitura. Voce pode refazer o Raio-X agora.");
       setCheckingSavedResult(false);
     }
   }
@@ -160,17 +170,7 @@ export function RaioXFlow() {
       setIsAdvancing(false);
 
       if (currentIndex >= executivePresenceQuestions.length - 1) {
-        const calculatedResult = calculateExecutivePresenceResult(nextAnswers);
-        setResult(calculatedResult);
-        setResultView("summary");
-        saveResult(calculatedResult, nextAnswers);
-        setStage("loading");
-
-        const loadingTimer = window.setTimeout(() => {
-          setStage("summary");
-        }, 1200);
-
-        timers.current.push(loadingTimer);
+        completeTest(nextAnswers);
         return;
       }
 
@@ -180,12 +180,24 @@ export function RaioXFlow() {
     timers.current.push(advanceTimer);
   }
 
-  async function saveResult(calculatedResult: ExecutivePresenceResult, currentAnswers: ExecutivePresenceAnswer[]) {
+  async function completeTest(currentAnswers: ExecutivePresenceAnswer[]) {
+    const calculatedResult = calculateExecutivePresenceResult(currentAnswers);
+    setStage("loading");
+    setResultView("summary");
+    setSaveNotice(null);
+    setSavedResultError(null);
+
     try {
       await persistResult(calculatedResult, currentAnswers);
-      setSaveNotice(null);
+      setResult(calculatedResult);
+      const loadingTimer = window.setTimeout(() => {
+        setStage("summary");
+      }, 1200);
+      timers.current.push(loadingTimer);
     } catch {
-      setSaveNotice("Sua leitura está pronta. Ela fica disponível aqui enquanto você estiver nesta sessão.");
+      setResult(null);
+      setSavedResultError("Nao conseguimos gravar sua leitura com seguranca. Refaca o Raio-X para concluir sua entrada.");
+      setStage("summary");
     }
   }
 
@@ -233,78 +245,39 @@ export function RaioXFlow() {
 }
 
 async function persistResult(result: ExecutivePresenceResult, answers: ExecutivePresenceAnswer[]) {
-  if (!supabase) return;
+  if (!supabase) throw new Error("supabase_unavailable");
 
   const { data: userData } = await supabase.auth.getUser();
   const user = userData.user;
-  if (!user) return;
+  if (!user) throw new Error("user_unavailable");
 
   const minimalAnswers = answers.map(({ questionId, optionId }) => ({ questionId, optionId }));
-  const { error } = await supabase.from("executive_presence_results").insert({
-    user_id: user.id,
-    profile_id: result.profileId,
-    primary_trait: result.primaryTrait,
-    secondary_trait: result.secondaryTrait,
-    confidence_level: result.confidenceLevel,
-    scores: result.scores,
-    answers: minimalAnswers
+  const { data, error } = await supabase
+    .from("executive_presence_results")
+    .insert({
+      user_id: user.id,
+      profile_id: result.profileId,
+      primary_trait: result.primaryTrait,
+      secondary_trait: result.secondaryTrait,
+      confidence_level: result.confidenceLevel,
+      scores: result.scores,
+      answers: minimalAnswers
+    })
+    .select("id, created_at")
+    .single();
+
+  if (error || !data?.id) throw error ?? new Error("missing_result_id");
+
+  const { error: profileError } = await supabase.from("profiles").upsert({
+    id: user.id,
+    full_name: user.user_metadata?.full_name ?? null,
+    active_executive_presence_result_id: data.id,
+    executive_presence_profile_id: result.profileId,
+    executive_presence_completed_at: data.created_at ?? new Date().toISOString(),
+    updated_at: new Date().toISOString()
   });
 
-  if (error) {
-    throw error;
-  }
-}
-
-function restoreSavedResult(row: ExecutivePresenceResultRow): ExecutivePresenceResult | null {
-  if (!isProfileId(row.profile_id)) return null;
-  if (!isTraitKey(row.primary_trait)) return null;
-  const secondaryTrait = isTraitKey(row.secondary_trait) ? row.secondary_trait : row.primary_trait;
-  const confidenceLevel = isConfidenceLevel(row.confidence_level) ? row.confidence_level : "low";
-  const scores = isScores(row.scores) ? row.scores : null;
-  const answers = Array.isArray(row.answers) ? row.answers.filter(isAnswer) : [];
-
-  if (!scores) return null;
-
-  const topScore = scores[row.primary_trait] ?? 0;
-  const secondScore = scores[secondaryTrait] ?? 0;
-
-  return {
-    profileId: row.profile_id,
-    profile: executivePresenceProfiles[row.profile_id],
-    primaryTrait: row.primary_trait,
-    secondaryTrait,
-    scores,
-    answeredQuestions: answers.length,
-    totalQuestions: executivePresenceQuestions.length,
-    completed: answers.length >= executivePresenceQuestions.length,
-    isCombined: topScore - secondScore <= 2,
-    confidenceLevel,
-    invalidAnswers: []
-  };
-}
-
-function isProfileId(value: unknown): value is ExecutivePresenceProfileId {
-  return typeof value === "string" && value in executivePresenceProfiles;
-}
-
-function isTraitKey(value: unknown): value is TraitKey {
-  return typeof value === "string" && traitKeys.includes(value as TraitKey);
-}
-
-function isConfidenceLevel(value: unknown): value is ConfidenceLevel {
-  return typeof value === "string" && confidenceLevels.includes(value as ConfidenceLevel);
-}
-
-function isAnswer(value: unknown): value is ExecutivePresenceAnswer {
-  if (!value || typeof value !== "object") return false;
-  const answer = value as Partial<ExecutivePresenceAnswer>;
-  return typeof answer.questionId === "string" && typeof answer.optionId === "string";
-}
-
-function isScores(value: unknown): value is ExecutivePresenceScores {
-  if (!value || typeof value !== "object") return false;
-  const scores = value as Partial<Record<TraitKey, unknown>>;
-  return traitKeys.every((trait) => typeof scores[trait] === "number");
+  if (profileError) throw profileError;
 }
 
 function SavedResultFallback({ message, onRestart }: { message: string; onRestart: () => void }) {

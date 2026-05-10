@@ -174,6 +174,9 @@ export type ProfileRow = {
   industry: string | null;
   career_goal: string | null;
   preferred_style: string | null;
+  active_executive_presence_result_id: string | null;
+  executive_presence_profile_id: ExecutivePresenceProfileId | string | null;
+  executive_presence_completed_at: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -254,6 +257,9 @@ export type Database = {
           industry?: string | null;
           career_goal?: string | null;
           preferred_style?: string | null;
+          active_executive_presence_result_id?: string | null;
+          executive_presence_profile_id?: ExecutivePresenceProfileId | string | null;
+          executive_presence_completed_at?: string | null;
           created_at?: string;
           updated_at?: string;
         };

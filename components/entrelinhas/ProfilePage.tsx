@@ -4,6 +4,7 @@ import { Save, User } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { ProfileForm } from "@/lib/entrelinhas";
+import { getActiveExecutivePresenceProfile } from "@/src/lib/entrelinhas";
 
 const emptyProfile: ProfileForm = {
   full_name: "",
@@ -16,6 +17,7 @@ const emptyProfile: ProfileForm = {
 export function ProfilePage() {
   const [profile, setProfile] = useState<ProfileForm>(emptyProfile);
   const [status, setStatus] = useState<string | null>(null);
+  const [executivePresenceName, setExecutivePresenceName] = useState<string | null>(null);
 
   useEffect(() => {
     if (!supabase) return;
@@ -31,6 +33,7 @@ export function ProfilePage() {
           career_goal: row.career_goal ?? "",
           preferred_style: row.preferred_style ?? "Executivo"
         });
+        setExecutivePresenceName(getActiveExecutivePresenceProfile(row).profileName);
       } else {
         setProfile((current) => ({ ...current, full_name: data.user.user_metadata?.full_name ?? "" }));
       }
@@ -65,6 +68,11 @@ export function ProfilePage() {
       <p className="mt-3 text-sm leading-6 text-entrelinhas-muted sm:text-base">
         Use poucos detalhes. Eles ajudam a calibrar tom, postura e objetivo.
       </p>
+      {executivePresenceName ? (
+        <div className="mt-5 rounded-2xl border border-entrelinhas-gold/25 bg-entrelinhas-gold/10 px-4 py-3 text-sm font-semibold leading-6 text-entrelinhas-goldLight">
+          Seu Raio-X ativo: {executivePresenceName}
+        </div>
+      ) : null}
 
       <form onSubmit={save} className="glass-panel mt-6 space-y-4 p-5">
         <User className="text-entrelinhas-gold" size={26} />

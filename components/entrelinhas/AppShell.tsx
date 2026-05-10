@@ -6,6 +6,7 @@ import { Home, History, Library, LogOut, Sparkles, User, WandSparkles } from "lu
 import { ReactNode, useEffect, useState } from "react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { hasActiveExecutivePresence } from "@/src/lib/entrelinhas";
 
 const navItems = [
   { label: "Home", href: "/dashboard", icon: Home },
@@ -63,19 +64,24 @@ export function AppShell({ children }: { children: ReactNode }) {
   }, [router]);
 
   useEffect(() => {
-    if (!supabase || !user || pathname === "/raio-x") return;
+    if (pathname === "/raio-x") {
+      setCheckingRaioX(false);
+      return;
+    }
+    if (!supabase || !user) return;
 
     let active = true;
     setCheckingRaioX(true);
 
     supabase
-      .from("executive_presence_results")
-      .select("id", { count: "exact", head: true })
-      .eq("user_id", user.id)
-      .then(({ count, error }) => {
+      .from("profiles")
+      .select("active_executive_presence_result_id, executive_presence_profile_id, executive_presence_completed_at")
+      .eq("id", user.id)
+      .maybeSingle()
+      .then(({ data, error }) => {
         if (!active) return;
         setCheckingRaioX(false);
-        if (!error && (count ?? 0) === 0) {
+        if (!error && !hasActiveExecutivePresence(data)) {
           router.replace("/raio-x");
         }
       });

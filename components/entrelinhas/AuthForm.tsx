@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { ArrowRight, Loader2, Sparkles } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { hasActiveExecutivePresence } from "@/src/lib/entrelinhas";
 
 type AuthFormProps = {
   mode: "login" | "signup";
@@ -39,7 +40,34 @@ export function AuthForm({ mode }: AuthFormProps) {
       return;
     }
 
-    router.push(isSignup ? "/raio-x" : "/dashboard");
+    if (isSignup) {
+      const user = result.data.user;
+      if (user) {
+        await supabase.from("profiles").upsert({
+          id: user.id,
+          full_name: fullName || user.user_metadata?.full_name || null,
+          updated_at: new Date().toISOString()
+        });
+      }
+      router.push("/raio-x");
+      router.refresh();
+      return;
+    }
+
+    const user = result.data.user;
+    if (!user) {
+      router.push("/raio-x");
+      router.refresh();
+      return;
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("active_executive_presence_result_id, executive_presence_profile_id, executive_presence_completed_at")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    router.push(hasActiveExecutivePresence(profile) ? "/dashboard" : "/raio-x");
     router.refresh();
   }
 

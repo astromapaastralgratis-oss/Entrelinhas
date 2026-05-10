@@ -15,3 +15,10 @@ export {
   hasReachedDailyAiLimit
 } from "@/src/lib/entrelinhas/mentorEconomics";
 export type { MentorEconomicsMetadata, MentorGenerationMode } from "@/src/lib/entrelinhas/mentorEconomics";
+export {
+  getActiveExecutivePresenceProfile,
+  hasActiveExecutivePresence,
+  isExecutivePresenceProfileId,
+  restoreExecutivePresenceResult
+} from "@/src/lib/entrelinhas/executivePresenceIdentity";
+export type { ActiveExecutivePresenceProfile } from "@/src/lib/entrelinhas/executivePresenceIdentity";
