@@ -36,23 +36,22 @@ export function AuthForm({ mode }: AuthFormProps) {
     setLoading(true);
 
     if (isSignup) {
-      try {
-        const availability = await fetch("/api/signup-availability");
-        const data = await availability.json();
-        if (data.allowed === false) {
-          setError("As vagas de acesso estao temporariamente fechadas.");
-          setLoading(false);
-          submittingRef.current = false;
-          return;
-        }
-      } catch {
-        // Se a checagem falhar, mantemos o fluxo para nao bloquear uma conta valida.
+      const signupResponse = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fullName, email, password })
+      });
+      const signupData = (await signupResponse.json().catch(() => null)) as { error?: string } | null;
+
+      if (!signupResponse.ok) {
+        setError(signupData?.error ?? "Nao foi possivel criar sua conta agora. Confira os dados e tente novamente.");
+        setLoading(false);
+        submittingRef.current = false;
+        return;
       }
     }
 
-    const result = isSignup
-      ? await supabase.auth.signUp({ email, password, options: { data: { full_name: fullName } } })
-      : await supabase.auth.signInWithPassword({ email, password });
+    const result = await supabase.auth.signInWithPassword({ email, password });
 
     if (result.error) {
       setError(getAuthErrorMessage(result.error.message, isSignup));
@@ -62,21 +61,6 @@ export function AuthForm({ mode }: AuthFormProps) {
     }
 
     if (isSignup) {
-      const user = result.data.user;
-      if (user) {
-        await supabase.from("profiles").upsert({
-          id: user.id,
-          full_name: fullName || user.user_metadata?.full_name || null,
-          updated_at: new Date().toISOString()
-        });
-      }
-      if (!result.data.session) {
-        setError("Conta criada. Confira seu email para confirmar o acesso antes de entrar.");
-        setLoading(false);
-        submittingRef.current = false;
-        return;
-      }
-
       router.push("/raio-x");
       router.refresh();
       return;
