@@ -8,11 +8,13 @@ import { calculateExecutivePresenceResult } from "@/src/utils/calculateExecutive
 import { shuffleArray } from "@/src/utils/shuffleArray";
 import type {
   ExecutivePresenceAnswer,
+  ExecutivePresenceContextSnapshot,
   ExecutivePresenceOption,
   ExecutivePresenceResult
 } from "@/src/types/executivePresence";
 import { hasActiveExecutivePresence, restoreExecutivePresenceResult } from "@/src/lib/entrelinhas";
 import { RaioXIntro } from "@/src/components/raio-x/RaioXIntro";
+import { RaioXContextStep } from "@/src/components/raio-x/RaioXContextStep";
 import { RaioXLoading } from "@/src/components/raio-x/RaioXLoading";
 import { RaioXQuestion } from "@/src/components/raio-x/RaioXQuestion";
 import { RaioXDevelopmentPlan } from "@/src/components/raio-x/RaioXDevelopmentPlan";
@@ -20,7 +22,7 @@ import { RaioXFullReading } from "@/src/components/raio-x/RaioXFullReading";
 import { RaioXResultSummary } from "@/src/components/raio-x/RaioXResultSummary";
 import { RaioXResultTabs, type RaioXResultView } from "@/src/components/raio-x/RaioXResultTabs";
 
-type FlowStage = "intro" | "question" | "loading" | "summary";
+type FlowStage = "intro" | "context" | "question" | "loading" | "summary";
 
 function createShuffledOptionsByQuestion() {
   return executivePresenceQuestions.reduce<Record<string, ExecutivePresenceOption[]>>((accumulator, question) => {
@@ -37,6 +39,8 @@ export function RaioXFlow() {
   const [isAdvancing, setIsAdvancing] = useState(false);
   const [result, setResult] = useState<ExecutivePresenceResult | null>(null);
   const [resultView, setResultView] = useState<RaioXResultView>("summary");
+  const [contextSnapshot, setContextSnapshot] = useState<ExecutivePresenceContextSnapshot | null>(null);
+  const [initialContext, setInitialContext] = useState<ExecutivePresenceContextSnapshot | null>(null);
   const [checkingSavedResult, setCheckingSavedResult] = useState(true);
   const [savedResultError, setSavedResultError] = useState<string | null>(null);
   const [saveNotice, setSaveNotice] = useState<string | null>(null);
@@ -75,7 +79,7 @@ export function RaioXFlow() {
 
       const { data: profile, error: profileError } = await supabase
         .from("profiles")
-        .select("active_executive_presence_result_id, executive_presence_profile_id, executive_presence_completed_at")
+        .select("active_executive_presence_result_id, executive_presence_profile_id, executive_presence_completed_at, current_role, seniority, industry, main_challenge, career_goal")
         .eq("id", user.id)
         .maybeSingle();
 
@@ -117,6 +121,13 @@ export function RaioXFlow() {
         return;
       }
 
+      setInitialContext({
+        currentRole: profile.current_role ?? null,
+        seniority: profile.seniority ?? null,
+        industry: profile.industry ?? null,
+        mainChallenge: profile.main_challenge ?? null,
+        careerGoal: profile.career_goal ?? null
+      });
       setResult(restoredResult);
       setResultView("summary");
       setStage("summary");
@@ -129,7 +140,7 @@ export function RaioXFlow() {
 
   function start() {
     clearTimers();
-    setStage("question");
+    setStage("context");
     setCurrentIndex(0);
     setAnswers([]);
     setSelectedOptionId(null);
@@ -139,6 +150,12 @@ export function RaioXFlow() {
     setSaveNotice(null);
     setSavedResultError(null);
     setShuffledOptionsByQuestion(createShuffledOptionsByQuestion());
+  }
+
+  function continueWithContext(context: ExecutivePresenceContextSnapshot) {
+    setContextSnapshot(context);
+    setInitialContext(context);
+    setStage("question");
   }
 
   function restart() {
@@ -181,7 +198,7 @@ export function RaioXFlow() {
   }
 
   async function completeTest(currentAnswers: ExecutivePresenceAnswer[]) {
-    const calculatedResult = calculateExecutivePresenceResult(currentAnswers);
+    const calculatedResult = calculateExecutivePresenceResult(currentAnswers, executivePresenceQuestions, contextSnapshot);
     setStage("loading");
     setResultView("summary");
     setSaveNotice(null);
@@ -204,6 +221,7 @@ export function RaioXFlow() {
   if (checkingSavedResult) return <RaioXLoading />;
   if (savedResultError && !result) return <SavedResultFallback message={savedResultError} onRestart={restart} />;
   if (stage === "intro") return <RaioXIntro onStart={start} />;
+  if (stage === "context") return <RaioXContextStep initialContext={initialContext} onContinue={continueWithContext} />;
   if (stage === "loading") return <RaioXLoading />;
   if (stage === "summary" && result) {
     return (
@@ -261,7 +279,14 @@ async function persistResult(result: ExecutivePresenceResult, answers: Executive
       secondary_trait: result.secondaryTrait,
       confidence_level: result.confidenceLevel,
       scores: result.scores,
-      answers: minimalAnswers
+      answers: minimalAnswers,
+      methodology_version: result.methodologyVersion ?? null,
+      subdimension_scores: result.subdimensionScores ?? null,
+      executive_dynamic_scores: result.executiveDynamicScores ?? null,
+      trait_intensities: result.traitIntensities ?? null,
+      behavior_signals: result.behaviorSignals ?? null,
+      conditional_insights: result.conditionalInsights ?? null,
+      context_snapshot: result.contextSnapshot ?? null
     })
     .select("id, created_at")
     .single();
@@ -271,6 +296,11 @@ async function persistResult(result: ExecutivePresenceResult, answers: Executive
   const { error: profileError } = await supabase.from("profiles").upsert({
     id: user.id,
     full_name: user.user_metadata?.full_name ?? null,
+    current_role: result.contextSnapshot?.currentRole ?? null,
+    seniority: result.contextSnapshot?.seniority ?? null,
+    industry: result.contextSnapshot?.industry ?? null,
+    main_challenge: result.contextSnapshot?.mainChallenge ?? null,
+    career_goal: result.contextSnapshot?.careerGoal ?? null,
     active_executive_presence_result_id: data.id,
     executive_presence_profile_id: result.profileId,
     executive_presence_completed_at: data.created_at ?? new Date().toISOString(),

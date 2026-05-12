@@ -1,5 +1,6 @@
 import { AlertTriangle, CheckCircle2, MessageSquareQuote, ShieldCheck, Sparkles, Target, TrendingUp } from "lucide-react";
 import type { ReactNode } from "react";
+import { executiveDynamicLabels, executivePresenceSubdimensionLabels } from "@/src/data/executivePresenceMethodology";
 import type { ExecutivePresenceResult } from "@/src/types/executivePresence";
 
 type RaioXFullReadingProps = {
@@ -8,6 +9,10 @@ type RaioXFullReadingProps = {
 
 export function RaioXFullReading({ result }: RaioXFullReadingProps) {
   const { profile } = result;
+  const subdimensionItems = getTopEntries(result.subdimensionScores, executivePresenceSubdimensionLabels, 5);
+  const dynamicItems = getTopEntries(result.executiveDynamicScores, executiveDynamicLabels, 5);
+  const behaviorItems = result.behaviorSignals?.slice(0, 6).map((signal) => signal.interpretation) ?? [];
+  const insightItems = result.conditionalInsights?.map((insight) => `${insight.title}: ${insight.description}`) ?? [];
 
   return (
     <section className="brand-fade-in mx-auto max-w-5xl">
@@ -26,6 +31,10 @@ export function RaioXFullReading({ result }: RaioXFullReadingProps) {
 
           <ListCard icon={CheckCircle2} title="Suas Fortalezas" items={profile.strengths} tone="gold" />
           <ListCard icon={AlertTriangle} title="O Que Reduz Sua Influencia" items={profile.risks} tone="blue" />
+          {subdimensionItems.length ? <ListCard icon={Target} title="Subdimensoes Mais Presentes" items={subdimensionItems} tone="gold" /> : null}
+          {dynamicItems.length ? <ListCard icon={Sparkles} title="Dinamicas Executivas Dominantes" items={dynamicItems} tone="blue" /> : null}
+          {insightItems.length ? <ListCard icon={TrendingUp} title="Leitura Condicional Do Seu Padrao" items={insightItems} tone="gold" className="lg:col-span-2" /> : null}
+          {behaviorItems.length ? <ListCard icon={ShieldCheck} title="Sinais Comportamentais Observados" items={behaviorItems} tone="muted" className="lg:col-span-2" /> : null}
 
           <ReadingCard icon={MessageSquareQuote} title="Seu Padrao Sob Pressao">
             <p className="leading-7 text-entrelinhas-muted">{profile.pressurePattern}</p>
@@ -49,6 +58,19 @@ export function RaioXFullReading({ result }: RaioXFullReadingProps) {
       </div>
     </section>
   );
+}
+
+function getTopEntries<T extends string>(
+  scores: Record<T, number> | undefined,
+  labels: Record<T, string>,
+  limit: number
+) {
+  if (!scores) return [];
+  return (Object.entries(scores) as Array<[T, number]>)
+    .filter(([, score]) => score > 0)
+    .sort((first, second) => second[1] - first[1])
+    .slice(0, limit)
+    .map(([key, score]) => `${labels[key]} (${score})`);
 }
 
 function Header({ title, subtitle }: { title: string; subtitle: string }) {

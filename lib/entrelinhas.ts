@@ -24,7 +24,9 @@ export type ExecutiveScriptInput = {
 export type ProfileForm = {
   full_name: string;
   current_role: string;
+  seniority: string;
   industry: string;
+  main_challenge: string;
   career_goal: string;
   preferred_style: string;
 };

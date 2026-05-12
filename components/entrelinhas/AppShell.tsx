@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, History, Library, LogOut, ShieldCheck, User, WandSparkles } from "lucide-react";
+import { BookOpenCheck, Home, History, Library, LogOut, ShieldCheck, User, WandSparkles } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
@@ -66,7 +66,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   }, [router]);
 
   useEffect(() => {
-    if (pathname === "/raio-x" || pathname === "/admin") {
+    if (pathname === "/raio-x" || pathname.startsWith("/admin")) {
       setCheckingRaioX(false);
       return;
     }
@@ -154,7 +154,9 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   if (!user) return null;
 
-  const visibleNavItems = isAdmin ? [...navItems, { label: "Admin", href: "/admin", icon: ShieldCheck }] : navItems;
+  const visibleNavItems = isAdmin
+    ? [...navItems, { label: "Admin", href: "/admin", icon: ShieldCheck }, { label: "Metodo", href: "/admin/metodologia", icon: BookOpenCheck }]
+    : navItems;
 
   return (
     <main className="min-h-screen bg-entrelinhas-void text-entrelinhas-ivory">

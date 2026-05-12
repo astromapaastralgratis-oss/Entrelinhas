@@ -1,5 +1,6 @@
-import { AlertTriangle, ArrowRight, CheckCircle2, RotateCcw, Target } from "lucide-react";
+import { AlertTriangle, ArrowRight, CheckCircle2, RotateCcw, Sparkles, Target } from "lucide-react";
 import { BrandAvatar } from "@/components/entrelinhas/BrandAssets";
+import { executiveDynamicLabels, executivePresenceSubdimensionLabels } from "@/src/data/executivePresenceMethodology";
 import type { ExecutivePresenceResult } from "@/src/types/executivePresence";
 
 type RaioXResultSummaryProps = {
@@ -16,6 +17,9 @@ const confidenceCopy = {
 };
 
 export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPlan }: RaioXResultSummaryProps) {
+  const strongestSubdimensions = getTopEntries(result.subdimensionScores, executivePresenceSubdimensionLabels, 3);
+  const strongestDynamics = getTopEntries(result.executiveDynamicScores, executiveDynamicLabels, 3);
+
   return (
     <section className="brand-fade-in mx-auto max-w-5xl">
       <div className="editorial-panel overflow-hidden">
@@ -33,12 +37,19 @@ export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPla
           <article>
             <p className="text-base leading-7 text-white/90 sm:text-lg">{result.profile.shortDescription}</p>
             <p className="mt-4 line-clamp-4 leading-7 text-entrelinhas-muted">{result.profile.perceivedByOthers}</p>
+            {result.contextSnapshot?.mainChallenge ? (
+              <p className="mt-4 rounded-2xl border border-entrelinhas-gold/14 bg-entrelinhas-navy/45 px-4 py-3 text-sm leading-6 text-entrelinhas-goldLight">
+                Contexto calibrado: {result.contextSnapshot.mainChallenge}
+              </p>
+            ) : null}
             <p className="mt-5 rounded-2xl border border-entrelinhas-gold/22 bg-entrelinhas-gold/[0.08] p-4 text-sm font-semibold leading-6 text-entrelinhas-goldLight">
               {confidenceCopy[result.confidenceLevel]}
             </p>
             <div className="mt-5 grid gap-3">
               <SummaryList icon={CheckCircle2} title="Fortalezas" items={result.profile.strengths.slice(0, 3)} tone="gold" />
               <SummaryList icon={AlertTriangle} title="Pontos de atencao" items={result.profile.risks.slice(0, 3)} tone="blue" />
+              {strongestSubdimensions.length ? <SummaryList icon={Target} title="Subdimensoes dominantes" items={strongestSubdimensions} tone="gold" /> : null}
+              {strongestDynamics.length ? <SummaryList icon={Sparkles} title="Dinamicas executivas" items={strongestDynamics} tone="blue" /> : null}
             </div>
           </article>
 
@@ -69,9 +80,36 @@ export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPla
             </button>
           </aside>
         </div>
+
+        {result.conditionalInsights?.length ? (
+          <div className="border-t border-entrelinhas-gold/12 p-5 sm:p-7">
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-gold">Sinais especificos do seu padrao</p>
+            <div className="mt-4 grid gap-3 md:grid-cols-3">
+              {result.conditionalInsights.slice(0, 3).map((insight) => (
+                <div key={insight.id} className="rounded-2xl border border-entrelinhas-gold/10 bg-entrelinhas-navy/42 p-4">
+                  <h3 className="font-semibold text-white">{insight.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-entrelinhas-muted">{insight.recommendation}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
       </div>
     </section>
   );
+}
+
+function getTopEntries<T extends string>(
+  scores: Record<T, number> | undefined,
+  labels: Record<T, string>,
+  limit: number
+) {
+  if (!scores) return [];
+  return (Object.entries(scores) as Array<[T, number]>)
+    .filter(([, score]) => score > 0)
+    .sort((first, second) => second[1] - first[1])
+    .slice(0, limit)
+    .map(([key, score]) => `${labels[key]} (${score})`);
 }
 
 function SummaryList({

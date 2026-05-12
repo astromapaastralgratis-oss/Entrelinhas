@@ -3,9 +3,15 @@ import { executivePresenceQuestions } from "@/src/data/executivePresenceQuestion
 import type {
   ConfidenceLevel,
   ExecutivePresenceAnswer,
+  ExecutivePresenceBehaviorSignal,
+  ExecutivePresenceConditionalInsight,
   ExecutivePresenceProfileId,
   ExecutivePresenceResult,
   ExecutivePresenceScores,
+  ExecutivePresenceSubdimensionScores,
+  ExecutiveDynamicScores,
+  ExecutivePresenceTraitIntensities,
+  ExecutivePresenceContextSnapshot,
   TraitKey
 } from "@/src/types/executivePresence";
 import type { ExecutivePresenceResultRow } from "@/types/database";
@@ -78,7 +84,14 @@ export function restoreExecutivePresenceResult(row: ExecutivePresenceResultRow |
     completed: answers.length >= executivePresenceQuestions.length,
     isCombined: topScore - secondScore <= 2,
     confidenceLevel,
-    invalidAnswers: []
+    invalidAnswers: [],
+    methodologyVersion: typeof row.methodology_version === "string" ? row.methodology_version : undefined,
+    subdimensionScores: isRecordOfNumbers(row.subdimension_scores) ? row.subdimension_scores as ExecutivePresenceSubdimensionScores : undefined,
+    executiveDynamicScores: isRecordOfNumbers(row.executive_dynamic_scores) ? row.executive_dynamic_scores as ExecutiveDynamicScores : undefined,
+    traitIntensities: isRecordOfStrings(row.trait_intensities) ? row.trait_intensities as ExecutivePresenceTraitIntensities : undefined,
+    behaviorSignals: Array.isArray(row.behavior_signals) ? row.behavior_signals as ExecutivePresenceBehaviorSignal[] : undefined,
+    conditionalInsights: Array.isArray(row.conditional_insights) ? row.conditional_insights as ExecutivePresenceConditionalInsight[] : undefined,
+    contextSnapshot: isContextSnapshot(row.context_snapshot) ? row.context_snapshot : undefined
   };
 }
 
@@ -100,4 +113,29 @@ function isScores(value: unknown): value is ExecutivePresenceScores {
   if (!value || typeof value !== "object") return false;
   const scores = value as Partial<Record<TraitKey, unknown>>;
   return traitKeys.every((trait) => typeof scores[trait] === "number");
+}
+
+function isRecordOfNumbers(value: unknown) {
+  return Boolean(
+    value &&
+      typeof value === "object" &&
+      Object.values(value as Record<string, unknown>).every((item) => typeof item === "number")
+  );
+}
+
+function isRecordOfStrings(value: unknown) {
+  return Boolean(
+    value &&
+      typeof value === "object" &&
+      Object.values(value as Record<string, unknown>).every((item) => typeof item === "string")
+  );
+}
+
+function isContextSnapshot(value: unknown): value is ExecutivePresenceContextSnapshot {
+  if (!value || typeof value !== "object") return false;
+  const snapshot = value as Partial<ExecutivePresenceContextSnapshot>;
+  return ["currentRole", "seniority", "industry", "mainChallenge", "careerGoal"].every((key) => {
+    const item = snapshot[key as keyof ExecutivePresenceContextSnapshot];
+    return item === null || item === undefined || typeof item === "string";
+  });
 }

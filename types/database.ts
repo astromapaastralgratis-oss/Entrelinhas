@@ -171,7 +171,9 @@ export type ProfileRow = {
   id: string;
   full_name: string | null;
   current_role: string | null;
+  seniority: string | null;
   industry: string | null;
+  main_challenge: string | null;
   career_goal: string | null;
   preferred_style: string | null;
   account_status: string;
@@ -220,6 +222,13 @@ export type ExecutivePresenceResultRow = {
   confidence_level: ConfidenceLevel | string | null;
   scores: ExecutivePresenceScores;
   answers: ExecutivePresenceAnswer[];
+  methodology_version: string | null;
+  subdimension_scores: Record<string, number> | null;
+  executive_dynamic_scores: Record<string, number> | null;
+  trait_intensities: Record<string, string> | null;
+  behavior_signals: unknown[] | null;
+  conditional_insights: unknown[] | null;
+  context_snapshot: Record<string, unknown> | null;
   created_at: string;
 };
 
@@ -269,7 +278,9 @@ export type Database = {
         Insert: Pick<ProfileRow, "id"> & {
           full_name?: string | null;
           current_role?: string | null;
+          seniority?: string | null;
           industry?: string | null;
+          main_challenge?: string | null;
           career_goal?: string | null;
           preferred_style?: string | null;
           account_status?: string;

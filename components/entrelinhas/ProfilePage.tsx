@@ -9,7 +9,9 @@ import { getActiveExecutivePresenceProfile } from "@/src/lib/entrelinhas";
 const emptyProfile: ProfileForm = {
   full_name: "",
   current_role: "",
+  seniority: "",
   industry: "",
+  main_challenge: "",
   career_goal: "",
   preferred_style: "Executivo"
 };
@@ -29,7 +31,9 @@ export function ProfilePage() {
         setProfile({
           full_name: row.full_name ?? "",
           current_role: row.current_role ?? "",
+          seniority: row.seniority ?? "",
           industry: row.industry ?? "",
+          main_challenge: row.main_challenge ?? "",
           career_goal: row.career_goal ?? "",
           preferred_style: row.preferred_style ?? "Executivo"
         });
@@ -85,8 +89,16 @@ export function ProfilePage() {
           <input value={profile.current_role} onChange={(event) => updateField("current_role", event.target.value)} className="mt-2 w-full rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy/65 px-4 py-3 text-white outline-none transition duration-300 focus:border-entrelinhas-gold/55" />
         </label>
         <label className="block">
+          <span className="text-sm font-semibold text-white/85">Senioridade</span>
+          <input value={profile.seniority} onChange={(event) => updateField("seniority", event.target.value)} className="mt-2 w-full rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy/65 px-4 py-3 text-white outline-none transition duration-300 focus:border-entrelinhas-gold/55" />
+        </label>
+        <label className="block">
           <span className="text-sm font-semibold text-white/85">Segmento</span>
           <input value={profile.industry} onChange={(event) => updateField("industry", event.target.value)} className="mt-2 w-full rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy/65 px-4 py-3 text-white outline-none transition duration-300 focus:border-entrelinhas-gold/55" />
+        </label>
+        <label className="block">
+          <span className="text-sm font-semibold text-white/85">Principal desafio</span>
+          <textarea rows={3} value={profile.main_challenge} onChange={(event) => updateField("main_challenge", event.target.value)} className="mt-2 w-full resize-none rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy/65 px-4 py-3 text-white outline-none transition duration-300 focus:border-entrelinhas-gold/55" />
         </label>
         <label className="block">
           <span className="text-sm font-semibold text-white/85">Objetivo profissional</span>

@@ -10,6 +10,7 @@ export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
   const { profile } = result;
   const firstSuggestion = profile.firstScriptSuggestions[0];
   const mentorHref = firstSuggestion ? `/mentor?situation=${encodeURIComponent(firstSuggestion)}` : "/mentor";
+  const calibratedPlan = buildCalibratedPlan(result);
 
   return (
     <section className="brand-fade-in mx-auto max-w-5xl">
@@ -26,10 +27,18 @@ export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
             <Sparkles className="text-entrelinhas-gold" size={24} />
             <h2 className="mt-4 text-xl font-semibold text-white">Proximo movimento</h2>
             <p className="mt-3 leading-7 text-entrelinhas-goldLight">{profile.evolutionPoint}</p>
+            {result.contextualModifiers?.goalLens ? (
+              <p className="mt-4 rounded-2xl border border-entrelinhas-gold/14 bg-entrelinhas-navy/35 p-4 text-sm leading-6 text-white/82">
+                {result.contextualModifiers.goalLens}
+              </p>
+            ) : null}
           </article>
 
           <PlanList icon={Target} title="Microajustes De Presenca" items={profile.presenceMicroAdjustments} featured />
-          <PlanList icon={Sparkles} title="Plano De Evolucao Executiva - 30 dias" items={profile.thirtyDayEvolutionPlan} featured className="lg:col-span-2" />
+          <PlanList icon={Sparkles} title="Plano De Evolucao Executiva - 30 dias" items={calibratedPlan} featured className="lg:col-span-2" />
+          {result.conditionalInsights?.length ? (
+            <PlanList icon={Target} title="Ajustes Pela Sua Dinamica Dominante" items={result.conditionalInsights.map((insight) => insight.recommendation)} featured className="lg:col-span-2" />
+          ) : null}
           <PlanList icon={Lightbulb} title="Praticas De Repertorio" items={profile.recommendedPractices} />
           <PlanList icon={BookOpen} title="Referencias" items={profile.recommendedReadings} />
           <PlanList icon={Dumbbell} title="Treinos" items={profile.recommendedTrainings} />
@@ -53,6 +62,21 @@ export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
       </div>
     </section>
   );
+}
+
+function buildCalibratedPlan(result: ExecutivePresenceResult) {
+  const context = result.contextSnapshot;
+  const basePlan = [...result.profile.thirtyDayEvolutionPlan];
+  if (context?.seniority) {
+    basePlan[0] = `${basePlan[0]} Calibre a pratica para sua senioridade atual: ${context.seniority}.`;
+  }
+  if (context?.mainChallenge) {
+    basePlan[1] = `${basePlan[1]} Use como laboratorio o desafio: ${context.mainChallenge}.`;
+  }
+  if (context?.careerGoal) {
+    basePlan[3] = `${basePlan[3]} Conecte a revisao ao objetivo: ${context.careerGoal}.`;
+  }
+  return basePlan;
 }
 
 function PlanList({

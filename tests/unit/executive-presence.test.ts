@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { executivePresenceProfiles } from "@/src/data/executivePresenceProfiles";
+import { executivePresenceMethodology } from "@/src/data/executivePresenceMethodology";
 import { executivePresenceQuestions } from "@/src/data/executivePresenceQuestions";
 import { calculateExecutivePresenceResult } from "@/src/utils/calculateExecutivePresenceResult";
 import { shuffleArray } from "@/src/utils/shuffleArray";
@@ -58,6 +59,32 @@ describe("executive presence questions", () => {
   });
 });
 
+describe("executive presence methodology", () => {
+  it("maps every question and option to traceable behavioral metadata", () => {
+    expect(executivePresenceMethodology).toHaveLength(20);
+
+    for (const question of executivePresenceQuestions) {
+      const entry = executivePresenceMethodology.find((item) => item.questionId === question.id);
+      expect(entry).toBeTruthy();
+      expect(entry?.observedSituation).toBeTruthy();
+      expect(entry?.evaluatedBehavior).toBeTruthy();
+      expect(entry?.options).toHaveLength(4);
+
+      for (const option of question.options) {
+        const methodologyOption = entry?.options.find((item) => item.optionId === option.id);
+        expect(methodologyOption).toBeTruthy();
+        expect(methodologyOption?.traitKey).toBe(option.traitKey);
+        expect(methodologyOption?.subdimension).toBeTruthy();
+        expect(methodologyOption?.executiveDynamic).toBeTruthy();
+        expect(methodologyOption?.behaviorSignal).toBeTruthy();
+        expect(methodologyOption?.interpretation).toBeTruthy();
+        expect(methodologyOption?.risk).toBeTruthy();
+        expect(methodologyOption?.feedback).toBeTruthy();
+      }
+    }
+  });
+});
+
 describe("executive presence profiles", () => {
   it("defines the ten proprietary profiles with complete content blocks", () => {
     expect(Object.keys(executivePresenceProfiles).sort()).toEqual(
@@ -107,6 +134,10 @@ describe("calculateExecutivePresenceResult", () => {
     expect(result.totalQuestions).toBe(20);
     expect(result.completed).toBe(true);
     expect(result.invalidAnswers).toEqual([]);
+    expect(result.subdimensionScores?.assertividade).toBeGreaterThan(0);
+    expect(result.executiveDynamicScores?.firmeza_situacional).toBeGreaterThan(0);
+    expect(result.traitIntensities?.direction).toBe("high");
+    expect(result.behaviorSignals).toHaveLength(20);
   });
 
   it("returns a combined profile when top and second scores are close", () => {
@@ -120,6 +151,22 @@ describe("calculateExecutivePresenceResult", () => {
     expect(result.confidenceLevel).toBe("low");
     expect(result.scores.direction).toBe(11);
     expect(result.scores.influence).toBe(9);
+    expect(result.conditionalInsights?.some((insight) => insight.id === "perfil_combinado")).toBe(true);
+  });
+
+  it("uses context without changing the base profile calculation", () => {
+    const result = calculateExecutivePresenceResult(answersForTrait("precision"), executivePresenceQuestions, {
+      currentRole: "Especialista financeira",
+      seniority: "Senior",
+      industry: "Financas",
+      mainChallenge: "ganhar visibilidade em comites",
+      careerGoal: "assumir lideranca"
+    });
+
+    expect(result.profileId).toBe("analytical_advisor");
+    expect(result.contextSnapshot?.mainChallenge).toBe("ganhar visibilidade em comites");
+    expect(result.contextualModifiers?.challengeLens).toContain("ganhar visibilidade");
+    expect(result.conditionalInsights?.some((insight) => insight.id === "desafio_declarado")).toBe(true);
   });
 
   it("maps every primary trait to the expected primary profile", () => {
