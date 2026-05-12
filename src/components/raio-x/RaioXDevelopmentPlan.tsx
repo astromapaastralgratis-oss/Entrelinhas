@@ -11,6 +11,10 @@ export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
   const firstSuggestion = profile.firstScriptSuggestions[0];
   const mentorHref = firstSuggestion ? `/mentor?situation=${encodeURIComponent(firstSuggestion)}` : "/mentor";
   const calibratedPlan = buildCalibratedPlan(result);
+  const mainContradiction = result.executiveContradictions?.[0];
+  const microAdjustments = mainContradiction
+    ? [mainContradiction.microAdjustment, ...profile.presenceMicroAdjustments]
+    : profile.presenceMicroAdjustments;
 
   return (
     <section className="brand-fade-in mx-auto max-w-5xl">
@@ -34,7 +38,7 @@ export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
             ) : null}
           </article>
 
-          <PlanList icon={Target} title="Microajustes De Presenca" items={profile.presenceMicroAdjustments} featured />
+          <PlanList icon={Target} title="Microajustes De Presenca" items={microAdjustments} featured />
           <PlanList icon={Sparkles} title="Plano De Evolucao Executiva - 30 dias" items={calibratedPlan} featured className="lg:col-span-2" />
           {result.conditionalInsights?.length ? (
             <PlanList icon={Target} title="Ajustes Pela Sua Dinamica Dominante" items={result.conditionalInsights.map((insight) => insight.recommendation)} featured className="lg:col-span-2" />
@@ -67,6 +71,10 @@ export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
 function buildCalibratedPlan(result: ExecutivePresenceResult) {
   const context = result.contextSnapshot;
   const basePlan = [...result.profile.thirtyDayEvolutionPlan];
+  const mainContradiction = result.executiveContradictions?.[0];
+  if (mainContradiction) {
+    basePlan.unshift(mainContradiction.thirtyDayAction);
+  }
   if (context?.seniority) {
     basePlan[0] = `${basePlan[0]} Calibre a pratica para sua senioridade atual: ${context.seniority}.`;
   }

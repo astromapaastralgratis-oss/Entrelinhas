@@ -9,10 +9,12 @@ type RaioXFullReadingProps = {
 
 export function RaioXFullReading({ result }: RaioXFullReadingProps) {
   const { profile } = result;
+  const mainContradiction = result.executiveContradictions?.[0];
   const subdimensionItems = getTopEntries(result.subdimensionScores, executivePresenceSubdimensionLabels, 5);
   const dynamicItems = getTopEntries(result.executiveDynamicScores, executiveDynamicLabels, 5);
   const behaviorItems = result.behaviorSignals?.slice(0, 6).map((signal) => signal.interpretation) ?? [];
   const insightItems = result.conditionalInsights?.map((insight) => `${insight.title}: ${insight.description}`) ?? [];
+  const riskItems = mainContradiction ? [mainContradiction.risk, ...profile.risks] : profile.risks;
 
   return (
     <section className="brand-fade-in mx-auto max-w-5xl">
@@ -29,8 +31,15 @@ export function RaioXFullReading({ result }: RaioXFullReadingProps) {
             <p className="max-w-3xl leading-7 text-entrelinhas-muted">{profile.perceivedByOthers}</p>
           </ReadingCard>
 
+          {mainContradiction ? (
+            <ReadingCard icon={Target} title="Tensao Executiva Principal" className="lg:col-span-2">
+              <p className="max-w-3xl text-base font-semibold leading-7 text-white/90">{mainContradiction.title}</p>
+              <p className="mt-3 max-w-3xl leading-7 text-entrelinhas-muted">{mainContradiction.summary}</p>
+            </ReadingCard>
+          ) : null}
+
           <ListCard icon={CheckCircle2} title="Suas Fortalezas" items={profile.strengths} tone="gold" />
-          <ListCard icon={AlertTriangle} title="O Que Reduz Sua Influencia" items={profile.risks} tone="blue" />
+          <ListCard icon={AlertTriangle} title="O Que Reduz Sua Influencia" items={riskItems} tone="blue" />
           {subdimensionItems.length ? <ListCard icon={Target} title="Subdimensoes Mais Presentes" items={subdimensionItems} tone="gold" /> : null}
           {dynamicItems.length ? <ListCard icon={Sparkles} title="Dinamicas Executivas Dominantes" items={dynamicItems} tone="blue" /> : null}
           {insightItems.length ? <ListCard icon={TrendingUp} title="Leitura Condicional Do Seu Padrao" items={insightItems} tone="gold" className="lg:col-span-2" /> : null}

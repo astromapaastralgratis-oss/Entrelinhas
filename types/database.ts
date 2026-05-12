@@ -232,6 +232,17 @@ export type ExecutivePresenceResultRow = {
   created_at: string;
 };
 
+export type ExecutivePresenceFeedbackRow = {
+  id: string;
+  result_id: string;
+  user_id: string;
+  most_real_part: string | null;
+  generic_part: string | null;
+  would_share: boolean | null;
+  would_return: boolean | null;
+  created_at: string;
+};
+
 export type AppSettingsRow = {
   key: string;
   value: Record<string, unknown>;
@@ -320,6 +331,15 @@ export type Database = {
           created_at?: string;
         };
         Update: Partial<Omit<ExecutivePresenceResultRow, "id" | "created_at" | "user_id">>;
+        Relationships: [];
+      };
+      executive_presence_feedback: {
+        Row: ExecutivePresenceFeedbackRow;
+        Insert: Omit<ExecutivePresenceFeedbackRow, "id" | "created_at"> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<Omit<ExecutivePresenceFeedbackRow, "id" | "created_at" | "user_id" | "result_id">>;
         Relationships: [];
       };
       app_settings: {

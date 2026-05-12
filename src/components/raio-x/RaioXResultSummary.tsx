@@ -1,5 +1,6 @@
 import { AlertTriangle, ArrowRight, CheckCircle2, RotateCcw, Sparkles, Target } from "lucide-react";
 import { BrandAvatar } from "@/components/entrelinhas/BrandAssets";
+import { RaioXFeedback } from "@/src/components/raio-x/RaioXFeedback";
 import { executiveDynamicLabels, executivePresenceSubdimensionLabels } from "@/src/data/executivePresenceMethodology";
 import type { ExecutivePresenceResult } from "@/src/types/executivePresence";
 
@@ -19,6 +20,8 @@ const confidenceCopy = {
 export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPlan }: RaioXResultSummaryProps) {
   const strongestSubdimensions = getTopEntries(result.subdimensionScores, executivePresenceSubdimensionLabels, 3);
   const strongestDynamics = getTopEntries(result.executiveDynamicScores, executiveDynamicLabels, 3);
+  const evolution = result.evolution;
+  const recognitionPhrases = result.recognitionPhrases ?? [];
 
   return (
     <section className="brand-fade-in mx-auto max-w-5xl">
@@ -45,6 +48,31 @@ export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPla
             <p className="mt-5 rounded-2xl border border-entrelinhas-gold/22 bg-entrelinhas-gold/[0.08] p-4 text-sm font-semibold leading-6 text-entrelinhas-goldLight">
               {confidenceCopy[result.confidenceLevel]}
             </p>
+            {evolution ? (
+              <div className="mt-5 rounded-2xl border border-entrelinhas-gold/14 bg-entrelinhas-navy/45 p-4">
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-gold">Seu movimento recente</p>
+                <p className="mt-3 text-sm leading-6 text-white/86">{evolution.narrative}</p>
+                <div className="mt-3 grid gap-2">
+                  {evolution.signals.slice(0, 2).map((signal) => (
+                    <p key={signal.id} className="rounded-xl border border-entrelinhas-gold/10 bg-entrelinhas-void/40 px-3 py-2 text-xs leading-5 text-entrelinhas-muted">
+                      {signal.title}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+            {recognitionPhrases.length ? (
+              <div className="mt-5 rounded-2xl border border-entrelinhas-gold/14 bg-entrelinhas-void/45 p-4">
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-gold">Para guardar</p>
+                <div className="mt-3 grid gap-3">
+                  {recognitionPhrases.slice(0, 3).map((phrase) => (
+                    <p key={phrase.id} className="rounded-xl border border-entrelinhas-gold/10 bg-entrelinhas-navy/45 px-4 py-3 text-sm font-semibold leading-6 text-white/90">
+                      {phrase.text}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            ) : null}
             <div className="mt-5 grid gap-3">
               <SummaryList icon={CheckCircle2} title="Fortalezas" items={result.profile.strengths.slice(0, 3)} tone="gold" />
               <SummaryList icon={AlertTriangle} title="Pontos de atencao" items={result.profile.risks.slice(0, 3)} tone="blue" />
@@ -94,6 +122,8 @@ export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPla
             </div>
           </div>
         ) : null}
+
+        <RaioXFeedback resultId={result.resultId} />
       </div>
     </section>
   );

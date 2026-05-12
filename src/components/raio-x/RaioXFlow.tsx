@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { AlertTriangle } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { executivePresenceQuestions } from "@/src/data/executivePresenceQuestions";
+import { buildExecutivePresenceEvolution } from "@/src/utils/buildExecutivePresenceEvolution";
 import { calculateExecutivePresenceResult } from "@/src/utils/calculateExecutivePresenceResult";
 import { shuffleArray } from "@/src/utils/shuffleArray";
 import type {
@@ -45,6 +46,7 @@ export function RaioXFlow() {
   const [savedResultError, setSavedResultError] = useState<string | null>(null);
   const [saveNotice, setSaveNotice] = useState<string | null>(null);
   const [shuffledOptionsByQuestion, setShuffledOptionsByQuestion] = useState(createShuffledOptionsByQuestion);
+  const [comparisonBaselineResult, setComparisonBaselineResult] = useState<ExecutivePresenceResult | null>(null);
   const timers = useRef<number[]>([]);
 
   const currentQuestion = executivePresenceQuestions[currentIndex];
@@ -121,6 +123,21 @@ export function RaioXFlow() {
         return;
       }
 
+      const { data: previousData } = await supabase
+        .from("executive_presence_results")
+        .select("*")
+        .eq("user_id", user.id)
+        .neq("id", activeResultId)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      const previousResult = restoreExecutivePresenceResult(previousData);
+      const resultWithEvolution = {
+        ...restoredResult,
+        evolution: buildExecutivePresenceEvolution(restoredResult, previousResult)
+      };
+
       setInitialContext({
         currentRole: profile.current_role ?? null,
         seniority: profile.seniority ?? null,
@@ -128,7 +145,8 @@ export function RaioXFlow() {
         mainChallenge: profile.main_challenge ?? null,
         careerGoal: profile.career_goal ?? null
       });
-      setResult(restoredResult);
+      setResult(resultWithEvolution);
+      setComparisonBaselineResult(restoredResult);
       setResultView("summary");
       setStage("summary");
       setCheckingSavedResult(false);
@@ -205,8 +223,13 @@ export function RaioXFlow() {
     setSavedResultError(null);
 
     try {
-      await persistResult(calculatedResult, currentAnswers);
-      setResult(calculatedResult);
+      const persistedResult = await persistResult(calculatedResult, currentAnswers);
+      const resultWithEvolution = {
+        ...persistedResult,
+        evolution: buildExecutivePresenceEvolution(persistedResult, comparisonBaselineResult)
+      };
+      setResult(resultWithEvolution);
+      setComparisonBaselineResult(persistedResult);
       const loadingTimer = window.setTimeout(() => {
         setStage("summary");
       }, 1200);
@@ -308,6 +331,12 @@ async function persistResult(result: ExecutivePresenceResult, answers: Executive
   });
 
   if (profileError) throw profileError;
+
+  return {
+    ...result,
+    resultId: data.id,
+    createdAt: data.created_at ?? undefined
+  };
 }
 
 function SavedResultFallback({ message, onRestart }: { message: string; onRestart: () => void }) {

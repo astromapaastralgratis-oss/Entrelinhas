@@ -28,6 +28,7 @@ export type ExecutiveDynamic =
   | "presenca_forte_com_desgaste_interno";
 
 export type IntensityLevel = "low" | "medium" | "high";
+export type ExecutivePresenceQuestionCriticality = "standard" | "elevated" | "critical";
 
 export type ExecutivePresenceProfileId =
   | "assertive_executor"
@@ -108,6 +109,8 @@ export type ExecutivePresenceBehaviorSignal = {
   traitKey: TraitKey;
   subdimension: ExecutivePresenceSubdimension;
   executiveDynamic: ExecutiveDynamic;
+  criticality: ExecutivePresenceQuestionCriticality;
+  weight: number;
   signal: string;
   interpretation: string;
 };
@@ -125,11 +128,70 @@ export type ExecutivePresenceContextualModifiers = {
   goalLens: string | null;
 };
 
+export type ExecutiveContradictionId =
+  | "high_delivery_low_visibility"
+  | "high_diplomacy_low_boundaries"
+  | "high_precision_low_decision"
+  | "high_influence_low_space_ownership"
+  | "strong_presence_internal_strain";
+
+export type ExecutiveContradiction = {
+  id: ExecutiveContradictionId;
+  title: string;
+  summary: string;
+  risk: string;
+  microAdjustment: string;
+  thirtyDayAction: string;
+  severity: number;
+};
+
+export type ExecutivePresenceEvolutionSignalId =
+  | "assertiveness_increased"
+  | "positioning_clarity_increased"
+  | "defensive_diplomacy_reduced"
+  | "performance_validation_reduced"
+  | "reliability_overload_persisted"
+  | "space_ownership_increased"
+  | "presence_strain_increased"
+  | "boundaries_improved"
+  | "dominant_dynamic_shifted";
+
+export type ExecutivePresenceEvolutionSignalKind = "increase" | "reduction" | "persistence" | "shift";
+
+export type ExecutivePresenceEvolutionSignal = {
+  id: ExecutivePresenceEvolutionSignalId;
+  kind: ExecutivePresenceEvolutionSignalKind;
+  title: string;
+  summary: string;
+  previousValue: number | string | null;
+  currentValue: number | string | null;
+};
+
+export type ExecutivePresenceEvolution = {
+  previousResultId?: string;
+  previousCreatedAt?: string;
+  currentResultId?: string;
+  currentCreatedAt?: string;
+  narrative: string;
+  signals: ExecutivePresenceEvolutionSignal[];
+};
+
+export type ExecutiveRecognitionPhraseSource = "contradiction" | "dynamic" | "context";
+
+export type ExecutiveRecognitionPhrase = {
+  id: string;
+  text: string;
+  source: ExecutiveRecognitionPhraseSource;
+  priority: number;
+};
+
 export type InvalidExecutivePresenceAnswer = ExecutivePresenceAnswer & {
   reason: "question_not_found" | "option_not_found";
 };
 
 export type ExecutivePresenceResult = {
+  resultId?: string;
+  createdAt?: string;
   profileId: ExecutivePresenceProfileId;
   profile: ExecutivePresenceProfile;
   primaryTrait: TraitKey;
@@ -151,4 +213,7 @@ export type ExecutivePresenceResult = {
   conditionalInsights?: ExecutivePresenceConditionalInsight[];
   contextualModifiers?: ExecutivePresenceContextualModifiers;
   contextSnapshot?: ExecutivePresenceContextSnapshot;
+  executiveContradictions?: ExecutiveContradiction[];
+  evolution?: ExecutivePresenceEvolution;
+  recognitionPhrases?: ExecutiveRecognitionPhrase[];
 };

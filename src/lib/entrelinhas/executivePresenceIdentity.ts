@@ -1,5 +1,7 @@
 import { executivePresenceProfiles } from "@/src/data/executivePresenceProfiles";
 import { executivePresenceQuestions } from "@/src/data/executivePresenceQuestions";
+import { calculateExecutivePresenceResult } from "@/src/utils/calculateExecutivePresenceResult";
+import { buildExecutiveRecognitionPhrases } from "@/src/utils/buildExecutiveRecognitionPhrases";
 import type {
   ConfidenceLevel,
   ExecutivePresenceAnswer,
@@ -12,6 +14,7 @@ import type {
   ExecutiveDynamicScores,
   ExecutivePresenceTraitIntensities,
   ExecutivePresenceContextSnapshot,
+  ExecutiveContradiction,
   TraitKey
 } from "@/src/types/executivePresence";
 import type { ExecutivePresenceResultRow } from "@/types/database";
@@ -67,13 +70,19 @@ export function restoreExecutivePresenceResult(row: ExecutivePresenceResultRow |
   const confidenceLevel = isConfidenceLevel(row.confidence_level) ? row.confidence_level : "low";
   const scores = isScores(row.scores) ? row.scores : null;
   const answers = Array.isArray(row.answers) ? row.answers.filter(isAnswer) : [];
+  const contextSnapshot = isContextSnapshot(row.context_snapshot) ? row.context_snapshot : undefined;
 
   if (!scores) return null;
 
   const topScore = scores[row.primary_trait] ?? 0;
   const secondScore = scores[secondaryTrait] ?? 0;
+  const restoredContradictions = answers.length
+    ? calculateExecutivePresenceResult(answers, executivePresenceQuestions, contextSnapshot).executiveContradictions
+    : [];
 
-  return {
+  const restoredResult: ExecutivePresenceResult = {
+    resultId: row.id,
+    createdAt: row.created_at,
     profileId: row.profile_id,
     profile: executivePresenceProfiles[row.profile_id],
     primaryTrait: row.primary_trait,
@@ -91,7 +100,15 @@ export function restoreExecutivePresenceResult(row: ExecutivePresenceResultRow |
     traitIntensities: isRecordOfStrings(row.trait_intensities) ? row.trait_intensities as ExecutivePresenceTraitIntensities : undefined,
     behaviorSignals: Array.isArray(row.behavior_signals) ? row.behavior_signals as ExecutivePresenceBehaviorSignal[] : undefined,
     conditionalInsights: Array.isArray(row.conditional_insights) ? row.conditional_insights as ExecutivePresenceConditionalInsight[] : undefined,
-    contextSnapshot: isContextSnapshot(row.context_snapshot) ? row.context_snapshot : undefined
+    contextSnapshot,
+    executiveContradictions: Array.isArray((row as { executive_contradictions?: unknown }).executive_contradictions)
+      ? (row as { executive_contradictions?: unknown }).executive_contradictions as ExecutiveContradiction[]
+      : restoredContradictions ?? []
+  };
+
+  return {
+    ...restoredResult,
+    recognitionPhrases: buildExecutiveRecognitionPhrases(restoredResult)
   };
 }
 

@@ -1,10 +1,17 @@
 import type {
   ExecutiveDynamic,
+  ExecutivePresenceQuestionCriticality,
   ExecutivePresenceSubdimension,
   TraitKey
 } from "@/src/types/executivePresence";
 
-export const EXECUTIVE_PRESENCE_METHODOLOGY_VERSION = "2026-05-11-v1";
+export const EXECUTIVE_PRESENCE_METHODOLOGY_VERSION = "2026-05-12-v2-weighted";
+
+export const executivePresenceCriticalityWeights: Record<ExecutivePresenceQuestionCriticality, number> = {
+  standard: 1,
+  elevated: 1.25,
+  critical: 1.5
+};
 
 export const executivePresenceSubdimensionLabels: Record<ExecutivePresenceSubdimension, string> = {
   assertividade: "Assertividade",
@@ -50,6 +57,9 @@ export type ExecutivePresenceMethodologyEntry = {
   questionId: string;
   observedSituation: string;
   evaluatedBehavior: string;
+  criticality: ExecutivePresenceQuestionCriticality;
+  weight: number;
+  weightRationale: string;
   options: ExecutivePresenceMethodologyOption[];
 };
 
@@ -128,35 +138,38 @@ const overrides: Record<string, Partial<Omit<ExecutivePresenceMethodologyOption,
 };
 
 const questionBlueprints = [
-  ["q01", "Reuniao sem foco", "Como a usuaria reorganiza energia coletiva, decisao e criterios quando a conversa perde direcao."],
-  ["q02", "Interrupcao", "Como recupera espaco, autoria e presenca sem perder maturidade executiva."],
-  ["q03", "Discordancia com lideranca", "Como sustenta divergencia, criterio politico e seguranca relacional."],
-  ["q04", "Negociacao salarial", "Como traduz entrega em valor, pedido e posicao profissional."],
-  ["q05", "Apropriacao de ideia", "Como protege autoria, credito e lideranca sem escalar tensao desnecessaria."],
-  ["q06", "Definicao de limites", "Como delimita capacidade, prioridade e combinados."],
-  ["q07", "Pressao", "Qual recurso de presenca aparece primeiro em ambiente de urgencia."],
-  ["q08", "Feedback injusto", "Como separa percepcao, fato, imagem e resposta executiva."],
-  ["q09", "Apresentacao senior", "Como prepara mensagem, politica, evidencia e pedido de decisao."],
-  ["q10", "Conversa carregada", "Como regula tensao, ambiguidade e necessidade de fechamento."],
-  ["q11", "Comite divergente", "Como cria caminho entre interesses, criterios e responsabilidades."],
-  ["q12", "Defesa de trabalho", "Como transforma entrega em reconhecimento, autoria e valor percebido."],
-  ["q13", "Decisao dificil", "Como escolhe entre velocidade, consenso, impacto humano e risco."],
-  ["q14", "Posicionamento publico", "Qual base de sustentacao usa quando esta visivel."],
-  ["q15", "Entrega critica atrasada", "Como conduz responsabilidade, urgencia, bloqueios e recuperacao."],
-  ["q16", "Questionamento", "Como responde a objecao sem perder posicao ou relacao."],
-  ["q17", "Ambiente politico", "O que observa primeiro quando poder, influencia e narrativa estao em jogo."],
-  ["q18", "Pedido de apoio", "Como formula necessidade, impacto, contexto e expectativa."],
-  ["q19", "Subestimacao", "Como reage quando precisa reposicionar percepcao de valor."],
-  ["q20", "Proximo nivel", "Qual capacidade a usuaria reconhece como alavanca de evolucao profissional."]
+  ["q01", "Reuniao sem foco", "Como a usuaria reorganiza energia coletiva, decisao e criterios quando a conversa perde direcao.", "standard", "Situacao recorrente, mas menos reveladora de risco politico ou exposicao direta."],
+  ["q02", "Interrupcao", "Como recupera espaco, autoria e presenca sem perder maturidade executiva.", "critical", "Revela ocupacao de espaco, autoria e resposta sob exposicao publica imediata."],
+  ["q03", "Discordancia com lideranca", "Como sustenta divergencia, criterio politico e seguranca relacional.", "critical", "Mostra capacidade de sustentar posicao quando ha assimetria de poder."],
+  ["q04", "Negociacao salarial", "Como traduz entrega em valor, pedido e posicao profissional.", "elevated", "Evidencia relacao com valor, reconhecimento e pedido explicito."],
+  ["q05", "Apropriacao de ideia", "Como protege autoria, credito e lideranca sem escalar tensao desnecessaria.", "critical", "Expõe padroes de autoria, visibilidade e protecao de contribuicao estrategica."],
+  ["q06", "Definicao de limites", "Como delimita capacidade, prioridade e combinados.", "critical", "Revela sustentacao de limite quando ha risco de sobrecarga ou desagrado."],
+  ["q07", "Pressao", "Qual recurso de presenca aparece primeiro em ambiente de urgencia.", "elevated", "Mostra resposta inicial em tensao, mas com menor especificidade contextual."],
+  ["q08", "Feedback injusto", "Como separa percepcao, fato, imagem e resposta executiva.", "elevated", "Indica regulacao, defesa de imagem e capacidade de resposta sem reatividade."],
+  ["q09", "Apresentacao senior", "Como prepara mensagem, politica, evidencia e pedido de decisao.", "elevated", "Revela preparo de influencia e leitura de audiencia executiva."],
+  ["q10", "Conversa carregada", "Como regula tensao, ambiguidade e necessidade de fechamento.", "critical", "Mostra padrao de regulacao emocional em conversa de alto custo relacional."],
+  ["q11", "Comite divergente", "Como cria caminho entre interesses, criterios e responsabilidades.", "elevated", "Evidencia conducao entre interesses e maturidade politica."],
+  ["q12", "Defesa de trabalho", "Como transforma entrega em reconhecimento, autoria e valor percebido.", "standard", "Importante para visibilidade, mas menos tensionada que situacoes de confronto direto."],
+  ["q13", "Decisao dificil", "Como escolhe entre velocidade, consenso, impacto humano e risco.", "elevated", "Revela criterios de decisao em ambiguidade e trade-offs."],
+  ["q14", "Posicionamento publico", "Qual base de sustentacao usa quando esta visivel.", "elevated", "Mostra sustentacao de presenca em exposicao profissional."],
+  ["q15", "Entrega critica atrasada", "Como conduz responsabilidade, urgencia, bloqueios e recuperacao.", "elevated", "Evidencia responsabilidade executiva sob risco de entrega."],
+  ["q16", "Questionamento", "Como responde a objecao sem perder posicao ou relacao.", "elevated", "Revela resposta a contestacao e capacidade de manter eixo."],
+  ["q17", "Ambiente politico", "O que observa primeiro quando poder, influencia e narrativa estao em jogo.", "critical", "Mapeia leitura politica, uma das variaveis mais sensiveis de presenca executiva."],
+  ["q18", "Pedido de apoio", "Como formula necessidade, impacto, contexto e expectativa.", "standard", "Relevante para comunicacao, mas com menor exposicao de conflito ou poder."],
+  ["q19", "Subestimacao", "Como reage quando precisa reposicionar percepcao de valor.", "critical", "Revela resposta a desvalorizacao, visibilidade e reposicionamento de autoridade."],
+  ["q20", "Proximo nivel", "Qual capacidade a usuaria reconhece como alavanca de evolucao profissional.", "elevated", "Mostra direcao de desenvolvimento percebida e tensao dominante de crescimento."]
 ] as const;
 
 const traitOptionOrder: TraitKey[] = ["direction", "influence", "diplomacy", "precision"];
 
 export const executivePresenceMethodology: ExecutivePresenceMethodologyEntry[] = questionBlueprints.map(
-  ([questionId, observedSituation, evaluatedBehavior]) => ({
+  ([questionId, observedSituation, evaluatedBehavior, criticality, weightRationale]) => ({
     questionId,
     observedSituation,
     evaluatedBehavior,
+    criticality,
+    weight: executivePresenceCriticalityWeights[criticality],
+    weightRationale,
     options: traitOptionOrder.map((traitKey, index) => {
       const optionId = `${questionId}_o${index + 1}`;
       return {
@@ -169,8 +182,10 @@ export const executivePresenceMethodology: ExecutivePresenceMethodologyEntry[] =
   })
 );
 
+export function getExecutivePresenceMethodologyEntry(questionId: string) {
+  return executivePresenceMethodology.find((entry) => entry.questionId === questionId);
+}
+
 export function getExecutivePresenceMethodologyOption(questionId: string, optionId: string) {
-  return executivePresenceMethodology
-    .find((entry) => entry.questionId === questionId)
-    ?.options.find((option) => option.optionId === optionId);
+  return getExecutivePresenceMethodologyEntry(questionId)?.options.find((option) => option.optionId === optionId);
 }
