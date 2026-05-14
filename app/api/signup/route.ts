@@ -49,7 +49,7 @@ export async function POST(request: Request) {
 
     const user = data.user;
     if (!user) {
-      return signupError("Nao conseguimos criar sua conta agora. Tente novamente em instantes.", 500);
+      return signupError("Não conseguimos criar sua conta agora. Tente novamente em instantes.", 500);
     }
 
     const { error: profileError } = await serviceClient.from("profiles").upsert({
@@ -62,12 +62,12 @@ export async function POST(request: Request) {
     });
 
     if (profileError) {
-      return signupError("Sua conta foi criada, mas nao conseguimos preparar sua area agora. Tente entrar novamente em instantes.", 500);
+      return signupError("Sua conta foi criada, mas não conseguimos preparar sua área agora. Tente entrar novamente em instantes.", 500);
     }
 
     return Response.json({ ok: true });
   } catch {
-    return signupError("Nao conseguimos criar sua conta agora. Tente novamente em instantes.", 500);
+    return signupError("Não conseguimos criar sua conta agora. Tente novamente em instantes.", 500);
   }
 }
 
@@ -79,7 +79,7 @@ function getSignupAdminErrorMessage(message: string) {
   const normalized = message.toLowerCase();
 
   if (normalized.includes("already") || normalized.includes("exists") || normalized.includes("registered")) {
-    return "Este email ja esta cadastrado. Entre com sua senha ou use a recuperacao de acesso.";
+    return "Este email já está cadastrado. Entre com sua senha ou use a recuperação de acesso.";
   }
 
   if (normalized.includes("password") && (normalized.includes("weak") || normalized.includes("short") || normalized.includes("6"))) {
@@ -94,5 +94,5 @@ function getSignupAdminErrorMessage(message: string) {
     return "O cadastro ficou temporariamente limitado. Aguarde alguns minutos e tente novamente.";
   }
 
-  return "Nao conseguimos criar sua conta agora. Confira os dados e tente novamente.";
+  return "Não conseguimos criar sua conta agora. Confira os dados e tente novamente.";
 }

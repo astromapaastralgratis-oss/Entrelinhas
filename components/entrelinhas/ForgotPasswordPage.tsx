@@ -16,14 +16,14 @@ export function ForgotPasswordPage() {
     setStatus(null);
 
     if (!supabase || !isSupabaseConfigured) {
-      setStatus("Nao conseguimos enviar o acesso agora. Tente novamente em instantes.");
+      setStatus("Não conseguimos enviar o acesso agora. Tente novamente em instantes.");
       return;
     }
 
     setLoading(true);
     const redirectTo = `${process.env.NEXT_PUBLIC_APP_URL ?? window.location.origin}/update-password`;
     const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
-    setStatus(error ? "Nao conseguimos enviar o acesso agora. Confira o email e tente novamente." : "Enviamos o link para redefinir sua senha.");
+    setStatus(error ? "Não conseguimos enviar o acesso agora. Confira o email e tente novamente." : "Enviamos o link para redefinir sua senha.");
     setLoading(false);
   }
 
@@ -40,7 +40,7 @@ export function ForgotPasswordPage() {
           </p>
           <label className="mt-7 block">
             <span className="text-sm font-semibold text-white/85">Email</span>
-            <input required type="email" className="mt-2 w-full rounded-xl border border-entrelinhas-gold/15 bg-[#071525]/72 px-4 py-3 text-white outline-none transition duration-300 placeholder:text-entrelinhas-muted/55 focus:border-entrelinhas-gold/50" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="voce@empresa.com" />
+            <input required type="email" className="mt-2 w-full rounded-xl border border-entrelinhas-gold/15 bg-[#071525]/72 px-4 py-3 text-white outline-none transition duration-300 placeholder:text-entrelinhas-muted/55 focus:border-entrelinhas-gold/50" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="você@empresa.com" />
           </label>
           {status ? <p className="mt-4 rounded-xl border border-entrelinhas-gold/22 bg-entrelinhas-gold/[0.08] px-4 py-3 text-sm text-entrelinhas-goldLight">{status}</p> : null}
           <button disabled={loading} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-entrelinhas-gold px-5 py-4 text-sm font-bold text-entrelinhas-ink shadow-gold transition duration-300 hover:-translate-y-0.5 hover:bg-entrelinhas-goldLight disabled:cursor-not-allowed disabled:opacity-70">

@@ -70,5 +70,5 @@ export function adminErrorResponse(error: unknown) {
     return Response.json({ error: "Ambiente administrativo indisponivel." }, { status: 500 });
   }
 
-  return Response.json({ error: "Nao conseguimos concluir esta acao agora." }, { status: 500 });
+  return Response.json({ error: "Não conseguimos concluir esta ação agora." }, { status: 500 });
 }

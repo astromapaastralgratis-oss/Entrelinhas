@@ -13,7 +13,7 @@ type AutomationSettingsPanelProps = {
 };
 
 const modes: Array<{ value: AutomationMode; label: string; description: string }> = [
-  { value: "economico", label: "Leve", description: "Menos conteudos, menor custo e revisao rapida." },
+  { value: "economico", label: "Leve", description: "Menos conteúdos, menor custo e revisão rápida." },
   { value: "padrao", label: "Padrao", description: "Equilibrio entre volume, qualidade e custo." },
   { value: "crescimento", label: "Intenso", description: "Mais conteudos e mais variacoes para crescer." }
 ];
@@ -41,11 +41,11 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
         <div>
           <p className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-entrelinhas-gold">
             <Bot className="h-4 w-4" />
-            Configuracoes avancadas
+            Configurações avançadas
           </p>
           <h2 className="mt-2 text-xl font-semibold text-stone-50">IA, custo e operacao</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-stone-300">
-            A tela principal fica simples. Aqui voce ajusta preferencias tecnicas quando precisar.
+            A tela principal fica simples. Aqui você ajusta preferências técnicas quando precisar.
           </p>
         </div>
 
@@ -78,7 +78,7 @@ export function AutomationSettingsPanel({ settings, usage, onChange }: Automatio
           </div>
         </label>
         <p className="mt-2 text-sm leading-6 text-stone-400">
-          Se a IA escolhida nao estiver disponivel, o app usa automaticamente outra opcao para nao interromper sua geracao.
+          Se a IA escolhida não estiver disponível, o app usa automaticamente outra opção para não interromper sua geração.
         </p>
       </div>
 

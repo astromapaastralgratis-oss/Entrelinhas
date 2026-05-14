@@ -19,15 +19,15 @@ export function RaioXFullReading({ result }: RaioXFullReadingProps) {
   return (
     <section className="brand-fade-in mx-auto max-w-5xl">
       <div className="editorial-panel overflow-hidden">
-        <Header title="Direcao executiva" subtitle={profile.name} />
+        <Header title="Direção executiva" subtitle={profile.name} />
 
         <div className="grid gap-4 p-5 sm:p-7 lg:grid-cols-2">
-          <ReadingCard icon={Sparkles} title="Sua Direcao Executiva" className="lg:col-span-2">
+          <ReadingCard icon={Sparkles} title="Sua Direção Executiva" className="lg:col-span-2">
             <p className="max-w-3xl text-base leading-7 text-white/90 sm:text-lg">{profile.shortDescription}</p>
             <p className="mt-4 max-w-3xl leading-7 text-entrelinhas-muted">{profile.executiveReading}</p>
           </ReadingCard>
 
-          <ReadingCard icon={ShieldCheck} title="Como Voce E Percebida" className="lg:col-span-2">
+          <ReadingCard icon={ShieldCheck} title="Como Você E Percebida" className="lg:col-span-2">
             <p className="max-w-3xl leading-7 text-entrelinhas-muted">{profile.perceivedByOthers}</p>
           </ReadingCard>
 
@@ -39,21 +39,21 @@ export function RaioXFullReading({ result }: RaioXFullReadingProps) {
           ) : null}
 
           <ListCard icon={CheckCircle2} title="Suas Fortalezas" items={profile.strengths} tone="gold" />
-          <ListCard icon={AlertTriangle} title="O Que Reduz Sua Influencia" items={riskItems} tone="blue" />
+          <ListCard icon={AlertTriangle} title="O Que Reduz Sua Influência" items={riskItems} tone="blue" />
           {subdimensionItems.length ? <ListCard icon={Target} title="Subdimensoes Mais Presentes" items={subdimensionItems} tone="gold" /> : null}
           {dynamicItems.length ? <ListCard icon={Sparkles} title="Dinamicas Executivas Dominantes" items={dynamicItems} tone="blue" /> : null}
           {insightItems.length ? <ListCard icon={TrendingUp} title="Leitura Condicional Do Seu Padrao" items={insightItems} tone="gold" className="lg:col-span-2" /> : null}
           {behaviorItems.length ? <ListCard icon={ShieldCheck} title="Sinais Comportamentais Observados" items={behaviorItems} tone="muted" className="lg:col-span-2" /> : null}
 
-          <ReadingCard icon={MessageSquareQuote} title="Seu Padrao Sob Pressao">
+          <ReadingCard icon={MessageSquareQuote} title="Seu Padrão Sob Pressão">
             <p className="leading-7 text-entrelinhas-muted">{profile.pressurePattern}</p>
           </ReadingCard>
 
-          <ReadingCard icon={Target} title="Onde Voce Pode Estar Se Sabotando">
+          <ReadingCard icon={Target} title="Onde Você Pode Estar Se Sabotando">
             <p className="leading-7 text-entrelinhas-muted">{profile.executiveSabotage}</p>
           </ReadingCard>
 
-          <ReadingCard icon={MessageSquareQuote} title="Como Voce Se Comunica">
+          <ReadingCard icon={MessageSquareQuote} title="Como Você Se Comunica">
             <p className="leading-7 text-entrelinhas-muted">{profile.communicationPattern}</p>
           </ReadingCard>
 
@@ -62,7 +62,7 @@ export function RaioXFullReading({ result }: RaioXFullReadingProps) {
           </ReadingCard>
 
           <ScriptShiftCard items={profile.internalScriptsToChange} />
-          <ListCard icon={TrendingUp} title="Frases Para Sustentar Presenca" items={profile.startUsingPhrases} tone="gold" className="lg:col-span-2" />
+          <ListCard icon={TrendingUp} title="Frases Para Sustentar Presença" items={profile.startUsingPhrases} tone="gold" className="lg:col-span-2" />
         </div>
       </div>
     </section>

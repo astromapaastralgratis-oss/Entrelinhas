@@ -13,19 +13,19 @@ import type {
 export const entrelinhasHookLibrary = [
   "Nem todo cansaco e fisico.",
   "Hoje sua energia pede menos reacao.",
-  "Voce nao esta confusa. Esta captando sinais demais.",
+  "Você não está confusa. Está captando sinais demais.",
   "Tem dias em que o corpo entende antes da mente.",
-  "O que voce sente pode ter uma pista.",
+  "O que você sente pode ter uma pista.",
   "Antes de decidir, entenda o clima do seu dia.",
-  "Talvez nao seja falta de forca. Talvez seja excesso de ruido.",
-  "Seu dia nao precisa ser perfeito. Precisa ser lido com clareza."
+  "Talvez não seja falta de força. Talvez seja excesso de ruído.",
+  "Seu dia não precisa ser perfeito. Precisa ser lido com clareza."
 ];
 
 export const entrelinhasCtaLibrary = {
-  follow: "Segue a pagina pra entender o que esta por tras do que voce sente.",
+  follow: "Segue a página para entender o que está por trás do que você sente.",
   app: "Acesse o link na bio e veja sua leitura do dia.",
   save: "Salva este post para consultar quando o dia pesar.",
-  comment: "Comenta: qual energia voce sentiu hoje?",
+  comment: "Comenta: qual energia você sentiu hoje?",
   share: "Envia para alguem que tambem sente tudo antes de entender."
 };
 
@@ -213,7 +213,7 @@ export function generateVisualPrompt(contentItem: VisualPromptInput, visualStyle
       `Estilo do post: ${visualStyle.name}. ${visualStyle.promptFragment}.`,
       `Paleta: ${visualStyle.palette.join(", ")}. Elementos: ${visualStyle.elements.join(", ")}.`,
       `Composicao: ${visualStyle.compositionRules.join("; ")}.`,
-      `Texto sera renderizado pelo sistema, nao pela IA de imagem. Use somente fundo, atmosfera, elementos e hierarquia visual.`,
+      `Texto será renderizado pelo sistema, não pela IA de imagem. Use somente fundo, atmosfera, elementos e hierarquia visual.`,
       `Titulo na arte: "${title}". Subtitulo: "${subtitle}". Chamada para acao: "${cta}".`,
       "Post pronto para publicar, leitura perfeita no celular, margens seguras, sem bordas brancas, sem grid, sem colagem, sem multiplos cards na mesma arte."
     ].join(" "),
@@ -229,7 +229,7 @@ export function generateVisualPrompt(contentItem: VisualPromptInput, visualStyle
       "multiplas telas",
       "borda branca",
       "baixo contraste",
-      "layout generico de Canva",
+      "layout genérico de Canva",
       "excesso de elementos",
       "aparencia amadora"
     ].join(", "),
@@ -309,7 +309,7 @@ function chooseHook(planItem: EditorialPlanItem) {
   const science = planItem.scienceBase.toLowerCase();
   if (science.includes("energia")) return "Hoje sua energia pede menos reacao.";
   if (science.includes("tarot")) return "Antes de decidir, observe o sinal do dia.";
-  if (science.includes("numerologia")) return "O numero do dia pode organizar sua direcao.";
+  if (science.includes("numerologia")) return "O número do dia pode organizar sua direção.";
   return entrelinhasHookLibrary[Math.abs(planItem.theme.length) % entrelinhasHookLibrary.length];
 }
 

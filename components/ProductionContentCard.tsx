@@ -131,9 +131,9 @@ export function ProductionContentCard({
           ) : null}
 
           <details className="mt-3 rounded-md border border-entrelinhas-line bg-entrelinhas-void/35 p-3 text-sm">
-            <summary className="cursor-pointer text-stone-200">Ver estrategia</summary>
+            <summary className="cursor-pointer text-stone-200">Ver estratégia</summary>
             <div className="mt-3 grid gap-2 text-stone-400 md:grid-cols-2">
-              <p>Base do conteudo: {content.plan.scienceBase}</p>
+              <p>Base do conteúdo: {content.plan.scienceBase}</p>
               <p>Objetivo: {content.plan.objective}</p>
               <p>Chamada para acao: {copy?.cta ?? content.plan.ctaType}</p>
               <p>IA usada: {aiLabel}</p>
@@ -178,7 +178,7 @@ function getMissingApprovalItems(hasCaption: boolean, hasImage: boolean, isValid
   if (!hasCaption) items.push("gerar ou revisar legenda");
   if (!hasImage) items.push("gerar post");
   if (!isValid) items.push("corrigir texto sinalizado, como cards repetidos");
-  return items.length ? items : ["revisar conteudo"];
+  return items.length ? items : ["revisar conteúdo"];
 }
 
 function friendlyFormat(format: string) {
@@ -238,7 +238,7 @@ function PostGallery({ prompts, format }: { prompts: ProductionContent["visualPr
     return (
       <div className="mt-4 flex h-72 flex-col items-center justify-center rounded-md border border-white/10 bg-black/30 px-6 text-center text-stone-500">
         <ImageDown className="h-8 w-8 text-entrelinhas-violet" />
-        <p className="mt-3 text-sm">Post ainda nao gerado</p>
+        <p className="mt-3 text-sm">Post ainda não gerado</p>
       </div>
     );
   }
@@ -254,11 +254,11 @@ function PostGallery({ prompts, format }: { prompts: ProductionContent["visualPr
           </p>
           {prompt.imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={prompt.imageUrl} alt={`${label} ${index + 1} do conteudo`} className="h-72 w-full object-contain" />
+            <img src={prompt.imageUrl} alt={`${label} ${index + 1} do conteúdo`} className="h-72 w-full object-contain" />
           ) : (
             <div className="flex h-72 flex-col items-center justify-center px-6 text-center text-stone-500">
               <ImageDown className="h-8 w-8 text-entrelinhas-violet" />
-              <p className="mt-3 text-sm">{label} ainda nao gerado</p>
+              <p className="mt-3 text-sm">{label} ainda não gerado</p>
             </div>
           )}
         </div>

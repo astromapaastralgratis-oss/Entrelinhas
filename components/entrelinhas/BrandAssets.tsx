@@ -36,7 +36,7 @@ export function BrandAvatar({ className = "", size = 96, priority = false }: Bra
   return (
     <Image
       src="/brand/entrelinhas-profile.png"
-      alt="Entrelinhas - presenca, estrategia e evolucao"
+      alt="Entrelinhas - presença, estratégia e evolução"
       width={size}
       height={size}
       priority={priority}
@@ -58,7 +58,7 @@ export function BrandLockup({
       <div className="min-w-0">
         <p className={`font-semibold tracking-[0.16em] text-entrelinhas-goldLight ${textClassName}`}>Entrelinhas</p>
         <p className="mt-0.5 hidden text-[10px] font-semibold uppercase tracking-[0.18em] text-entrelinhas-muted sm:block">
-          Presenca • Estrategia • Evolucao
+          Presença • Estratégia • Evolução
         </p>
       </div>
     </div>

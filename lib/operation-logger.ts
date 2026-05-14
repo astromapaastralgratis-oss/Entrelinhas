@@ -59,16 +59,16 @@ export function friendlyErrorMessage(error: unknown) {
   const message = readableErrorMessage(error);
 
   if (/JSON|invalid/i.test(message)) return "A IA retornou um formato invalido. Use o fallback ou tente regenerar este item.";
-  if (/cost|limite|budget/i.test(message)) return "Limite de custo atingido. Use modo economico ou regenere so um conteudo.";
+  if (/cost|limite|budget/i.test(message)) return "Limite de custo atingido. Use modo economico ou regenere so um conteúdo.";
   if (/Supabase|database|banco|RLS|permission|policy/i.test(message)) {
-    return `Falha no banco ou permissao: ${message}`;
+    return `Falha no banco ou permissão: ${message}`;
   }
-  if (/storage|bucket|upload/i.test(message)) return `Storage indisponivel: ${message}`;
-  if (/image|imagem|PNG|post/i.test(message)) return "Post ainda nao foi gerado. Clique em Gerar post para tentar novamente.";
-  if (/OpenAI|Gemini|IA|provider/i.test(message)) return "IA indisponivel. O app pode continuar com fallback local.";
-  if (/content|blocked|bloqueado/i.test(message)) return "Conteudo invalido pelas regras de seguranca. Ajuste ou regenere este item.";
+  if (/storage|bucket|upload/i.test(message)) return `Storage indisponível: ${message}`;
+  if (/image|imagem|PNG|post/i.test(message)) return "Post ainda não foi gerado. Clique em Gerar post para tentar novamente.";
+  if (/OpenAI|Gemini|IA|provider/i.test(message)) return "IA indisponível. O app pode continuar com fallback local.";
+  if (/content|blocked|bloqueado/i.test(message)) return "Conteudo invalido pelas regras de segurança. Ajuste ou regenere este item.";
 
-  return message || "Algo nao saiu como esperado. Tente novamente em instantes.";
+  return message || "Algo não saiu como esperado. Tente novamente em instantes.";
 }
 
 function readableErrorMessage(error: unknown) {

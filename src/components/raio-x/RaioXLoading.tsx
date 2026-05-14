@@ -7,10 +7,10 @@ export function RaioXLoading() {
         <div className="mx-auto w-fit animate-pulse">
           <BrandAvatar className="h-16 w-16" size={80} />
         </div>
-        <p className="mt-6 text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Seu direcionamento estrategico</p>
+        <p className="mt-6 text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Seu direcionamento estratégico</p>
         <h1 className="mt-3 text-3xl font-semibold text-white">Organizando seu Raio-X Executivo.</h1>
         <p className="mt-4 leading-7 text-entrelinhas-muted">
-          Alguns instantes para organizar uma direcao clara, aplicavel e sofisticada.
+          Alguns instantes para organizar uma direção clara, aplicável e sofisticada.
         </p>
         <div className="mt-7 h-1.5 overflow-hidden rounded-full bg-entrelinhas-navy/70">
           <div className="h-full w-2/3 animate-[pulse_1.2s_ease-in-out_infinite] rounded-full bg-gradient-to-r from-entrelinhas-blueLight via-entrelinhas-gold to-entrelinhas-goldLight" />

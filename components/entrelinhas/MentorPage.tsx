@@ -41,7 +41,7 @@ export function MentorPage() {
       const data = await result.json();
 
       if (!data.response) {
-        setStatus("Nao conseguimos preparar sua orientacao agora. Tente novamente em alguns instantes.");
+        setStatus("Não conseguimos preparar sua orientação agora. Tente novamente em alguns instantes.");
         return;
       }
 
@@ -66,10 +66,10 @@ export function MentorPage() {
           });
         }
       } catch {
-        // Manter a experiencia fluida mesmo se o registro nao for salvo.
+        // Manter a experiencia fluida mesmo se o registro não for salvo.
       }
     } catch {
-      setStatus("Nao conseguimos preparar sua orientacao agora. Tente novamente em alguns instantes.");
+      setStatus("Não conseguimos preparar sua orientação agora. Tente novamente em alguns instantes.");
     } finally {
       setLoading(false);
     }
@@ -82,13 +82,13 @@ export function MentorPage() {
 
   async function saveResponse() {
     if (!supabase) {
-      setStatus("Nao conseguimos salvar agora. Sua orientacao continua disponivel aqui.");
+      setStatus("Não conseguimos salvar agora. Sua orientação continua disponível aqui.");
       return;
     }
 
     const user = (await supabase.auth.getUser()).data.user;
     if (!user || !response) {
-      setStatus("Entre na sua conta para guardar esta orientacao.");
+      setStatus("Entre na sua conta para guardar esta orientação.");
       return;
     }
 
@@ -100,7 +100,7 @@ export function MentorPage() {
       content: response
     });
 
-    setStatus(error ? "Nao conseguimos salvar agora. Sua orientacao continua disponivel aqui." : "Orientacao salva para consultar depois.");
+    setStatus(error ? "Não conseguimos salvar agora. Sua orientação continua disponível aqui." : "Orientacao salva para consultar depois.");
   }
 
   return (
@@ -109,17 +109,17 @@ export function MentorPage() {
         <div className="flex items-center gap-4">
           <BrandAvatar className="h-14 w-14" size={72} />
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Direcionamento estrategico</p>
-            <h1 className="mt-2 text-3xl font-semibold leading-tight text-white sm:text-5xl">Conduzir uma situacao real</h1>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Direcionamento estratégico</p>
+            <h1 className="mt-2 text-3xl font-semibold leading-tight text-white sm:text-5xl">Conduzir uma situação real</h1>
           </div>
         </div>
         <p className="mt-4 max-w-xl text-sm leading-6 text-entrelinhas-muted sm:text-base">
-          Traga o contexto. O Entrelinhas organiza postura, posicionamento e proximo movimento para uma conducao com presenca.
+          Traga o contexto. O Entrelinhas organiza postura, posicionamento e próximo movimento para uma condução com presença.
         </p>
 
         <form onSubmit={generate} className="editorial-panel mt-6 space-y-4 p-5">
           <label className="block">
-            <span className="text-sm font-semibold text-white/85">Situacao</span>
+            <span className="text-sm font-semibold text-white/85">Situação</span>
             <select value={situation} onChange={(event) => setSituation(event.target.value)} className="mt-2 w-full rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy px-4 py-3 text-white outline-none transition duration-300 focus:border-entrelinhas-gold/55">
               {situationOptions.map((option) => <option key={option}>{option}</option>)}
             </select>
@@ -129,11 +129,11 @@ export function MentorPage() {
             <textarea required value={context} onChange={(event) => setContext(event.target.value)} rows={4} className="mt-2 w-full resize-none rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy/65 px-4 py-3 text-white outline-none transition duration-300 placeholder:text-entrelinhas-muted/55 focus:border-entrelinhas-gold/55" placeholder="Conte os fatos principais, sem se explicar demais." />
           </label>
           <label className="block">
-            <span className="text-sm font-semibold text-white/85">Que posicao voce quer sustentar?</span>
+            <span className="text-sm font-semibold text-white/85">Que posição você quer sustentar?</span>
             <input value={desiredOutcome} onChange={(event) => setDesiredOutcome(event.target.value)} className="mt-2 w-full rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy/65 px-4 py-3 text-white outline-none transition duration-300 placeholder:text-entrelinhas-muted/55 focus:border-entrelinhas-gold/55" placeholder="Ex: recuperar credito, estabelecer limite, negociar reconhecimento" />
           </label>
           <label className="block">
-            <span className="text-sm font-semibold text-white/85">Quem esta na conversa?</span>
+            <span className="text-sm font-semibold text-white/85">Quem está na conversa?</span>
             <input value={peopleInvolved} onChange={(event) => setPeopleInvolved(event.target.value)} className="mt-2 w-full rounded-xl border border-entrelinhas-gold/12 bg-entrelinhas-navy/65 px-4 py-3 text-white outline-none transition duration-300 placeholder:text-entrelinhas-muted/55 focus:border-entrelinhas-gold/55" placeholder="Lider, pares, cliente, diretoria..." />
           </label>
           <div>
@@ -148,7 +148,7 @@ export function MentorPage() {
           </div>
           <button disabled={loading} className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-entrelinhas-gold px-5 py-4 text-sm font-bold text-entrelinhas-ink shadow-gold transition duration-300 hover:bg-entrelinhas-goldLight disabled:opacity-70">
             {loading ? <Loader2 className="animate-spin" size={18} /> : <WandSparkles size={18} />}
-            {loading ? "Organizando sua orientacao" : "Receber orientacao executiva"}
+            {loading ? "Organizando sua orientação" : "Receber orientação executiva"}
           </button>
         </form>
       </section>
@@ -156,7 +156,7 @@ export function MentorPage() {
       <section className="editorial-panel min-h-[34rem] p-5">
         <div className="flex flex-col justify-between gap-3 border-b border-entrelinhas-gold/12 pb-4 sm:flex-row sm:items-center">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-muted">Plano de acao</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-muted">Plano de ação</p>
             <h2 className="mt-1 text-2xl font-semibold text-white">{response ? situation : "Seu direcionamento aparece aqui"}</h2>
           </div>
           <div className="flex gap-2">
@@ -172,7 +172,7 @@ export function MentorPage() {
         {loading ? (
           <div className="flex min-h-[24rem] flex-col items-center justify-center text-center text-entrelinhas-muted">
             <BrandAvatar className="mb-4 h-16 w-16 animate-pulse" size={80} />
-            <p className="max-w-xs leading-7">Organizando postura, posicionamento e proximo passo.</p>
+            <p className="max-w-xs leading-7">Organizando postura, posicionamento e próximo passo.</p>
           </div>
         ) : response ? (
           <div className="mt-5 space-y-3">
@@ -186,7 +186,7 @@ export function MentorPage() {
         ) : (
           <div className="flex min-h-[24rem] flex-col items-center justify-center text-center text-entrelinhas-muted">
             <Clipboard className="mb-4 text-entrelinhas-gold" size={38} />
-            <p className="max-w-xs leading-7">Traga uma situacao concreta. A mentoria devolve direcao, limite e maturidade executiva.</p>
+            <p className="max-w-xs leading-7">Traga uma situação concreta. A mentoria devolve direção, limite e maturidade executiva.</p>
           </div>
         )}
       </section>
@@ -196,16 +196,16 @@ export function MentorPage() {
 
 function displaySectionTitle(title: string) {
   const normalized = title.toLowerCase();
-  if (normalized.includes("leitura")) return "Direcionamento estrategico";
-  if (normalized.includes("script")) return "Plano de acao";
+  if (normalized.includes("leitura")) return "Direcionamento estratégico";
+  if (normalized.includes("script")) return "Plano de ação";
   if (normalized.includes("curta")) return "Versao objetiva";
-  if (normalized.includes("pronto")) return "Plano de acao";
-  return title.replace("O que NAO dizer", "O que evitar").replace("O que NÃƒO dizer", "O que evitar");
+  if (normalized.includes("pronto")) return "Plano de ação";
+  return title.replace("O que NAO dizer", "O que evitar").replace("O que NÃO dizer", "O que evitar");
 }
 
 function formatResponseForDisplay(content: string) {
   return parseExecutiveScriptSections(content)
-    .filter((section) => section.body && section.body !== "Ainda nao gerado.")
+    .filter((section) => section.body && section.body !== "Ainda não gerado.")
     .map((section, index) => `${index + 1}. ${displaySectionTitle(section.title)}\n${section.body}`)
     .join("\n\n");
 }

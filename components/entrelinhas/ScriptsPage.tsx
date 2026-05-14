@@ -39,7 +39,7 @@ export function ScriptsPage() {
                   <div key={key} className="rounded-xl border border-entrelinhas-gold/10 bg-entrelinhas-navy/45 p-4">
                     <div className="flex items-center justify-between gap-3">
                       <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-entrelinhas-gold sm:text-sm">{label}</h3>
-                      <button onClick={() => copy(content, `${script.title} (${label})`)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-entrelinhas-gold/12 bg-entrelinhas-navy/35 text-entrelinhas-muted transition duration-300 hover:border-entrelinhas-gold/45 hover:text-white" aria-label={`Copiar direcao ${label}`}>
+                      <button onClick={() => copy(content, `${script.title} (${label})`)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-entrelinhas-gold/12 bg-entrelinhas-navy/35 text-entrelinhas-muted transition duration-300 hover:border-entrelinhas-gold/45 hover:text-white" aria-label={`Copiar direção ${label}`}>
                         <Copy size={16} />
                       </button>
                     </div>

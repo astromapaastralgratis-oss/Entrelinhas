@@ -60,7 +60,7 @@ export function AdminPage() {
 
   const adminFetch = useCallback(async (path: string, init?: RequestInit) => {
     const token = await getToken();
-    if (!token) throw new Error("Sessao indisponivel.");
+    if (!token) throw new Error("Sessao indisponível.");
     const response = await fetch(path, {
       ...init,
       headers: {
@@ -70,7 +70,7 @@ export function AdminPage() {
       }
     });
     const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(data.error ?? "Nao conseguimos concluir esta acao.");
+    if (!response.ok) throw new Error(data.error ?? "Não conseguimos concluir esta ação.");
     return data;
   }, [getToken]);
 
@@ -89,7 +89,7 @@ export function AdminPage() {
       const limit = settingsData.signupLimits?.max_active_users;
       setGlobalLimit(limit ? String(limit) : "");
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Nao conseguimos carregar a administracao.");
+      setStatus(error instanceof Error ? error.message : "Não conseguimos carregar a administração.");
     } finally {
       setLoading(false);
     }
@@ -108,7 +108,7 @@ export function AdminPage() {
       setStatus("Limite global atualizado.");
       await loadAdminData();
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Nao conseguimos salvar o limite.");
+      setStatus(error instanceof Error ? error.message : "Não conseguimos salvar o limite.");
     }
   }
 
@@ -121,14 +121,14 @@ export function AdminPage() {
       setStatus(successMessage);
       await loadAdminData();
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Nao conseguimos concluir esta acao.");
+      setStatus(error instanceof Error ? error.message : "Não conseguimos concluir esta ação.");
     }
   }
 
   async function setDailyLimit(user: AdminUser) {
-    const value = window.prompt("Novo limite diario de geracoes para esta usuaria:", user.dailyAiScriptLimit?.toString() ?? "");
+    const value = window.prompt("Novo limite diário de gerações para esta usuária:", user.dailyAiScriptLimit?.toString() ?? "");
     if (value === null) return;
-    await updateUser(user, { action: "set_limit", dailyAiScriptLimit: value }, "Limite da usuaria atualizado.");
+    await updateUser(user, { action: "set_limit", dailyAiScriptLimit: value }, "Limite da usuária atualizado.");
   }
 
   async function setTemporaryPassword(user: AdminUser) {
@@ -139,7 +139,7 @@ export function AdminPage() {
 
   async function deleteUserPermanently(user: AdminUser) {
     const confirmed = window.confirm(
-      `Excluir permanentemente ${user.fullName || user.email || "esta usuaria"}?\n\nEsta acao remove a conta, perfil, Raio-X, direcionamentos, limites e jornada vinculada. Nao sera possivel recuperar.`
+      `Excluir permanentemente ${user.fullName || user.email || "esta usuária"}?\n\nEsta ação remove a conta, perfil, Raio-X, direcionamentos, limites e jornada vinculada. Não será possível recuperar.`
     );
     if (!confirmed) return;
 
@@ -213,7 +213,7 @@ export function AdminPage() {
               </div>
               <div className="mt-3 grid gap-2 text-sm leading-6 text-entrelinhas-muted lg:grid-cols-3">
                 {feedback.mostRealPart ? <p><strong className="text-white/80">Real:</strong> {feedback.mostRealPart}</p> : null}
-                {feedback.genericPart ? <p><strong className="text-white/80">Generico:</strong> {feedback.genericPart}</p> : null}
+                {feedback.genericPart ? <p><strong className="text-white/80">Genérico:</strong> {feedback.genericPart}</p> : null}
                 {feedback.improvementSuggestion ? <p><strong className="text-white/80">Melhoria:</strong> {feedback.improvementSuggestion}</p> : null}
               </div>
             </article>
@@ -227,7 +227,7 @@ export function AdminPage() {
 
       <section className="mt-6 space-y-4">
         {loading ? (
-          <div className="editorial-panel p-6 text-center text-entrelinhas-muted">Carregando administracao.</div>
+          <div className="editorial-panel p-6 text-center text-entrelinhas-muted">Carregando administração.</div>
         ) : users.map((user) => (
           <article key={user.id} className="editorial-panel p-5">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
@@ -244,7 +244,7 @@ export function AdminPage() {
                   <Metric label="uso hoje" value={user.aiToday} />
                   <Metric label="tokens hoje" value={user.dailyTokensEstimate} />
                   <Metric label="tokens totais" value={user.totalTokensEstimate} />
-                  <Metric label="limite diario" value={user.dailyAiScriptLimit ?? "padrao"} />
+                  <Metric label="limite diario" value={user.dailyAiScriptLimit ?? "padrão"} />
                 </div>
                 <p className="mt-3 text-xs text-entrelinhas-muted">
                   Raio-X: {user.executivePresenceProfileId ? user.executivePresenceProfileId : "pendente"} · cadastro: {new Date(user.createdAt).toLocaleDateString("pt-BR")}

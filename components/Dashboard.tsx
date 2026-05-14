@@ -302,7 +302,7 @@ export function Dashboard() {
       const result = (await response.json()) as GenerateCopyResult & { savedPostId?: string | null; error?: string };
       if (!response.ok) {
         const message = friendlyErrorMessage(
-          result.cost?.reason ?? result.error ?? "Nao consegui gerar agora. Tente novamente ou revise suas configuracoes avancadas."
+          result.cost?.reason ?? result.error ?? "Não consegui gerar agora. Tente novamente ou revise suas configurações avançadas."
         );
         setBudgetMessage(message);
         addLog("ai_error", message, { status: response.status }, "error");
@@ -410,7 +410,7 @@ export function Dashboard() {
 
       const result = await response.json();
       if (!response.ok) {
-        const message = "Post ainda nao foi gerado. Clique em Gerar post para tentar novamente.";
+        const message = "Post ainda não foi gerado. Clique em Gerar post para tentar novamente.";
         setBudgetMessage(message);
         addLog("image_error", message, { status: response.status, error: result.error }, "warning");
         return null;
@@ -461,7 +461,7 @@ export function Dashboard() {
       if (result.persistenceWarning) {
         addLog(
           "supabase_error",
-          "Post gerado, mas nao consegui salvar no historico.",
+          "Post gerado, mas não consegui salvar no histórico.",
           { warning: result.persistenceWarning, cardIndex: result.cardIndex },
           "warning"
         );
@@ -592,7 +592,7 @@ export function Dashboard() {
               Resultados dos Posts
             </NavButton>
             <NavButton active={activeScreen === "settings"} onClick={() => setActiveScreen("settings")}>
-              Configuracoes avancadas
+              Configurações avançadas
             </NavButton>
           </nav>
 
@@ -645,7 +645,7 @@ export function Dashboard() {
                 <p className="mt-2 text-sm text-stone-400">
                   {isGeneratingDay
                     ? "Gerando textos e posts com IA automatica..."
-                    : budgetMessage ?? "Conteudos e posts prontos para revisar quando voce gerar o dia."}
+                    : budgetMessage ?? "Conteúdos e posts prontos para revisar quando você gerar o dia."}
                 </p>
               </section>
 

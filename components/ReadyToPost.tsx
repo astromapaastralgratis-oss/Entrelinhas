@@ -39,7 +39,7 @@ export function ReadyToPost({ contents, onStatusChange }: ReadyToPostProps) {
 
       {approved.length === 0 ? (
         <div className="rounded-lg border border-entrelinhas-line bg-entrelinhas-panel/72 p-5 text-sm text-stone-300">
-          Nenhum conteudo aprovado ainda. Gere o texto, gere o post, revise e clique em Aprovar.
+          Nenhum conteúdo aprovado ainda. Gere o texto, gere o post, revise e clique em Aprovar.
         </div>
       ) : (
         approved.map((content) => (
@@ -51,7 +51,7 @@ export function ReadyToPost({ contents, onStatusChange }: ReadyToPostProps) {
                   <img src={content.visualPrompts[0].imageUrl} alt={`Post ${content.plan.theme}`} className="h-72 w-full object-contain" />
                 ) : (
                   <div className="flex h-72 items-center justify-center px-4 text-center text-sm text-stone-500">
-                    Post ainda nao gerado. O download usara uma arte de seguranca.
+                    Post ainda não gerado. O download usará uma arte de segurança.
                   </div>
                 )}
               </div>

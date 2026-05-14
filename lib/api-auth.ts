@@ -40,8 +40,8 @@ export async function requireAuthenticatedRequest(request: Request): Promise<Aut
 }
 
 export function authErrorResponse(message: string) {
-  if (message === "AUTH_REQUIRED") return { error: "Login obrigatorio para gerar conteudo." };
+  if (message === "AUTH_REQUIRED") return { error: "Login obrigatorio para gerar conteúdo." };
   if (message === "AUTH_INVALID") return { error: "Sessao invalida. Entre novamente." };
-  if (message === "SUPABASE_NOT_CONFIGURED") return { error: "Supabase nao configurado." };
+  if (message === "SUPABASE_NOT_CONFIGURED") return { error: "Supabase não configurado." };
   return { error: message };
 }

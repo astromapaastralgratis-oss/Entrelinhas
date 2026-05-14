@@ -133,7 +133,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="editorial-panel brand-fade-in max-w-sm rounded-3xl p-6">
           <BrandAvatar className="mx-auto h-16 w-16" size={96} priority />
           <p className="mt-4 text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Entrelinhas</p>
-          <p className="mt-2 text-sm leading-6 text-entrelinhas-muted">Preparando sua jornada de evolucao.</p>
+          <p className="mt-2 text-sm leading-6 text-entrelinhas-muted">Preparando sua jornada de evolução.</p>
         </div>
       </div>
     );
@@ -143,9 +143,9 @@ export function AppShell({ children }: { children: ReactNode }) {
     return (
       <main className="brand-surface flex min-h-screen items-center justify-center p-5 text-entrelinhas-ivory">
         <div className="editorial-panel max-w-lg rounded-3xl p-6">
-          <h1 className="text-2xl font-semibold text-white">Ambiente indisponivel</h1>
+          <h1 className="text-2xl font-semibold text-white">Ambiente indisponível</h1>
           <p className="mt-3 leading-7 text-entrelinhas-muted">
-            Nao conseguimos abrir sua area agora. Tente novamente em alguns instantes.
+            Não conseguimos abrir sua área agora. Tente novamente em alguns instantes.
           </p>
         </div>
       </main>
@@ -170,8 +170,8 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="mt-8 flex items-center gap-3 rounded-2xl border border-entrelinhas-gold/15 bg-[#08182A]/70 p-3">
             <BrandAvatar className="h-12 w-12" size={96} />
             <div>
-              <p className="text-xs uppercase tracking-[0.18em] text-entrelinhas-gold">Presenca</p>
-              <p className="text-sm font-semibold text-white">Estrategia e evolucao</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-entrelinhas-gold">Presença</p>
+              <p className="text-sm font-semibold text-white">Estratégia e evolução</p>
             </div>
           </div>
 

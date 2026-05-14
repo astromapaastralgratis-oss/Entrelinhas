@@ -56,7 +56,7 @@ const outputSchema = {
 } as const;
 
 const systemPrompt =
-  "Voce e o motor de copy do Entrelinhas. Gere conteudo em portugues do Brasil para Instagram e TikTok. Linguagem direta, emocionalmente inteligente, acessivel e com apelo de crescimento organico. Nao use promessa medica, cura garantida, diagnostico psicologico ou previsao absoluta. Nao use linguagem esoterica exagerada. Retorne apenas JSON valido.";
+  "Você é o motor de copy do Entrelinhas. Gere conteúdo em português do Brasil para Instagram e TikTok. Linguagem direta, emocionalmente inteligente, acessível e com apelo de crescimento orgânico. Não use promessa médica, cura garantida, diagnóstico psicológico ou previsão absoluta. Não use linguagem esotérica exagerada. Retorne apenas JSON válido.";
 
 export function buildCompactTextPrompt(input: CompactGenerateCopyRequest) {
   const titleMaxWords = input.limits?.titleMaxWords ?? 12;
@@ -242,7 +242,7 @@ async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs = 20_0
 function normalizeAiError(provider: ConcreteProvider, error: unknown) {
   const message = error instanceof Error ? error.message : String(error);
   if (/AbortError|aborted|timeout/i.test(message)) return `${provider}: timeout`;
-  if (/status_(401|403)/.test(message)) return `${provider}: credencial, permissao ou billing indisponivel`;
+  if (/status_(401|403)/.test(message)) return `${provider}: credencial, permissão ou billing indisponível`;
   if (/status_429/.test(message)) return `${provider}: limite ou billing atingido`;
   return `${provider}: ${message}`;
 }

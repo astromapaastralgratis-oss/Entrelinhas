@@ -108,9 +108,9 @@ const validationMessages: Record<keyof GeneratedContentValidationChecks, string>
   noMedicalPromise: "Conteudo contem promessa medica ou terapeutica.",
   noAbsolutePrediction: "Conteudo contem previsao absoluta ou promessa garantida.",
   noPsychologicalDiagnosis: "Conteudo parece diagnostico psicologico.",
-  noGenericCopy: "Texto generico bloqueado.",
+  noGenericCopy: "Texto genérico bloqueado.",
   noRepeatedSlides: "Cards do carrossel estao repetidos.",
-  noRepeatedTheme: "Tema repetitivo sinalizado pelo historico.",
+  noRepeatedTheme: "Tema repetitivo sinalizado pelo histórico.",
   visualPromptHasRatio: "Estilo do post sem proporcao.",
   visualPostReady: "Este post ainda precisa de ajuste antes de publicar."
 };

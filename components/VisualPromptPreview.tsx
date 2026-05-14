@@ -67,7 +67,7 @@ export function VisualPromptPreview({
             ) : (
               <div className="flex h-64 flex-col items-center justify-center text-center text-stone-500">
                 <ImageIcon className="h-7 w-7 text-entrelinhas-violet" />
-                <p className="mt-2 text-xs">Post ainda nao gerado</p>
+                <p className="mt-2 text-xs">Post ainda não gerado</p>
               </div>
             )}
             <div className="mt-2 grid gap-2">
@@ -110,7 +110,7 @@ export function VisualPromptPreview({
                   className="inline-flex h-8 items-center gap-2 rounded-md border border-entrelinhas-line px-2 text-xs text-stone-200 transition hover:border-entrelinhas-gold"
                 >
                   <Copy className="h-3.5 w-3.5" />
-                  {copiedIndex === index ? "Copiado" : "Copiar direcao"}
+                  {copiedIndex === index ? "Copiado" : "Copiar direção"}
                 </button>
               </div>
 

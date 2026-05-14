@@ -90,7 +90,7 @@ export function HistoryPage() {
         )) : (
           <div className="editorial-panel flex min-h-72 flex-col items-center justify-center p-6 text-center text-entrelinhas-muted">
             <History className="mb-4 text-entrelinhas-gold" size={38} />
-            <p className="max-w-xs leading-7">Seus direcionamentos aparecerao aqui depois da primeira situacao trabalhada.</p>
+            <p className="max-w-xs leading-7">Seus direcionamentos aparecerão aqui depois da primeira situação trabalhada.</p>
           </div>
         )}
       </div>
@@ -100,7 +100,7 @@ export function HistoryPage() {
 
 function formatResponseForDisplay(content: string) {
   return parseExecutiveScriptSections(content)
-    .filter((section) => section.body && section.body !== "Ainda nao gerado.")
+    .filter((section) => section.body && section.body !== "Ainda não gerado.")
     .map((section, index) => `${index + 1}. ${section.title}\n${section.body}`)
     .join("\n\n");
 }

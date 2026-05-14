@@ -18,7 +18,7 @@ export function UpdatePasswordPage() {
     setStatus(null);
 
     if (!supabase || !isSupabaseConfigured) {
-      setStatus("Nao conseguimos atualizar sua senha agora.");
+      setStatus("Não conseguimos atualizar sua senha agora.");
       return;
     }
 
@@ -49,7 +49,7 @@ export function UpdatePasswordPage() {
         <form onSubmit={updatePassword} className="editorial-panel brand-fade-in rounded-3xl p-6 sm:p-7">
           <h1 className="text-3xl font-semibold text-white">Nova senha</h1>
           <p className="mt-2 text-sm leading-6 text-entrelinhas-muted">
-            Defina uma nova senha para continuar sua jornada de presenca executiva.
+            Defina uma nova senha para continuar sua jornada de presença executiva.
           </p>
           <label className="mt-7 block">
             <span className="text-sm font-semibold text-white/85">Senha</span>

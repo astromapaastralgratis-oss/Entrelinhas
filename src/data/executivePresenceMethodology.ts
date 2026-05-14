@@ -15,31 +15,31 @@ export const executivePresenceCriticalityWeights: Record<ExecutivePresenceQuesti
 
 export const executivePresenceSubdimensionLabels: Record<ExecutivePresenceSubdimension, string> = {
   assertividade: "Assertividade",
-  influencia: "Influencia",
+  influencia: "Influência",
   leitura_politica: "Leitura politica",
   regulacao_emocional: "Regulacao emocional",
   clareza_de_posicionamento: "Clareza de posicionamento",
   gestao_de_conflito: "Gestao de conflito",
   limites: "Limites",
   tomada_de_decisao: "Tomada de decisao",
-  presenca_executiva: "Presenca executiva",
+  presenca_executiva: "Presença executiva",
   seguranca_relacional: "Seguranca relacional"
 };
 
 export const executiveDynamicLabels: Record<ExecutiveDynamic, string> = {
   hipercompetencia_silenciosa: "Hipercompetencia silenciosa",
   excesso_de_sustentacao_emocional: "Excesso de sustentacao emocional",
-  lideranca_invisivel: "Lideranca invisivel",
+  lideranca_invisivel: "Liderança invisível",
   diplomacia_defensiva: "Diplomacia defensiva",
   firmeza_situacional: "Firmeza situacional",
-  influencia_sem_ocupacao_de_espaco: "Influencia sem ocupacao de espaco",
+  influencia_sem_ocupacao_de_espaco: "Influência sem ocupação de espaço",
   autocensura_estrategica: "Autocensura estrategica",
   excesso_de_adaptacao: "Excesso de adaptacao",
   sobrecarga_por_confiabilidade: "Sobrecarga por confiabilidade",
   validacao_por_performance: "Validacao por performance",
-  controle_como_mecanismo_de_seguranca: "Controle como mecanismo de seguranca",
+  controle_como_mecanismo_de_seguranca: "Controle como mecanismo de segurança",
   evitacao_de_conflito_politico: "Evitacao de conflito politico",
-  presenca_forte_com_desgaste_interno: "Presenca forte com desgaste interno"
+  presenca_forte_com_desgaste_interno: "Presença forte com desgaste interno"
 };
 
 export type ExecutivePresenceMethodologyOption = {
@@ -68,7 +68,7 @@ const optionBlueprint: Record<TraitKey, Omit<ExecutivePresenceMethodologyOption,
     subdimension: "assertividade",
     executiveDynamic: "firmeza_situacional",
     behaviorSignal: "Escolhe agir, delimitar e conduzir o proximo passo.",
-    interpretation: "Indica preferencia por direcao, decisao e responsabilizacao visivel.",
+    interpretation: "Indica preferência por direção, decisão e responsabilização visível.",
     risk: "Pode acelerar antes de mapear sensibilidades politicas ou relacionais.",
     feedback: "Manter firmeza, incluindo criterio e leitura de ambiente antes do fechamento."
   },
@@ -76,25 +76,25 @@ const optionBlueprint: Record<TraitKey, Omit<ExecutivePresenceMethodologyOption,
     subdimension: "influencia",
     executiveDynamic: "influencia_sem_ocupacao_de_espaco",
     behaviorSignal: "Busca adesao, narrativa e mobilizacao de pessoas.",
-    interpretation: "Indica preferencia por construir tracao e tornar a mensagem mais influente.",
-    risk: "Pode buscar receptividade antes de declarar uma posicao suficientemente clara.",
-    feedback: "Converter narrativa em pedido explicito, decisao e autoria visivel."
+    interpretation: "Indica preferência por construir tracao e tornar a mensagem mais influente.",
+    risk: "Pode buscar receptividade antes de declarar uma posição suficientemente clara.",
+    feedback: "Converter narrativa em pedido explícito, decisao e autoria visivel."
   },
   diplomacy: {
     subdimension: "seguranca_relacional",
     executiveDynamic: "diplomacia_defensiva",
-    behaviorSignal: "Prioriza clima, relacao, timing e reducao de tensao.",
-    interpretation: "Indica sensibilidade relacional e capacidade de preservar confianca em temas sensiveis.",
-    risk: "Pode suavizar limites, atrasar confronto necessario ou carregar custo emocional excessivo.",
-    feedback: "Preservar elegancia sem diluir pedido, limite ou recomendacao."
+    behaviorSignal: "Prioriza clima, relação, timing e redução de tensao.",
+    interpretation: "Indica sensibilidade relacional e capacidade de preservar confiança em temas sensíveis.",
+    risk: "Pode suavizar limites, atrasar confronto necessário ou carregar custo emocional excessivo.",
+    feedback: "Preservar elegancia sem diluir pedido, limite ou recomendação."
   },
   precision: {
     subdimension: "tomada_de_decisao",
     executiveDynamic: "controle_como_mecanismo_de_seguranca",
     behaviorSignal: "Busca dados, criterios, riscos e estrutura antes de avancar.",
-    interpretation: "Indica preferencia por consistencia, preparo e reducao de ambiguidade.",
-    risk: "Pode explicar demais, adiar posicao ou usar controle como forma de seguranca.",
-    feedback: "Transformar analise em recomendacao executiva, com nivel de confianca e proximo passo."
+    interpretation: "Indica preferência por consistência, preparo e redução de ambiguidade.",
+    risk: "Pode explicar demais, adiar posição ou usar controle como forma de segurança.",
+    feedback: "Transformar análise em recomendação executiva, com nível de confiança e próximo passo."
   }
 };
 
@@ -138,26 +138,26 @@ const overrides: Record<string, Partial<Omit<ExecutivePresenceMethodologyOption,
 };
 
 const questionBlueprints = [
-  ["q01", "Reuniao sem foco", "Como a usuaria reorganiza energia coletiva, decisao e criterios quando a conversa perde direcao.", "standard", "Situacao recorrente, mas menos reveladora de risco politico ou exposicao direta."],
-  ["q02", "Interrupcao", "Como recupera espaco, autoria e presenca sem perder maturidade executiva.", "critical", "Revela ocupacao de espaco, autoria e resposta sob exposicao publica imediata."],
-  ["q03", "Discordancia com lideranca", "Como sustenta divergencia, criterio politico e seguranca relacional.", "critical", "Mostra capacidade de sustentar posicao quando ha assimetria de poder."],
-  ["q04", "Negociacao salarial", "Como traduz entrega em valor, pedido e posicao profissional.", "elevated", "Evidencia relacao com valor, reconhecimento e pedido explicito."],
-  ["q05", "Apropriacao de ideia", "Como protege autoria, credito e lideranca sem escalar tensao desnecessaria.", "critical", "Expõe padroes de autoria, visibilidade e protecao de contribuicao estrategica."],
+  ["q01", "Reunião sem foco", "Como a usuária reorganiza energia coletiva, decisão e critérios quando a conversa perde direção.", "standard", "Situação recorrente, mas menos reveladora de risco político ou exposição direta."],
+  ["q02", "Interrupção", "Como recupera espaço, autoria e presença sem perder maturidade executiva.", "critical", "Revela ocupação de espaço, autoria e resposta sob exposição pública imediata."],
+  ["q03", "Discordância com liderança", "Como sustenta divergência, critério político e segurança relacional.", "critical", "Mostra capacidade de sustentar posição quando há assimetria de poder."],
+  ["q04", "Negociação salarial", "Como traduz entrega em valor, pedido e posição profissional.", "elevated", "Evidencia relação com valor, reconhecimento e pedido explícito."],
+  ["q05", "Apropriação de ideia", "Como protege autoria, crédito e liderança sem escalar tensão desnecessária.", "critical", "Expõe padrões de autoria, visibilidade e proteção de contribuição estratégica."],
   ["q06", "Definicao de limites", "Como delimita capacidade, prioridade e combinados.", "critical", "Revela sustentacao de limite quando ha risco de sobrecarga ou desagrado."],
-  ["q07", "Pressao", "Qual recurso de presenca aparece primeiro em ambiente de urgencia.", "elevated", "Mostra resposta inicial em tensao, mas com menor especificidade contextual."],
-  ["q08", "Feedback injusto", "Como separa percepcao, fato, imagem e resposta executiva.", "elevated", "Indica regulacao, defesa de imagem e capacidade de resposta sem reatividade."],
-  ["q09", "Apresentacao senior", "Como prepara mensagem, politica, evidencia e pedido de decisao.", "elevated", "Revela preparo de influencia e leitura de audiencia executiva."],
+  ["q07", "Pressão", "Qual recurso de presença aparece primeiro em ambiente de urgência.", "elevated", "Mostra resposta inicial em tensão, mas com menor especificidade contextual."],
+  ["q08", "Feedback injusto", "Como separa percepção, fato, imagem e resposta executiva.", "elevated", "Indica regulação, defesa de imagem e capacidade de resposta sem reatividade."],
+  ["q09", "Apresentação sênior", "Como prepara mensagem, política, evidência e pedido de decisão.", "elevated", "Revela preparo de influência e leitura de audiência executiva."],
   ["q10", "Conversa carregada", "Como regula tensao, ambiguidade e necessidade de fechamento.", "critical", "Mostra padrao de regulacao emocional em conversa de alto custo relacional."],
-  ["q11", "Comite divergente", "Como cria caminho entre interesses, criterios e responsabilidades.", "elevated", "Evidencia conducao entre interesses e maturidade politica."],
+  ["q11", "Comite divergente", "Como cria caminho entre interesses, critérios e responsabilidades.", "elevated", "Evidencia condução entre interesses e maturidade política."],
   ["q12", "Defesa de trabalho", "Como transforma entrega em reconhecimento, autoria e valor percebido.", "standard", "Importante para visibilidade, mas menos tensionada que situacoes de confronto direto."],
   ["q13", "Decisao dificil", "Como escolhe entre velocidade, consenso, impacto humano e risco.", "elevated", "Revela criterios de decisao em ambiguidade e trade-offs."],
-  ["q14", "Posicionamento publico", "Qual base de sustentacao usa quando esta visivel.", "elevated", "Mostra sustentacao de presenca em exposicao profissional."],
+  ["q14", "Posicionamento público", "Qual base de sustentação usa quando está visível.", "elevated", "Mostra sustentação de presença em exposição profissional."],
   ["q15", "Entrega critica atrasada", "Como conduz responsabilidade, urgencia, bloqueios e recuperacao.", "elevated", "Evidencia responsabilidade executiva sob risco de entrega."],
-  ["q16", "Questionamento", "Como responde a objecao sem perder posicao ou relacao.", "elevated", "Revela resposta a contestacao e capacidade de manter eixo."],
-  ["q17", "Ambiente politico", "O que observa primeiro quando poder, influencia e narrativa estao em jogo.", "critical", "Mapeia leitura politica, uma das variaveis mais sensiveis de presenca executiva."],
-  ["q18", "Pedido de apoio", "Como formula necessidade, impacto, contexto e expectativa.", "standard", "Relevante para comunicacao, mas com menor exposicao de conflito ou poder."],
-  ["q19", "Subestimacao", "Como reage quando precisa reposicionar percepcao de valor.", "critical", "Revela resposta a desvalorizacao, visibilidade e reposicionamento de autoridade."],
-  ["q20", "Proximo nivel", "Qual capacidade a usuaria reconhece como alavanca de evolucao profissional.", "elevated", "Mostra direcao de desenvolvimento percebida e tensao dominante de crescimento."]
+  ["q16", "Questionamento", "Como responde a objeção sem perder posição ou relação.", "elevated", "Revela resposta a contestação e capacidade de manter eixo."],
+  ["q17", "Ambiente político", "O que observa primeiro quando poder, influência e narrativa estão em jogo.", "critical", "Mapeia leitura política, uma das variáveis mais sensíveis de presença executiva."],
+  ["q18", "Pedido de apoio", "Como formula necessidade, impacto, contexto e expectativa.", "standard", "Relevante para comunicação, mas com menor exposição de conflito ou poder."],
+  ["q19", "Subestimação", "Como reage quando precisa reposicionar percepção de valor.", "critical", "Revela resposta a desvalorização, visibilidade e reposicionamento de autoridade."],
+  ["q20", "Próximo nível", "Qual capacidade a usuária reconhece como alavanca de evolução profissional.", "elevated", "Mostra direção de desenvolvimento percebida e tensão dominante de crescimento."]
 ] as const;
 
 const traitOptionOrder: TraitKey[] = ["direction", "influence", "diplomacy", "precision"];

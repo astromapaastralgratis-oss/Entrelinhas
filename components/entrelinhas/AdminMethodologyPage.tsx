@@ -9,12 +9,12 @@ export function AdminMethodologyPage() {
       <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Metodologia interna</p>
       <h1 className="mt-3 text-3xl font-semibold text-white sm:text-5xl">Raio-X Executivo</h1>
       <p className="mt-3 max-w-3xl text-sm leading-6 text-entrelinhas-muted sm:text-base">
-        Leitura estrategica proprietaria baseada em comportamentos observaveis em situacoes corporativas. Nao e diagnostico psicologico,
-        nao mede personalidade clinica e nao substitui avaliacao profissional especializada.
+        Leitura estratégica proprietaria baseada em comportamentos observáveis em situações corporativas. Não e diagnóstico psicologico,
+        não mede personalidade clínica e não substitui avaliação profissional especializada.
       </p>
 
       <section className="mt-6 grid gap-4 lg:grid-cols-3">
-        <InfoCard title="Dimensoes" items={["Direcao", "Influencia", "Diplomacia", "Precisao"]} />
+        <InfoCard title="Dimensoes" items={["Direção", "Influência", "Diplomacia", "Precisao"]} />
         <InfoCard title="Subdimensoes" items={Object.values(executivePresenceSubdimensionLabels)} />
         <InfoCard title="Dinamicas executivas" items={Object.values(executiveDynamicLabels)} />
       </section>
@@ -56,9 +56,9 @@ export function AdminMethodologyPage() {
       <section className="editorial-panel mt-6 p-5">
         <h2 className="text-xl font-semibold text-white">Referencias conceituais</h2>
         <p className="mt-3 max-w-3xl text-sm leading-6 text-entrelinhas-muted">
-          Comunicacao Nao Violenta, inteligencia emocional, presenca executiva, seguranca psicologica, influencia,
-          feedback, gestao de conflitos, tomada de decisao e lideranca feminina sao usadas como referencias de desenho
-          conceitual. Elas nao representam validacao cientifica do instrumento.
+          Comunicacao Não Violenta, inteligencia emocional, presença executiva, segurança psicológica, influência,
+          feedback, gestão de conflitos, tomada de decisão e liderança feminina sao usadas como referencias de desenho
+          conceitual. Elas não representam validação científica do instrumento.
         </p>
       </section>
     </div>

@@ -86,7 +86,7 @@ export function RaioXFlow() {
         .maybeSingle();
 
       if (profileError) {
-        setSavedResultError("Nao conseguimos recuperar seu ultimo direcionamento. Voce pode refazer o Raio-X agora.");
+        setSavedResultError("Não conseguimos recuperar seu ultimo direcionamento. Você pode refazer o Raio-X agora.");
         setCheckingSavedResult(false);
         return;
       }
@@ -110,7 +110,7 @@ export function RaioXFlow() {
         .maybeSingle();
 
       if (error) {
-        setSavedResultError("Nao conseguimos recuperar seu ultimo direcionamento. Voce pode refazer o Raio-X agora.");
+        setSavedResultError("Não conseguimos recuperar seu ultimo direcionamento. Você pode refazer o Raio-X agora.");
         setCheckingSavedResult(false);
         return;
       }
@@ -151,7 +151,7 @@ export function RaioXFlow() {
       setStage("summary");
       setCheckingSavedResult(false);
     } catch {
-      setSavedResultError("Nao conseguimos recuperar seu ultimo direcionamento. Voce pode refazer o Raio-X agora.");
+      setSavedResultError("Não conseguimos recuperar seu ultimo direcionamento. Você pode refazer o Raio-X agora.");
       setCheckingSavedResult(false);
     }
   }
@@ -236,7 +236,7 @@ export function RaioXFlow() {
       timers.current.push(loadingTimer);
     } catch {
       setResult(null);
-      setSavedResultError("Nao conseguimos gravar seu direcionamento com seguranca. Refaca o Raio-X para concluir sua entrada.");
+      setSavedResultError("Não conseguimos gravar seu direcionamento com segurança. Refaca o Raio-X para concluir sua entrada.");
       setStage("summary");
     }
   }

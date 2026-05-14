@@ -12,7 +12,7 @@ type RaioXResultSummaryProps = {
 };
 
 const confidenceCopy = {
-  high: "Seu resultado mostra um padrao bem definido.",
+  high: "Seu resultado mostra um padrão bem definido.",
   medium: "Seu resultado mostra um perfil consistente, com nuances importantes.",
   low: "Seu resultado mostra um perfil equilibrado entre dois estilos."
 };
@@ -30,7 +30,7 @@ export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPla
           <div className="flex items-center gap-4">
             <BrandAvatar className="h-14 w-14" size={72} />
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Seu direcionamento estrategico</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Seu direcionamento estratégico</p>
               <h1 className="mt-1 text-3xl font-semibold leading-tight text-white sm:text-4xl">{result.profile.name}</h1>
             </div>
           </div>
@@ -92,7 +92,7 @@ export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPla
               onClick={onViewReading}
               className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-entrelinhas-gold px-5 py-4 text-sm font-bold text-entrelinhas-ink shadow-gold transition duration-300 hover:-translate-y-0.5 hover:bg-entrelinhas-goldLight"
             >
-              Ver direcao <ArrowRight size={17} />
+              Ver direção <ArrowRight size={17} />
             </button>
             <button
               onClick={onViewPlan}
@@ -111,7 +111,7 @@ export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPla
 
         {result.conditionalInsights?.length ? (
           <div className="border-t border-entrelinhas-gold/12 p-5 sm:p-7">
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-gold">Sinais especificos do seu padrao</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-gold">Sinais especificos do seu padrão</p>
             <div className="mt-4 grid gap-3 md:grid-cols-3">
               {result.conditionalInsights.slice(0, 3).map((insight) => (
                 <div key={insight.id} className="rounded-2xl border border-entrelinhas-gold/10 bg-entrelinhas-navy/42 p-4">

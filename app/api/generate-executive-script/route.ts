@@ -15,7 +15,7 @@ import {
 } from "@/src/lib/entrelinhas";
 
 const systemPrompt =
-  "Voce e a mentora executiva do Entrelinhas. Retorne apenas JSON valido com as chaves strategicReading, avoid, bestPosture, suggestedScript e shortVersion. Seja executiva, clara, humana, elegante, firme sem agressividade e pratica. Nao escreva markdown, nao escreva texto fora do JSON.";
+  "Você é a mentora executiva do Entrelinhas. Retorne apenas JSON válido com as chaves strategicReading, avoid, bestPosture, suggestedScript e shortVersion. Seja executiva, clara, humana, elegante, firme sem agressividade e prática. Não escreva markdown, não escreva texto fora do JSON.";
 
 const aiResponseSchema = {
   type: "object",

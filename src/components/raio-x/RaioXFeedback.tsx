@@ -35,7 +35,7 @@ const personalizationOptions: Array<{ value: BetaPersonalizationRating; label: s
   { value: "sim_muito", label: "Sim, muito" },
   { value: "em_partes", label: "Em partes" },
   { value: "pouco", label: "Pouco" },
-  { value: "nao", label: "Nao" }
+  { value: "nao", label: "Não" }
 ];
 
 const depthOptions: Array<{ value: BetaDepthRating; label: string }> = [
@@ -48,13 +48,13 @@ const depthOptions: Array<{ value: BetaDepthRating; label: string }> = [
 const intentOptions: Array<{ value: BetaIntentRating; label: string }> = [
   { value: "sim", label: "Sim" },
   { value: "talvez", label: "Talvez" },
-  { value: "nao", label: "Nao" }
+  { value: "nao", label: "Não" }
 ];
 
 const toneOptions: Array<{ value: BetaToneRating; label: string }> = [
   { value: "humano_sofisticado", label: "Humano e sofisticado" },
-  { value: "um_pouco_generico", label: "Um pouco generico" },
-  { value: "muito_tecnico", label: "Muito tecnico" },
+  { value: "um_pouco_generico", label: "Um pouco genérico" },
+  { value: "muito_tecnico", label: "Muito técnico" },
   { value: "muito_emocional", label: "Muito emocional" }
 ];
 
@@ -99,7 +99,7 @@ export function RaioXFeedback({ resultId, profileId, methodologyVersion }: RaioX
             Obrigada
           </p>
           <p className="mt-3 text-sm leading-6 text-entrelinhas-muted">
-            Sua percepcao ajuda a tornar o Entrelinhas mais preciso e humano.
+            Sua percepção ajuda a tornar o Entrelinhas mais preciso e humano.
           </p>
         </div>
       </div>
@@ -119,7 +119,7 @@ export function RaioXFeedback({ resultId, profileId, methodologyVersion }: RaioX
               Feedback beta
             </span>
             <span className="mt-2 block text-base font-semibold text-white">
-              Deixar minha percepcao sobre a leitura
+              Deixar minha percepção sobre a leitura
             </span>
           </span>
           <ChevronDown
@@ -131,25 +131,25 @@ export function RaioXFeedback({ resultId, profileId, methodologyVersion }: RaioX
         {isOpen ? (
           <div className="mt-6 space-y-5">
             <FeedbackChoiceGroup
-              label="A leitura pareceu feita para voce?"
+              label="A leitura pareceu feita para você?"
               options={personalizationOptions}
               value={draft.personalizationRating}
               onChange={(personalizationRating) => setDraft((current) => ({ ...current, personalizationRating }))}
             />
             <FeedbackChoiceGroup
-              label="O nivel de profundidade foi:"
+              label="O nível de profundidade foi:"
               options={depthOptions}
               value={draft.depthRating}
               onChange={(depthRating) => setDraft((current) => ({ ...current, depthRating }))}
             />
             <FeedbackChoiceGroup
-              label="Voce salvaria ou compartilharia algum trecho?"
+              label="Você salvaria ou compartilharia algum trecho?"
               options={intentOptions}
               value={draft.wouldShare}
               onChange={(wouldShare) => setDraft((current) => ({ ...current, wouldShare }))}
             />
             <FeedbackChoiceGroup
-              label="Voce voltaria para usar de novo?"
+              label="Você voltaria para usar de novo?"
               options={intentOptions}
               value={draft.wouldReturn}
               onChange={(wouldReturn) => setDraft((current) => ({ ...current, wouldReturn }))}
@@ -163,17 +163,17 @@ export function RaioXFeedback({ resultId, profileId, methodologyVersion }: RaioX
 
             <div className="grid gap-4 lg:grid-cols-3">
               <FeedbackTextarea
-                label="Qual parte mais pareceu real para voce?"
+                label="Qual parte mais pareceu real para você?"
                 value={draft.mostRealPart}
                 onChange={(mostRealPart) => setDraft((current) => ({ ...current, mostRealPart }))}
               />
               <FeedbackTextarea
-                label="Qual parte pareceu generica ou menos precisa?"
+                label="Qual parte pareceu genérica ou menos precisa?"
                 value={draft.genericPart}
                 onChange={(genericPart) => setDraft((current) => ({ ...current, genericPart }))}
               />
               <FeedbackTextarea
-                label="O que voce melhoraria?"
+                label="O que você melhoraria?"
                 value={draft.improvementSuggestion}
                 onChange={(improvementSuggestion) => setDraft((current) => ({ ...current, improvementSuggestion }))}
               />
@@ -186,7 +186,7 @@ export function RaioXFeedback({ resultId, profileId, methodologyVersion }: RaioX
               className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-entrelinhas-gold/24 bg-entrelinhas-gold/10 px-5 py-3 text-sm font-bold text-entrelinhas-goldLight transition duration-300 hover:border-entrelinhas-gold/45 hover:bg-entrelinhas-gold/16 disabled:cursor-not-allowed disabled:opacity-45 sm:w-auto"
             >
               <Send size={16} />
-              {status === "saving" ? "Registrando..." : "Enviar percepcao"}
+              {status === "saving" ? "Registrando..." : "Enviar percepção"}
             </button>
           </div>
         ) : null}

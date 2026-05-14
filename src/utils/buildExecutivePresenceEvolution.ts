@@ -27,14 +27,14 @@ export function buildExecutivePresenceEvolution(
     buildIncreaseSignal(
       "positioning_clarity_increased",
       "Mais clareza de posicionamento",
-      "aparece mais clareza para nomear posicao, impacto e proximo movimento",
+      "aparece mais clareza para nomear posição, impacto e proximo movimento",
       previous.subdimensionScores?.clareza_de_posicionamento,
       current.subdimensionScores?.clareza_de_posicionamento
     ),
     buildReductionSignal(
       "defensive_diplomacy_reduced",
       "Menos diplomacia defensiva",
-      "a diplomacia defensiva aparece menos intensa, abrindo espaco para conversas mais diretas",
+      "a diplomacia defensiva aparece menos intensa, abrindo espaço para conversas mais diretas",
       previous.executiveDynamicScores?.diplomacia_defensiva,
       current.executiveDynamicScores?.diplomacia_defensiva
     ),
@@ -54,15 +54,15 @@ export function buildExecutivePresenceEvolution(
     ),
     buildIncreaseSignal(
       "space_ownership_increased",
-      "Mais ocupacao de espaco",
-      "aparece mais presenca para ocupar espaco, autoria e lugar de conducao",
+      "Mais ocupacao de espaço",
+      "aparece mais presença para ocupar espaço, autoria e lugar de condução",
       previous.subdimensionScores?.presenca_executiva,
       current.subdimensionScores?.presenca_executiva
     ),
     buildIncreaseSignal(
       "presence_strain_increased",
-      "Mais presenca com desgaste interno",
-      "a presenca forte com desgaste interno aparece mais intensa e pede distribuicao de tensao",
+      "Mais presença com desgaste interno",
+      "a presença forte com desgaste interno aparece mais intensa e pede distribuição de tensão",
       previous.executiveDynamicScores?.presenca_forte_com_desgaste_interno,
       current.executiveDynamicScores?.presenca_forte_com_desgaste_interno
     ),

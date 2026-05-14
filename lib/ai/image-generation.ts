@@ -8,7 +8,7 @@ import type {
 } from "@/types/image-generation";
 
 const mandatoryPostDirection =
-  "Arte final postavel do Entrelinhas. O sistema renderiza o texto na arte final; a IA de imagem nao deve escrever palavras. Design premium mistico moderno, alto contraste, margens seguras, composicao editorial, uma unica tela independente por post.";
+  "Arte final postável do Entrelinhas. O sistema renderiza o texto na arte final; a IA de imagem não deve escrever palavras. Design premium místico moderno, alto contraste, margens seguras, composição editorial, uma única tela independente por post.";
 
 const mandatoryNegativePrompt =
   "texto pequeno, frase cortada, palavras aleatorias, erro ortografico, grid, colagem, multiplos cards, multiplas telas, baixa legibilidade, excesso de elementos, fonte distorcida, texto fora da margem, layout poluido, borda branca";
@@ -37,7 +37,7 @@ export function validateImageGenerationInput(input: GenerateImageRequest) {
   if (!input.ratio) errors.push("Proporcao obrigatoria ausente.");
   if (!input.prompt) errors.push("Estilo do post obrigatorio ausente.");
   if (asksForForbiddenMultiImageLayout(input.prompt)) {
-    errors.push("Estilo do post nao pode pedir grid, colagem ou multiplas telas.");
+    errors.push("Estilo do post não pode pedir grid, colagem ou múltiplas telas.");
   }
   errors.push(...validatePostArtworkInput(input).errors);
 
@@ -251,7 +251,7 @@ function asksForForbiddenMultiImageLayout(prompt: string) {
 
 function readablePersistenceError(error: unknown) {
   if (error instanceof Error) return error.message;
-  if (!error) return "Nao foi possivel salvar o post no historico.";
+  if (!error) return "Não foi possível salvar o post no histórico.";
   if (typeof error === "string") return error;
   if (typeof error === "object") {
     const record = error as Record<string, unknown>;

@@ -82,12 +82,12 @@ function buildNarrativeSlide(
       subtitle: trimWords(copy.subtitle || `Uma leitura simples sobre ${theme}.`, 18)
     },
     identificacao: {
-      title: "Talvez voce ja tenha sentido isso.",
+      title: "Talvez você já tenha sentido isso.",
       subtitle: trimWords(`Quando ${theme} aparece, o dia pede mais escuta.`, 18)
     },
     explicacao: {
-      title: trimWords(`${labelScience(science)} nao precisa complicar.`, 12),
-      subtitle: trimWords(`Use essa base como pista pratica, nao como previsao absoluta.`, 18)
+      title: trimWords(`${labelScience(science)} não precisa complicar.`, 12),
+      subtitle: trimWords(`Use essa base como pista prática, não como previsão absoluta.`, 18)
     },
     aplicacao: {
       title: "Leve isso para uma escolha pequena.",
@@ -110,11 +110,11 @@ function buildNarrativeSlide(
       subtitle: trimWords(`Nem toda sensacao precisa virar urgencia agora.`, 18)
     },
     acao: {
-      title: "Escolha um passo possivel.",
-      subtitle: trimWords(`Menos pressa, mais direcao para atravessar o dia.`, 18)
+      title: "Escolha um passo possível.",
+      subtitle: trimWords(`Menos pressa, mais direção para atravessar o dia.`, 18)
     },
     cta: {
-      title: isLast ? cta : "Guarde essa direcao.",
+      title: isLast ? cta : "Guarde essa direção.",
       subtitle: trimWords(isLast ? "Use este post como lembrete simples para hoje." : cta, 18)
     }
   };
@@ -160,7 +160,7 @@ function chooseHook(planItem: EditorialPlanItem) {
   if (science.includes("tarot")) return "Antes de decidir, observe o sinal.";
   if (science.includes("numerologia")) return "Seu dia tem um numero-guia.";
   if (science.includes("astrologia")) return "O ceu tambem fala em detalhes.";
-  return "O que voce sente pode ter uma pista.";
+  return "O que você sente pode ter uma pista.";
 }
 
 function chooseSimpleCta(ctaType: string) {

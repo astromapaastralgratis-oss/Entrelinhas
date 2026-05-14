@@ -3,16 +3,16 @@ import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { BrandAvatar, BrandLockup } from "@/components/entrelinhas/BrandAssets";
 
 const principles = [
-  "Estrategia tambem e saber como ocupar espaco.",
-  "Influencia e construida antes da decisao.",
-  "Presenca executiva muda a forma como voce e percebida."
+  "Estratégia tambem e saber como ocupar espaço.",
+  "Influência e construida antes da decisão.",
+  "Presença executiva muda a forma como você e percebida."
 ];
 
 const commitments = [
-  "Direcionamento estrategico para situacoes corporativas reais.",
-  "Repertorio executivo para decisoes, limites e reconhecimento.",
-  "Conducao profissional com maturidade, criterio e visao de negocio.",
-  "Evolucao continua para ampliar influencia ao longo da carreira."
+  "Direcionamento estratégico para situações corporativas reais.",
+  "Repertorio executivo para decisões, limites e reconhecimento.",
+  "Condução profissional com maturidade, critério e visão de negocio.",
+  "Evolução continua para ampliar influência ao longo da carreira."
 ];
 
 export default function PropositoPage() {
@@ -36,7 +36,7 @@ export default function PropositoPage() {
               Uma plataforma para mulheres que querem crescer com inteligencia executiva.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-entrelinhas-muted">
-              O Entrelinhas transforma vivencias corporativas reais em direcao, repertorio e maturidade profissional.
+              O Entrelinhas transforma vivencias corporativas reais em direção, repertorio e maturidade profissional.
             </p>
             <Link className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-entrelinhas-gold px-6 py-4 text-sm font-bold text-entrelinhas-ink shadow-gold transition duration-300 hover:-translate-y-0.5 hover:bg-entrelinhas-goldLight sm:w-auto" href="/signup">
               Fazer meu Raio-X Executivo <ArrowRight size={18} />
@@ -60,7 +60,7 @@ export default function PropositoPage() {
             <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">O que sustenta a mentoria</p>
-                <h2 className="mt-3 text-3xl font-semibold leading-tight text-white">Ambicao elegante, pensamento estrategico e crescimento sustentavel.</h2>
+                <h2 className="mt-3 text-3xl font-semibold leading-tight text-white">Ambicao elegante, pensamento estratégico e crescimento sustentavel.</h2>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
                 {commitments.map((commitment) => (

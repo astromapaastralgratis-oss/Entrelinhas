@@ -4,23 +4,23 @@ import { BrandAvatar } from "@/components/entrelinhas/BrandAssets";
 
 const pillars = [
   {
-    title: "Presenca para influenciar",
-    description: "Fortaleca autoridade e sustentacao executiva.",
+    title: "Presença para influenciar",
+    description: "Fortaleça autoridade e sustentação executiva.",
     icon: Crown
   },
   {
-    title: "Estrategia para crescer",
-    description: "Interprete contextos corporativos com inteligencia.",
+    title: "Estratégia para crescer",
+    description: "Interprete contextos corporativos com inteligência.",
     icon: Compass
   },
   {
-    title: "Repertorio para liderar",
-    description: "Amplie visao, maturidade e capacidade de conducao.",
+    title: "Repertório para liderar",
+    description: "Amplie visão, maturidade e capacidade de condução.",
     icon: Sparkles
   },
   {
-    title: "Evolucao continua",
-    description: "Desenvolva influencia e crescimento sustentavel.",
+    title: "Evolução contínua",
+    description: "Desenvolva influência e crescimento sustentável.",
     icon: Route
   }
 ];
@@ -151,10 +151,10 @@ export function LandingPage() {
 
 function StrategicPreview() {
   const rows = [
-    ["Situacao", "Quando voce precisa lidar com uma decisao sensivel no ambiente corporativo."],
-    ["Direcionamento", "O diferencial nao esta em reagir rapido. Esta em compreender o contexto antes de mover sua posicao."],
-    ["Estrategia", "Mapeie impactos, interesses e riscos antes da tomada de decisao."],
-    ["Plano de acao", "Estruture sua conducao com clareza, consistencia e visao de negocio."]
+    ["Situação", "Quando você precisa lidar com uma decisão sensível no ambiente corporativo."],
+    ["Direcionamento", "O diferencial não está em reagir rápido. Está em compreender o contexto antes de mover sua posição."],
+    ["Estratégia", "Mapeie impactos, interesses e riscos antes da tomada de decisão."],
+    ["Plano de ação", "Estruture sua condução com clareza, consistência e visão de negócio."]
   ];
 
   return (
@@ -165,7 +165,7 @@ function StrategicPreview() {
         </span>
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-entrelinhas-gold">previa do seu direcionamento estrategico</p>
-          <p className="mt-1 text-xl font-semibold text-white">Conducao executiva</p>
+          <p className="mt-1 text-xl font-semibold text-white">Condução executiva</p>
         </div>
       </div>
       <div className="mt-5 space-y-4">

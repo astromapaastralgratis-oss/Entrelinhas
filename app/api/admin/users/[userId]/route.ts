@@ -53,7 +53,7 @@ export async function PATCH(request: Request, { params }: { params: { userId: st
 
     if (body.action === "delete_user") {
       if (userId === adminUserId) {
-        return Response.json({ error: "Voce nao pode excluir sua propria conta administrativa." }, { status: 400 });
+        return Response.json({ error: "Você não pode excluir sua própria conta administrativa." }, { status: 400 });
       }
 
       await Promise.all([

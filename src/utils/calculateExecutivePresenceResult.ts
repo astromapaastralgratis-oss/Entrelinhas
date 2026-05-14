@@ -310,7 +310,7 @@ function buildContextualModifiers(contextSnapshot: ExecutivePresenceContextSnaps
 
   const seniority = contextSnapshot.seniority?.toLowerCase() ?? "";
   const seniorityLens = seniority.includes("lider") || seniority.includes("dire") || seniority.includes("ger")
-    ? "A devolutiva prioriza influencia, decisao, leitura politica e conducao de contextos complexos."
+    ? "A devolutiva prioriza influência, decisão, leitura política e condução de contextos complexos."
     : seniority
       ? "A devolutiva prioriza clareza, repertorio, sustentacao de limites e construcao de autoridade."
       : null;
@@ -351,8 +351,8 @@ function buildExecutiveContradictions({
     contradictions.push({
       id: "high_delivery_low_visibility",
       title: "Alta entrega com baixa visibilidade",
-      summary: "Voce tende a sustentar qualidade, preparo e consistencia, mas pode deixar o impacto menos visivel do que ele precisa ser.",
-      risk: "Sua contribuicao pode ser percebida como confiavel, mas nao necessariamente como lideranca, autoria ou influencia estrategica.",
+      summary: "Você tende a sustentar qualidade, preparo e consistência, mas pode deixar o impacto menos visível do que ele precisa ser.",
+      risk: "Sua contribuição pode ser percebida como confiável, mas não necessariamente como liderança, autoria ou influência estratégica.",
       microAdjustment: "Antes de assumir uma nova entrega, nomeie o impacto da entrega anterior e conecte sua contribuicao a uma decisao do negocio.",
       thirtyDayAction: "Escolha uma entrega relevante por semana e transforme resultado em narrativa executiva: contexto, impacto, decisao apoiada e proximo movimento.",
       severity: getSeverity([
@@ -371,10 +371,10 @@ function buildExecutiveContradictions({
     contradictions.push({
       id: "high_diplomacy_low_boundaries",
       title: "Alta diplomacia com limite baixo",
-      summary: "Voce tende a preservar relacoes e reduzir atrito, mesmo quando o contexto pede uma fronteira mais explicita.",
-      risk: "A sua elegancia pode ser confundida com disponibilidade ilimitada, e o custo da harmonia pode cair sobre voce.",
-      microAdjustment: "Abra conversas sensiveis pelo limite, nao pela justificativa: diga o que e possivel, o que nao e, e qual alternativa sustenta o objetivo.",
-      thirtyDayAction: "Mapeie tres situacoes em que voce costuma acomodar demandas e pratique uma resposta com limite, criterio e alternativa objetiva.",
+      summary: "Você tende a preservar relações e reduzir atrito, mesmo quando o contexto pede uma fronteira mais explícita.",
+      risk: "A sua elegância pode ser confundida com disponibilidade ilimitada, e o custo da harmonia pode cair sobre você.",
+      microAdjustment: "Abra conversas sensíveis pelo limite, não pela justificativa: diga o que é possível, o que não é, e qual alternativa sustenta o objetivo.",
+      thirtyDayAction: "Mapeie três situações em que você costuma acomodar demandas e pratique uma resposta com limite, critério e alternativa objetiva.",
       severity: getSeverity([
         scores.diplomacy,
         subdimensionScores.seguranca_relacional,
@@ -389,11 +389,11 @@ function buildExecutiveContradictions({
   ) {
     contradictions.push({
       id: "high_precision_low_decision",
-      title: "Alta precisao com baixa decisao",
-      summary: "Voce tende a buscar criterio, dados e seguranca antes de se expor, mas pode demorar a transformar analise em posicao.",
-      risk: "O excesso de preparo pode fazer sua maturidade parecer hesitacao quando o ambiente espera recomendacao, nao apenas diagnostico.",
-      microAdjustment: "Declare uma recomendacao com nivel de confianca: 'com o que temos hoje, meu caminho recomendado e este'.",
-      thirtyDayAction: "Em reunioes de decisao, pratique chegar com uma recomendacao, dois riscos e um criterio de revisao, sem tentar fechar todas as variaveis.",
+      title: "Alta precisão com baixa decisão",
+      summary: "Você tende a buscar critério, dados e segurança antes de se expor, mas pode demorar a transformar análise em posição.",
+      risk: "O excesso de preparo pode fazer sua maturidade parecer hesitação quando o ambiente espera recomendação, não apenas diagnóstico.",
+      microAdjustment: "Declare uma recomendação com nível de confiança: 'com o que temos hoje, meu caminho recomendado é este'.",
+      thirtyDayAction: "Em reuniões de decisão, pratique chegar com uma recomendação, dois riscos e um critério de revisão, sem tentar fechar todas as variáveis.",
       severity: getSeverity([
         scores.precision,
         executiveDynamicScores.controle_como_mecanismo_de_seguranca,
@@ -410,11 +410,11 @@ function buildExecutiveContradictions({
   ) {
     contradictions.push({
       id: "high_influence_low_space_ownership",
-      title: "Influencia alta com pouca ocupacao de espaco",
-      summary: "Voce tende a construir adesao e ler pessoas, mas pode deixar sua posicao menos explicita do que a sua influencia permite.",
+      title: "Influência alta com pouca ocupação de espaço",
+      summary: "Você tende a construir adesão e ler pessoas, mas pode deixar sua posição menos explícita do que a sua influência permite.",
       risk: "Sua capacidade de mobilizar pode beneficiar a decisao sem consolidar sua autoria, autoridade ou lugar na conversa.",
-      microAdjustment: "Depois de criar alinhamento, assuma a frase de conducao: 'minha recomendacao e esta, e proponho seguir por aqui'.",
-      thirtyDayAction: "Escolha uma conversa por semana para sair do papel de articuladora e ocupar tambem o papel de autora da direcao.",
+      microAdjustment: "Depois de criar alinhamento, assuma a frase de condução: 'minha recomendação é esta, e proponho seguir por aqui'.",
+      thirtyDayAction: "Escolha uma conversa por semana para sair do papel de articuladora e ocupar também o papel de autora da direção.",
       severity: getSeverity([
         scores.influence,
         subdimensionScores.influencia,
@@ -429,11 +429,11 @@ function buildExecutiveContradictions({
   ) {
     contradictions.push({
       id: "strong_presence_internal_strain",
-      title: "Presenca forte com desgaste interno",
-      summary: "Por fora, voce pode sustentar firmeza e controle; por dentro, tende a absorver mais tensao do que distribui.",
-      risk: "O ambiente pode ler solidez, enquanto voce paga o custo silencioso de carregar conflito, expectativa e responsabilidade demais.",
+      title: "Presença forte com desgaste interno",
+      summary: "Por fora, você pode sustentar firmeza e controle; por dentro, tende a absorver mais tensão do que distribui.",
+      risk: "O ambiente pode ler solidez, enquanto você paga o custo silencioso de carregar conflito, expectativa e responsabilidade demais.",
       microAdjustment: "Quando a tensao subir, nomeie responsabilidades compartilhadas e evite se colocar como unica sustentacao da conversa.",
-      thirtyDayAction: "Revise semanalmente onde voce sustentou tensoes sozinha e transforme uma dessas situacoes em pedido, combinados ou redistribuicao clara.",
+      thirtyDayAction: "Revise semanalmente onde você sustentou tensões sozinha e transforme uma dessas situações em pedido, combinados ou redistribuição clara.",
       severity: getSeverity([
         subdimensionScores.presenca_executiva,
         executiveDynamicScores.presenca_forte_com_desgaste_interno,
@@ -475,37 +475,37 @@ function buildConditionalInsights({
 
   addDynamicInsight(insights, executiveDynamicIntensities, "hipercompetencia_silenciosa", "high", {
     title: "Hipercompetencia silenciosa",
-    description: "Seu padrao sugere alta entrega, preparo e consistencia, mas com risco de deixar impacto pouco visivel.",
+    description: "Seu padrão sugere alta entrega, preparo e consistência, mas com risco de deixar impacto pouco visível.",
     recommendation: "Transforme entrega em narrativa executiva: impacto, decisao apoiada e proximo movimento."
   });
   addDynamicInsight(insights, executiveDynamicIntensities, "lideranca_invisivel", "medium", {
-    title: "Lideranca invisivel",
-    description: "Voce tende a sustentar temas relevantes, mas pode nao ocupar explicitamente autoria, escopo e credito.",
+    title: "Liderança invisível",
+    description: "Você tende a sustentar temas relevantes, mas pode não ocupar explicitamente autoria, escopo e crédito.",
     recommendation: "Nomeie sua contribuicao e proponha liderar o proximo passo quando sua participacao estruturou o caminho."
   });
   addDynamicInsight(insights, executiveDynamicIntensities, "diplomacia_defensiva", "high", {
     title: "Diplomacia defensiva",
     description: "Ha sinais de cuidado relacional forte, com risco de suavizar demais pedidos e limites.",
-    recommendation: "Preserve elegancia, mas abra conversas sensiveis com fato, posicao e pedido em frases curtas."
+    recommendation: "Preserve elegância, mas abra conversas sensíveis com fato, posição e pedido em frases curtas."
   });
   addDynamicInsight(insights, executiveDynamicIntensities, "influencia_sem_ocupacao_de_espaco", "high", {
-    title: "Influencia sem ocupacao de espaco",
-    description: "Voce tende a criar adesao, mas pode deixar a propria posicao menos explicita do que o contexto exige.",
-    recommendation: "Use influencia para conduzir decisao: tese central, criterio e pedido claro."
+    title: "Influência sem ocupação de espaço",
+    description: "Você tende a criar adesão, mas pode deixar a própria posição menos explícita do que o contexto exige.",
+    recommendation: "Use influência para conduzir decisão: tese central, critério e pedido claro."
   });
   addDynamicInsight(insights, executiveDynamicIntensities, "controle_como_mecanismo_de_seguranca", "high", {
     title: "Controle como mecanismo de seguranca",
-    description: "Ha preferencia por reduzir ambiguidade por dados e criterios, o que fortalece qualidade, mas pode atrasar exposicao.",
-    recommendation: "Declare nivel de confianca e recomende o melhor caminho com a informacao disponivel."
+    description: "Há preferência por reduzir ambiguidade por dados e critérios, o que fortalece qualidade, mas pode atrasar exposição.",
+    recommendation: "Declare nível de confiança e recomende o melhor caminho com a informação disponível."
   });
   addDynamicInsight(insights, executiveDynamicIntensities, "presenca_forte_com_desgaste_interno", "medium", {
-    title: "Presenca forte com desgaste interno",
-    description: "Sua presenca pode aparecer como firmeza externa enquanto voce absorve tensao demais internamente.",
+    title: "Presença forte com desgaste interno",
+    description: "Sua presença pode aparecer como firmeza externa enquanto você absorve tensão demais internamente.",
     recommendation: "Distribua responsabilidade, nomeie limites e evite sustentar sozinha o custo emocional da decisao."
   });
   addDynamicInsight(insights, executiveDynamicIntensities, "validacao_por_performance", "medium", {
     title: "Validacao por performance",
-    description: "Existe tendencia a provar valor por entrega, evidencia ou preparo antes de pedir reconhecimento.",
+    description: "Existe tendência a provar valor por entrega, evidência ou preparo antes de pedir reconhecimento.",
     recommendation: "Apresente impacto antes de assumir novas demandas e conecte resultado a escopo, reconhecimento e decisao."
   });
 
@@ -514,7 +514,7 @@ function buildConditionalInsights({
       id: "limites_com_cuidado_relacional",
       title: "Limites com cuidado relacional",
       description: "O tema limites aparece com forte preocupacao relacional.",
-      recommendation: "Defina o limite primeiro e use o cuidado apenas para calibrar tom, nao para reduzir a mensagem."
+      recommendation: "Defina o limite primeiro e use o cuidado apenas para calibrar tom, não para reduzir a mensagem."
     });
   }
 
@@ -522,7 +522,7 @@ function buildConditionalInsights({
     insights.push({
       id: "perfil_combinado",
       title: "Padrao combinado",
-      description: "Seu resultado nao esta concentrado em um unico eixo; ha uma tensao produtiva entre dois modos de presenca.",
+      description: "Seu resultado não está concentrado em um único eixo; há uma tensão produtiva entre dois modos de presença.",
       recommendation: "Use o eixo dominante para conduzir e o secundario para calibrar risco, timing e adesao."
     });
   }
@@ -532,7 +532,7 @@ function buildConditionalInsights({
       id: "desafio_declarado",
       title: "Desafio declarado",
       description: `O desafio informado foi: ${contextSnapshot.mainChallenge}.`,
-      recommendation: "Use esse tema como laboratorio principal dos proximos 30 dias de evolucao executiva."
+      recommendation: "Use esse tema como laboratório principal dos próximos 30 dias de evolução executiva."
     });
   }
 

@@ -44,10 +44,10 @@ export function DashboardPage() {
               Ola, {name}.
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-7 text-entrelinhas-muted sm:text-lg">
-              Evolucao profissional exige movimentos bem escolhidos.
+              Evolução profissional exige movimentos bem escolhidos.
             </p>
             <Link href="/mentor" className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-entrelinhas-gold px-5 py-4 text-sm font-bold text-entrelinhas-ink shadow-gold transition duration-300 hover:-translate-y-0.5 hover:bg-entrelinhas-goldLight sm:w-fit">
-              Receber direcionamento estrategico <ArrowRight size={18} />
+              Receber direcionamento estratégico <ArrowRight size={18} />
             </Link>
           </div>
 
@@ -65,7 +65,7 @@ export function DashboardPage() {
       <div className="grid gap-4 md:grid-cols-[0.95fr_1.05fr]">
         <article className="glass-panel p-5">
           <Goal className="text-entrelinhas-gold" size={23} />
-          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-entrelinhas-muted">Direcao profissional</p>
+          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-entrelinhas-muted">Direção profissional</p>
           <h2 className="mt-2 text-xl font-semibold leading-snug text-white sm:text-2xl">{goal}</h2>
           <Link href="/profile" className="mt-4 inline-flex text-sm font-semibold text-entrelinhas-gold hover:text-entrelinhas-goldLight">
             Refinar contexto
@@ -100,7 +100,7 @@ export function DashboardPage() {
             <Link key={situation} href={`/mentor?situation=${encodeURIComponent(situation)}`} className="glass-card group min-h-32 p-4">
               <MessageSquareText className="text-entrelinhas-gold transition group-hover:text-entrelinhas-goldLight" size={23} />
               <h3 className="mt-4 text-base font-semibold leading-snug text-white sm:text-lg">{situation}</h3>
-              <p className="mt-2 text-sm leading-6 text-entrelinhas-muted">Plano de acao aplicado</p>
+              <p className="mt-2 text-sm leading-6 text-entrelinhas-muted">Plano de ação aplicado</p>
             </Link>
           ))}
         </div>

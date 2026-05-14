@@ -22,7 +22,7 @@ export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
         <div className="border-b border-entrelinhas-gold/12 bg-entrelinhas-navy/35 p-5 sm:p-7">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Plano</p>
           <h1 className="mt-2 max-w-3xl text-3xl font-semibold leading-tight text-white sm:text-4xl">
-            Transforme seu direcionamento em presenca praticada.
+            Transforme seu direcionamento em presença praticada.
           </h1>
         </div>
 
@@ -38,8 +38,8 @@ export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
             ) : null}
           </article>
 
-          <PlanList icon={Target} title="Microajustes De Presenca" items={microAdjustments} featured />
-          <PlanList icon={Sparkles} title="Plano De Evolucao Executiva - 30 dias" items={calibratedPlan} featured className="lg:col-span-2" />
+          <PlanList icon={Target} title="Microajustes De Presença" items={microAdjustments} featured />
+          <PlanList icon={Sparkles} title="Plano De Evolução Executiva - 30 dias" items={calibratedPlan} featured className="lg:col-span-2" />
           {result.conditionalInsights?.length ? (
             <PlanList icon={Target} title="Ajustes Pela Sua Dinamica Dominante" items={result.conditionalInsights.map((insight) => insight.recommendation)} featured className="lg:col-span-2" />
           ) : null}
@@ -51,7 +51,7 @@ export function RaioXDevelopmentPlan({ result }: RaioXDevelopmentPlanProps) {
           <article className="rounded-[1.5rem] border border-entrelinhas-gold/12 bg-entrelinhas-panel/55 p-5 lg:col-span-2">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-muted">Primeira pratica</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-muted">Primeira prática</p>
                 <h2 className="mt-2 text-2xl font-semibold text-white">Prepare uma conversa alinhada ao seu novo posicionamento.</h2>
               </div>
               <Link
@@ -76,7 +76,7 @@ function buildCalibratedPlan(result: ExecutivePresenceResult) {
     basePlan.unshift(mainContradiction.thirtyDayAction);
   }
   if (context?.seniority) {
-    basePlan[0] = `${basePlan[0]} Calibre a pratica para sua senioridade atual: ${context.seniority}.`;
+    basePlan[0] = `${basePlan[0]} Calibre a prática para sua senioridade atual: ${context.seniority}.`;
   }
   if (context?.mainChallenge) {
     basePlan[1] = `${basePlan[1]} Use como laboratorio o desafio: ${context.mainChallenge}.`;

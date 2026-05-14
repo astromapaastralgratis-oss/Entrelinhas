@@ -16,9 +16,9 @@ type RaioXQuestionProps = {
 };
 
 const formatLabels: Record<ExecutivePresenceQuestionFormat, string> = {
-  situational: "Situacao real",
+  situational: "Situação real",
   frequency: "Padrao recorrente",
-  agreement: "Percepcao interna"
+  agreement: "Percepção interna"
 };
 
 export function RaioXQuestion({

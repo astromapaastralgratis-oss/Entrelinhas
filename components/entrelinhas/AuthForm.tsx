@@ -28,7 +28,7 @@ export function AuthForm({ mode }: AuthFormProps) {
     setError(null);
 
     if (!supabase || !isSupabaseConfigured) {
-      setError("Nao conseguimos abrir sua conta agora. Tente novamente em alguns instantes.");
+      setError("Não conseguimos abrir sua conta agora. Tente novamente em alguns instantes.");
       return;
     }
 
@@ -44,7 +44,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       const signupData = (await signupResponse.json().catch(() => null)) as { error?: string } | null;
 
       if (!signupResponse.ok) {
-        setError(signupData?.error ?? "Nao foi possivel criar sua conta agora. Confira os dados e tente novamente.");
+        setError(signupData?.error ?? "Não foi possível criar sua conta agora. Confira os dados e tente novamente.");
         setLoading(false);
         submittingRef.current = false;
         return;
@@ -81,7 +81,7 @@ export function AuthForm({ mode }: AuthFormProps) {
 
     if (profile?.account_status === "disabled") {
       await supabase.auth.signOut();
-      setError("Seu acesso esta temporariamente indisponivel.");
+      setError("Seu acesso esta temporariamente indisponível.");
       setLoading(false);
       submittingRef.current = false;
       return;
@@ -101,7 +101,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         <form onSubmit={handleSubmit} className="editorial-panel brand-fade-in rounded-3xl p-6 sm:p-7">
           <h1 className="text-3xl font-semibold text-white">{isSignup ? "Comece pelo seu Raio-X Executivo" : "Entrar"}</h1>
           <p className="mt-2 text-sm leading-6 text-entrelinhas-muted">
-            {isSignup ? "Sua jornada comeca por uma analise estrategica de presenca, influencia e conducao profissional." : "Entre para continuar sua evolucao executiva."}
+            {isSignup ? "Sua jornada começa por uma análise estratégica de presença, influência e condução profissional." : "Entre para continuar sua evolução executiva."}
           </p>
 
           <div className="mt-7 space-y-4">
@@ -113,7 +113,7 @@ export function AuthForm({ mode }: AuthFormProps) {
             ) : null}
             <label className="block">
               <span className="text-sm font-semibold text-white/85">Email</span>
-              <input required type="email" className="mt-2 w-full rounded-xl border border-entrelinhas-gold/15 bg-[#071525]/72 px-4 py-3 text-white outline-none transition duration-300 placeholder:text-entrelinhas-muted/55 focus:border-entrelinhas-gold/50" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="voce@empresa.com" />
+              <input required type="email" className="mt-2 w-full rounded-xl border border-entrelinhas-gold/15 bg-[#071525]/72 px-4 py-3 text-white outline-none transition duration-300 placeholder:text-entrelinhas-muted/55 focus:border-entrelinhas-gold/50" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="você@empresa.com" />
             </label>
             <label className="block">
               <span className="text-sm font-semibold text-white/85">Senha</span>
@@ -129,7 +129,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           </button>
 
           <p className="mt-5 text-center text-sm text-entrelinhas-muted">
-            {isSignup ? "Ja tem conta?" : "Ainda nao tem conta?"}{" "}
+            {isSignup ? "Ja tem conta?" : "Ainda não tem conta?"}{" "}
             <Link className="font-semibold text-entrelinhas-gold hover:text-entrelinhas-goldLight" href={isSignup ? "/login" : "/signup"}>
               {isSignup ? "Entrar" : "Comecar pelo Raio-X"}
             </Link>
@@ -151,7 +151,7 @@ function getAuthErrorMessage(message: string, isSignup: boolean) {
   const normalized = message.toLowerCase();
 
   if (normalized.includes("already registered") || normalized.includes("already exists") || normalized.includes("user already")) {
-    return "Este email ja esta cadastrado. Entre com sua senha ou use a recuperacao de acesso.";
+    return "Este email já está cadastrado. Entre com sua senha ou use a recuperacao de acesso.";
   }
 
   if (normalized.includes("password") && (normalized.includes("weak") || normalized.includes("short") || normalized.includes("6"))) {
@@ -163,7 +163,7 @@ function getAuthErrorMessage(message: string, isSignup: boolean) {
   }
 
   if (normalized.includes("email signups are disabled") || normalized.includes("signup is disabled") || normalized.includes("signups not allowed")) {
-    return "O cadastro por email esta temporariamente indisponivel. Tente novamente mais tarde.";
+    return "O cadastro por email está temporariamente indisponível. Tente novamente mais tarde.";
   }
 
   if (
@@ -177,10 +177,10 @@ function getAuthErrorMessage(message: string, isSignup: boolean) {
   }
 
   if (normalized.includes("invalid login") || normalized.includes("invalid credentials")) {
-    return "Email ou senha nao conferem. Revise os dados ou recupere sua senha.";
+    return "Email ou senha não conferem. Revise os dados ou recupere sua senha.";
   }
 
   return isSignup
-    ? "Nao foi possivel criar sua conta agora. Confira os dados e tente novamente."
-    : "Nao foi possivel entrar com esses dados. Confira email e senha e tente novamente.";
+    ? "Não foi possível criar sua conta agora. Confira os dados e tente novamente."
+    : "Não foi possível entrar com esses dados. Confira email e senha e tente novamente.";
 }

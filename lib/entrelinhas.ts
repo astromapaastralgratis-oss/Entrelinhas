@@ -35,44 +35,44 @@ export const quickScripts = [
   {
     title: "Retomar espaco em reuniao",
     situation: "Interrupcao em reuniao",
-    diplomatic: "Quero concluir meu raciocinio para que a equipe tenha o contexto completo. Em seguida, eu adoraria ouvir seu ponto.",
+    diplomatic: "Quero concluir meu raciocínio para que a equipe tenha o contexto completo. Em seguida, eu adoraria ouvir seu ponto.",
     firm: "Vou terminar meu ponto antes de abrirmos para comentarios. Preciso de mais trinta segundos.",
-    executive: "Para mantermos a qualidade da decisao, vou fechar a linha de raciocinio e depois conecto com a sua contribuicao."
+    executive: "Para mantermos a qualidade da decisão, vou fechar a linha de raciocínio e depois conecto com a sua contribuição."
   },
   {
-    title: "Recuperar credito por contribuicao",
-    situation: "Credito por contribuicao",
+    title: "Recuperar credito por contribuição",
+    situation: "Credito por contribuição",
     diplomatic: "Fico feliz que a ideia esteja avancando. Quero recuperar o ponto inicial que eu trouxe e contribuir com os proximos passos.",
     firm: "Essa proposta foi a linha que apresentei anteriormente. Quero garantir que o credito e a execucao fiquem claros daqui para frente.",
     executive: "Como essa iniciativa nasceu da estrutura que compartilhei, proponho que eu lidere a organizacao e alinhe responsabilidades com o grupo."
   },
   {
     title: "Discordar com criterio",
-    situation: "Discordancia com lideranca",
-    diplomatic: "Entendo a direcao. Vejo um risco adicional: se seguirmos assim, podemos comprometer prazo ou adesao.",
+    situation: "Discordância com liderança",
+    diplomatic: "Entendo a direção. Vejo um risco adicional: se seguirmos assim, podemos comprometer prazo ou adesão.",
     firm: "Tenho uma preocupacao objetiva com esse caminho. Antes de decidirmos, preciso colocar os impactos que estou vendo.",
-    executive: "Minha recomendacao e ajustarmos a rota. O racional e risco, custo de reversao e efeito politico da decisao."
+    executive: "Minha recomendação é ajustarmos a rota. O racional e risco, custo de reversao e efeito politico da decisão."
   },
   {
     title: "Pedir reconhecimento",
     situation: "Negociacao salarial",
-    diplomatic: "Gostaria de conversar sobre minha evolucao de escopo, entregas recentes e uma revisao de remuneracao compativel.",
+    diplomatic: "Gostaria de conversar sobre minha evolução de escopo, entregas recentes e uma revisão de remuneração compatível.",
     firm: "Meu escopo cresceu, os resultados sustentam a conversa e quero alinhar um plano concreto de revisao salarial.",
     executive: "Quero tratar minha remuneracao como reflexo de impacto, escopo e retencao. Trago dados e uma proposta objetiva."
   },
   {
     title: "Estabelecer limites",
     situation: "Limites de disponibilidade",
-    diplomatic: "Consigo apoiar, mas preciso alinhar prioridade e prazo para entregar com qualidade sem comprometer o que ja esta combinado.",
-    firm: "Nao consigo absorver isso sem retirar outra entrega da fila. Vamos decidir o que sera rebaixado em prioridade.",
-    executive: "Para proteger qualidade e previsibilidade, preciso de uma decisao de prioridade antes de assumir esse novo escopo."
+    diplomatic: "Consigo apoiar, mas preciso alinhar prioridade e prazo para entregar com qualidade sem comprometer o que já está combinado.",
+    firm: "Não consigo absorver isso sem retirar outra entrega da fila. Vamos decidir o que será rebaixado em prioridade.",
+    executive: "Para proteger qualidade e previsibilidade, preciso de uma decisão de prioridade antes de assumir esse novo escopo."
   },
   {
     title: "Responder a um retorno injusto",
     situation: "Feedback dificil",
-    diplomatic: "Obrigada por trazer. Quero entender exemplos concretos para separar percepcao, fato e acoes de melhoria.",
+    diplomatic: "Obrigada por trazer. Quero entender exemplos concretos para separar percepção, fato e ações de melhoria.",
     firm: "Quero responder com seriedade, mas preciso de evidencias especificas. Sem exemplos, fica dificil transformar isso em acao justa.",
-    executive: "Vamos qualificar esse retorno com fatos, impacto e expectativa. Assim conseguimos tratar a questao sem ruido ou julgamento amplo."
+    executive: "Vamos qualificar esse retorno com fatos, impacto e expectativa. Assim conseguimos tratar a questão sem ruído ou julgamento amplo."
   }
 ];
 
@@ -83,7 +83,7 @@ export function buildFallbackExecutiveScript(input: ExecutiveScriptInput) {
 export function parseExecutiveScriptSections(content: string) {
   const labels = [
     { source: "Leitura estrategica", title: "Direcionamento estrategico" },
-    { source: "Risco da situacao", title: "Risco da situacao" },
+    { source: "Risco da situação", title: "Risco da situação" },
     { source: "Melhor postura", title: "Melhor postura" },
     { source: "O que NAO dizer", title: "O que evitar" },
     { source: "Script pronto para usar", title: "Plano de acao" },
@@ -99,14 +99,14 @@ export function parseExecutiveScriptSections(content: string) {
     const start = normalized.indexOf(current);
     const end = next ? normalized.indexOf(next) : normalized.length;
     const body = start >= 0 ? normalized.slice(start + current.length, end >= 0 ? end : normalized.length).trim() : "";
-    return { title: label.title, body: body || "Ainda nao gerado." };
+    return { title: label.title, body: body || "Ainda não gerado." };
   });
 }
 
 function normalizeContent(content: string) {
   return content
     .replace(/Leitura\s+estrat\S+gica/gi, "Leitura estrategica")
-    .replace(/Risco\s+da\s+situa\S+o/gi, "Risco da situacao")
+    .replace(/Risco\s+da\s+situa\S+o/gi, "Risco da situação")
     .replace(/O\s+que\s+N\S+O\s+dizer/gi, "O que NAO dizer")
     .replace(/Vers\S+o\s+curta/gi, "Versao curta")
     .replace(/Vers\S+o\s+mais\s+firme/gi, "Versao mais firme")

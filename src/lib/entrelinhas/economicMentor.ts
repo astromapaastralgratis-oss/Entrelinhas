@@ -160,10 +160,10 @@ export function buildCompactExecutivePrompt(input: ExecutiveScriptInput, fallbac
 
   return [
     "Gere adaptacoes curtas para uma mentora executiva do Entrelinhas.",
-    "Nao converse. Nao explique o metodo. Retorne apenas JSON valido.",
+    "Não converse. Não explique o método. Retorne apenas JSON válido.",
     "Schema exato: strategicReading, avoid, bestPosture, suggestedScript, shortVersion.",
     "Tom: executivo, claro, humano, elegante, firme sem agressividade.",
-    "Evite coach cliche, motivacional generico e frases longas.",
+    "Evite coach clichê, motivacional genérico e frases longas.",
     JSON.stringify(compactPayload)
   ].join("\n");
 }

@@ -10,79 +10,79 @@ const MAX_PHRASES = 3;
 
 const phrasesByContradiction: Record<ExecutiveContradictionId, string[]> = {
   high_delivery_low_visibility: [
-    "Nem toda entrega excelente vira influencia quando voce nao ocupa explicitamente a autoria dela.",
-    "Quando o impacto fica silencioso, a competencia trabalha mais do que a reputacao."
+    "Nem toda entrega excelente vira influência quando você não ocupa explicitamente a autoria dela.",
+    "Quando o impacto fica silencioso, a competencia trabalha mais do que a reputação."
   ],
   high_diplomacy_low_boundaries: [
-    "Sua diplomacia protege relacoes, mas pode estar reduzindo sua presenca.",
-    "Quando voce suaviza demais o que precisa ser dito, sua clareza perde forca."
+    "Sua diplomacia protege relações, mas pode estar reduzindo sua presença.",
+    "Quando você suaviza demais o que precisa ser dito, sua clareza perde força."
   ],
   high_precision_low_decision: [
-    "Voce talvez esteja esperando seguranca demais para ocupar um espaco que ja e seu.",
-    "Criterio demais, sem decisao, pode fazer maturidade parecer hesitacao."
+    "Você talvez esteja esperando segurança demais para ocupar um espaço que já é seu.",
+    "Criterio demais, sem decisão, pode fazer maturidade parecer hesitacao."
   ],
   high_influence_low_space_ownership: [
-    "Influencia tambem precisa de autoria; alinhar pessoas nao substitui ocupar lugar.",
-    "Sua capacidade de mobilizar perde potencia quando sua posicao fica implicita."
+    "Influência também precisa de autoria; alinhar pessoas não substitui ocupar lugar.",
+    "Sua capacidade de mobilizar perde potencia quando sua posição fica implicita."
   ],
   strong_presence_internal_strain: [
-    "Confiabilidade nao deveria significar carregar tudo sozinha.",
-    "Presenca forte tambem precisa de limite para nao virar desgaste silencioso."
+    "Confiabilidade não deveria significar carregar tudo sozinha.",
+    "Presença forte também precisa de limite para não virar desgaste silencioso."
   ]
 };
 
 const phrasesByDynamic: Partial<Record<ExecutiveDynamic, string[]>> = {
   hipercompetencia_silenciosa: [
-    "Alta entrega precisa de narrativa, nao apenas de mais esforco.",
-    "Quem entrega muito em silencio pode virar referencia, mas nem sempre vira influencia."
+    "Alta entrega precisa de narrativa, não apenas de mais esforço.",
+    "Quem entrega muito em silencio pode virar referencia, mas nem sempre vira influência."
   ],
   excesso_de_sustentacao_emocional: [
-    "Sustentar o clima nao pode custar a sua posicao.",
-    "Nem toda tensao precisa ser absorvida por voce para a conversa continuar madura."
+    "Sustentar o clima não pode custar a sua posição.",
+    "Nem toda tensão precisa ser absorvida por você para a conversa continuar madura."
   ],
   lideranca_invisivel: [
-    "Liderar nos bastidores tambem exige nomear autoria no momento certo.",
-    "Se voce organiza o caminho, tambem precisa aparecer na decisao."
+    "Liderar nos bastidores também exige nomear autoria no momento certo.",
+    "Se você organiza o caminho, também precisa aparecer na decisão."
   ],
   diplomacia_defensiva: [
-    "Elegancia nao precisa diminuir a firmeza da sua mensagem.",
-    "Preservar relacoes nao deve apagar o que precisa ser sustentado."
+    "Elegancia não precisa diminuir a firmeza da sua mensagem.",
+    "Preservar relações não deve apagar o que precisa ser sustentado."
   ],
   firmeza_situacional: [
-    "Firmeza executiva nao e dureza; e criterio sem excesso de justificativa.",
-    "Sua posicao ganha forca quando vem acompanhada de criterio e proximo passo."
+    "Firmeza executiva não e dureza; e criterio sem excesso de justificativa.",
+    "Sua posição ganha força quando vem acompanhada de criterio e proximo passo."
   ],
   influencia_sem_ocupacao_de_espaco: [
-    "Criar adesao e importante, mas ocupar a decisao tambem faz parte da influencia.",
-    "Influencia silenciosa pode mover contextos, mas nem sempre move sua carreira."
+    "Criar adesao e importante, mas ocupar a decisão também faz parte da influência.",
+    "Influência silenciosa pode mover contextos, mas nem sempre move sua carreira."
   ],
   autocensura_estrategica: [
-    "Nem toda prudencia e estrategia; algumas vezes e autocensura bem vestida.",
-    "O que voce evita dizer pode estar definindo como voce e percebida."
+    "Nem toda prudência e estratégia; algumas vezes e autocensura bem vestida.",
+    "O que você evita dizer pode estar definindo como você e percebida."
   ],
   excesso_de_adaptacao: [
-    "Adaptar-se demais pode fazer o ambiente esquecer onde voce termina.",
+    "Adaptar-se demais pode fazer o ambiente esquecer onde você termina.",
     "Flexibilidade sem limite vira disponibilidade permanente."
   ],
   sobrecarga_por_confiabilidade: [
-    "Ser confiavel nao deveria transformar voce no destino automatico de toda urgencia.",
-    "Quando tudo chega em voce, talvez o problema nao seja capacidade; seja fronteira."
+    "Ser confiável não deveria transformar você no destino automatico de toda urgência.",
+    "Quando tudo chega em você, talvez o problema não seja capacidade; seja fronteira."
   ],
   validacao_por_performance: [
-    "Performance sustenta reputacao, mas nao substitui pedido de reconhecimento.",
+    "Performance sustenta reputação, mas não substitui pedido de reconhecimento.",
     "Entregar mais nem sempre corrige a falta de visibilidade."
   ],
   controle_como_mecanismo_de_seguranca: [
-    "Controle pode proteger a qualidade, mas tambem atrasar sua presenca na decisao.",
-    "Em ambientes executivos, seguranca suficiente costuma valer mais do que certeza total."
+    "Controle pode proteger a qualidade, mas também atrasar sua presença na decisão.",
+    "Em ambientes executivos, segurança suficiente costuma valer mais do que certeza total."
   ],
   evitacao_de_conflito_politico: [
-    "Evitar conflito politico pode preservar o clima e reduzir sua influencia ao mesmo tempo.",
-    "Alguns contextos nao pedem neutralidade; pedem posicao bem calculada."
+    "Evitar conflito político pode preservar o clima e reduzir sua influência ao mesmo tempo.",
+    "Alguns contextos não pedem neutralidade; pedem posição bem calculada."
   ],
   presenca_forte_com_desgaste_interno: [
-    "Se por fora voce sustenta tudo, por dentro talvez esteja pagando caro demais.",
-    "Presenca executiva tambem e saber distribuir tensao, nao apenas suportar melhor."
+    "Se por fora você sustenta tudo, por dentro talvez esteja pagando caro demais.",
+    "Presença executiva também é saber distribuir tensão, não apenas suportar melhor."
   ]
 };
 
@@ -139,7 +139,7 @@ function buildContextPhrases(context: ExecutivePresenceContextSnapshot | undefin
   } else if (seniority) {
     phrases.push({
       id: "context_seniority_growth",
-      text: "Crescer tambem exige tornar visivel o criterio por tras das suas entregas.",
+      text: "Crescer também exige tornar visivel o criterio por tras das suas entregas.",
       source: "context",
       priority: 50
     });
@@ -157,7 +157,7 @@ function buildContextPhrases(context: ExecutivePresenceContextSnapshot | undefin
   if (challenge.includes("limite") || challenge.includes("sobrecarga")) {
     phrases.push({
       id: "context_boundaries_challenge",
-      text: "Limite bem colocado nao reduz compromisso; protege a qualidade da sua contribuicao.",
+      text: "Limite bem colocado não reduz compromisso; protege a qualidade da sua contribuição.",
       source: "context",
       priority: 51
     });

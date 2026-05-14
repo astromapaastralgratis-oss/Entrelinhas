@@ -34,18 +34,18 @@ const challengeOptions = [
   "Ambientes muito politicos",
   "Dificuldade de colocar limites",
   "Sensacao de estar sempre devendo",
-  "Recuperar minha confianca profissional"
+  "Recuperar minha confiança profissional"
 ];
 
 const goalOptions = [
-  "Presenca executiva",
+  "Presença executiva",
   "Clareza para crescer",
   "Seguranca para me posicionar",
-  "Influencia nas decisoes",
+  "Influência nas decisões",
   "Equilibrio emocional no trabalho",
   "Reconhecimento profissional",
-  "Lideranca",
-  "Confianca profissional"
+  "Liderança",
+  "Confiança profissional"
 ];
 
 export function RaioXContextStep({ initialContext, onContinue }: RaioXContextStepProps) {
@@ -87,13 +87,13 @@ export function RaioXContextStep({ initialContext, onContinue }: RaioXContextSte
         <BrandAvatar className="h-16 w-16 sm:h-20 sm:w-20" size={140} priority />
         <p className="mt-7 text-sm font-semibold uppercase tracking-[0.26em] text-entrelinhas-gold">Seu momento profissional</p>
         <h1 className="mt-4 text-3xl font-semibold leading-tight text-white sm:text-5xl">
-          O mesmo padrao pode fortalecer ou desgastar voce dependendo do momento profissional que esta vivendo hoje.
+          O mesmo padrão pode fortalecer ou desgastar você dependendo do momento profissional que está vivendo hoje.
         </h1>
         <p className="mt-5 max-w-xl text-base leading-8 text-entrelinhas-muted">
-          Alguns padroes se intensificam em momentos de crescimento, pressao, inseguranca ou transicao. Esse contexto ajuda sua leitura a ficar mais precisa e humana.
+          Alguns padrões se intensificam em momentos de crescimento, pressão, inseguranca ou transição. Esse contexto ajuda sua leitura a ficar mais precisa e humana.
         </p>
         <p className="mt-5 max-w-lg rounded-2xl border border-entrelinhas-gold/16 bg-entrelinhas-gold/[0.07] px-4 py-3 text-sm font-semibold leading-6 text-entrelinhas-goldLight">
-          Nem sempre o que fez voce crescer e o que vai sustentar sua proxima fase.
+          Nem sempre o que fez você crescer e o que vai sustentar sua próxima fase.
         </p>
       </div>
 
@@ -146,7 +146,7 @@ export function RaioXContextStep({ initialContext, onContinue }: RaioXContextSte
         />
 
         <SelectableCardGroup
-          label="O que voce mais deseja fortalecer agora?"
+          label="O que você mais deseja fortalecer agora?"
           options={goalOptions}
           value={context.careerGoal ?? ""}
           onChange={(value) => update("careerGoal", value)}

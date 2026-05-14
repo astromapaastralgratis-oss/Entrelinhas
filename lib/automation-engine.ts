@@ -36,7 +36,7 @@ export function applyLockedThemes(plan: EditorialPlanItem[], lockedThemes: strin
     return {
       ...item,
       theme: lockedTheme,
-      strategicReason: `${item.strategicReason} Tema travado manualmente para manter consistencia da semana.`
+      strategicReason: `${item.strategicReason} Tema travado manualmente para manter consistência da semana.`
     };
   });
 }
