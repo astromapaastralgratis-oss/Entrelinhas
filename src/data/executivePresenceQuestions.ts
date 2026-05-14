@@ -3,202 +3,222 @@ import type { ExecutivePresenceQuestion } from "@/src/types/executivePresence";
 export const executivePresenceQuestions: ExecutivePresenceQuestion[] = [
   {
     id: "q01",
-    text: "Em uma reunião importante, quando a conversa começa a perder foco, você tende a:",
+    format: "situational",
+    text: "Quando uma conversa importante comeca a perder direcao, sua tendencia mais natural e:",
     options: [
-      { id: "q01_o1", text: "Retomar o objetivo e propor uma decisão clara para o grupo.", traitKey: "direction" },
-      { id: "q01_o2", text: "Reorganizar a conversa conectando as pessoas ao impacto da decisão.", traitKey: "influence" },
-      { id: "q01_o3", text: "Acolher os pontos levantados e buscar um alinhamento sem tensionar o ambiente.", traitKey: "diplomacy" },
-      { id: "q01_o4", text: "Pedir dados, critérios e próximos passos antes de avançar.", traitKey: "precision" }
+      { id: "q01_o1", text: "Trazer a conversa para uma definicao objetiva, mesmo que ainda exista algum desconforto na sala.", traitKey: "direction" },
+      { id: "q01_o2", text: "Reorganizar o sentido da conversa para que as pessoas enxerguem o impacto da decisao.", traitKey: "influence" },
+      { id: "q01_o3", text: "Diminuir a tensao, escutar o que esta por tras das falas e reconstruir alinhamento.", traitKey: "diplomacy" },
+      { id: "q01_o4", text: "Separar fatos, criterios e proximos passos antes de qualquer encaminhamento.", traitKey: "precision" }
     ]
   },
   {
     id: "q02",
-    text: "Quando alguém interrompe sua posicao, sua reação mais natural é:",
+    format: "situational",
+    text: "Quando sua fala e interrompida em uma reuniao, o movimento que mais se aproxima do seu e:",
     options: [
-      { id: "q02_o1", text: "Retomar a palavra com firmeza e concluir seu raciocínio.", traitKey: "direction" },
-      { id: "q02_o2", text: "Usar uma frase elegante para recuperar atenção sem perder presença.", traitKey: "influence" },
-      { id: "q02_o3", text: "Esperar uma brecha e voltar ao ponto preservando o clima.", traitKey: "diplomacy" },
-      { id: "q02_o4", text: "Recolocar o argumento com mais estrutura para evitar ruído.", traitKey: "precision" }
+      { id: "q02_o1", text: "Retomar a palavra e concluir o raciocinio sem pedir permissao demais.", traitKey: "direction" },
+      { id: "q02_o2", text: "Usar uma frase curta, elegante e firme para recuperar atencao sem romper o clima.", traitKey: "influence" },
+      { id: "q02_o3", text: "Esperar uma abertura mais segura para voltar ao ponto com menos exposicao.", traitKey: "diplomacy" },
+      { id: "q02_o4", text: "Recolocar o argumento com mais estrutura para reduzir ruido e aumentar legitimidade.", traitKey: "precision" }
     ]
   },
   {
     id: "q03",
-    text: "Ao discordar de uma liderança, você se sente mais segura quando:",
+    format: "agreement",
+    text: "Eu me sinto mais segura para discordar de uma lideranca quando:",
     options: [
-      { id: "q03_o1", text: "Sabe exatamente qual recomendação quer defender.", traitKey: "direction" },
-      { id: "q03_o2", text: "Consegue mostrar como sua visão favorece o objetivo coletivo.", traitKey: "influence" },
-      { id: "q03_o3", text: "Encontra uma forma respeitosa de apresentar a divergência.", traitKey: "diplomacy" },
-      { id: "q03_o4", text: "Tem evidências suficientes para sustentar cada ponto.", traitKey: "precision" }
+      { id: "q03_o1", text: "Tenho clareza da posicao que quero sustentar e do limite que nao quero ceder.", traitKey: "direction" },
+      { id: "q03_o2", text: "Consigo conectar minha divergencia ao resultado que o grupo quer proteger.", traitKey: "influence" },
+      { id: "q03_o3", text: "Encontro um jeito respeitoso de discordar sem parecer que estou criando atrito.", traitKey: "diplomacy" },
+      { id: "q03_o4", text: "Tenho evidencias suficientes para defender o ponto com consistencia.", traitKey: "precision" }
     ]
   },
   {
     id: "q04",
-    text: "Diante de uma negociação salarial, seu primeiro movimento seria:",
+    format: "frequency",
+    text: "Com que frequencia, ao falar sobre reconhecimento ou salario, voce percebe que sua preparacao vai primeiro para:",
     options: [
-      { id: "q04_o1", text: "Definir o pedido e conduzir a conversa com objetividade.", traitKey: "direction" },
-      { id: "q04_o2", text: "Construir uma narrativa de valor, impacto e evolução.", traitKey: "influence" },
-      { id: "q04_o3", text: "Preparar uma abordagem cuidadosa para manter a relação positiva.", traitKey: "diplomacy" },
-      { id: "q04_o4", text: "Reunir entregas, métricas e referências de mercado.", traitKey: "precision" }
+      { id: "q04_o1", text: "Definir o pedido com clareza e entrar na conversa sabendo qual resultado busca.", traitKey: "direction" },
+      { id: "q04_o2", text: "Construir uma narrativa de valor que mostre evolucao, impacto e maturidade.", traitKey: "influence" },
+      { id: "q04_o3", text: "Encontrar um tom cuidadoso para nao comprometer a relacao ou parecer inadequada.", traitKey: "diplomacy" },
+      { id: "q04_o4", text: "Levantar entregas, numeros e referencias antes de se sentir pronta para pedir.", traitKey: "precision" }
     ]
   },
   {
     id: "q05",
-    text: "Quando uma ideia sua é apropriada por outra pessoa, você tende a:",
+    format: "situational",
+    text: "Quando uma contribuicao sua aparece como se fosse de outra pessoa, voce tende a:",
     options: [
-      { id: "q05_o1", text: "Reivindicar o crédito e propor assumir a frente do tema.", traitKey: "direction" },
-      { id: "q05_o2", text: "Reposicionar sua autoria mostrando como a ideia evoluiu.", traitKey: "influence" },
-      { id: "q05_o3", text: "Abrir uma conversa individual para evitar exposição desnecessária.", traitKey: "diplomacy" },
-      { id: "q05_o4", text: "Recuperar registros, contexto e sequência dos fatos.", traitKey: "precision" }
+      { id: "q05_o1", text: "Recolocar sua autoria e assumir mais claramente a frente do tema.", traitKey: "direction" },
+      { id: "q05_o2", text: "Reposicionar a historia da ideia mostrando como ela nasceu, evoluiu e gerou impacto.", traitKey: "influence" },
+      { id: "q05_o3", text: "Escolher uma conversa mais reservada para proteger a relacao e reduzir exposicao.", traitKey: "diplomacy" },
+      { id: "q05_o4", text: "Recuperar registros, contexto e sequencia dos fatos antes de agir.", traitKey: "precision" }
     ]
   },
   {
     id: "q06",
-    text: "Quando precisa estabelecer limites, você costuma priorizar:",
+    format: "frequency",
+    text: "Com que frequencia, quando precisa colocar um limite, sua energia se concentra em:",
     options: [
-      { id: "q06_o1", text: "Dizer o que é possível e o que não é, sem rodeios.", traitKey: "direction" },
-      { id: "q06_o2", text: "Explicar o limite mostrando impacto em prioridades maiores.", traitKey: "influence" },
-      { id: "q06_o3", text: "Preservar a relação enquanto renegocia expectativa e prazo.", traitKey: "diplomacy" },
-      { id: "q06_o4", text: "Organizar escopo, capacidade e critérios de prioridade.", traitKey: "precision" }
+      { id: "q06_o1", text: "Dizer com simplicidade o que cabe, o que nao cabe e qual decisao precisa ser tomada.", traitKey: "direction" },
+      { id: "q06_o2", text: "Mostrar que o limite protege prioridades maiores, nao apenas uma preferencia pessoal.", traitKey: "influence" },
+      { id: "q06_o3", text: "Preservar a relacao enquanto renegocia expectativa, prazo ou disponibilidade.", traitKey: "diplomacy" },
+      { id: "q06_o4", text: "Organizar escopo, capacidade e criterios para que o limite pareca inquestionavel.", traitKey: "precision" }
     ]
   },
   {
     id: "q07",
-    text: "Em situações de pressão, sua força mais visível costuma ser:",
+    format: "frequency",
+    text: "Com que frequencia, em momentos de pressao, as pessoas parecem esperar de voce:",
     options: [
-      { id: "q07_o1", text: "Tomar decisão e destravar o andamento.", traitKey: "direction" },
-      { id: "q07_o2", text: "Mobilizar pessoas em torno de uma saída possível.", traitKey: "influence" },
-      { id: "q07_o3", text: "Reduzir tensão e manter a conversa produtiva.", traitKey: "diplomacy" },
-      { id: "q07_o4", text: "Separar fatos, hipóteses e riscos com clareza.", traitKey: "precision" }
+      { id: "q07_o1", text: "Uma decisao que destrave o assunto e reduza a indecisao do grupo.", traitKey: "direction" },
+      { id: "q07_o2", text: "Uma forma de mobilizar energia e fazer as pessoas acreditarem na saida.", traitKey: "influence" },
+      { id: "q07_o3", text: "Uma presenca que abaixe a temperatura e mantenha a conversa possivel.", traitKey: "diplomacy" },
+      { id: "q07_o4", text: "Uma leitura fria dos fatos, riscos e hipoteses antes de qualquer movimento.", traitKey: "precision" }
     ]
   },
   {
     id: "q08",
-    text: "Quando recebe um feedback injusto, você tende a buscar:",
+    format: "frequency",
+    text: "Com que frequencia, diante de um feedback que parece injusto, voce se percebe buscando primeiro:",
     options: [
-      { id: "q08_o1", text: "Uma resposta firme para corrigir a percepção.", traitKey: "direction" },
-      { id: "q08_o2", text: "Uma forma de reposicionar sua imagem com maturidade.", traitKey: "influence" },
-      { id: "q08_o3", text: "Uma conversa cuidadosa para entender a origem do ruído.", traitKey: "diplomacy" },
-      { id: "q08_o4", text: "Exemplos concretos para transformar percepção em fato.", traitKey: "precision" }
+      { id: "q08_o1", text: "Corrigir a percepcao com firmeza antes que ela se consolide.", traitKey: "direction" },
+      { id: "q08_o2", text: "Reposicionar sua imagem com maturidade e mostrar outro enquadramento.", traitKey: "influence" },
+      { id: "q08_o3", text: "Entender a origem do ruido para responder sem ampliar o conflito.", traitKey: "diplomacy" },
+      { id: "q08_o4", text: "Pedir exemplos concretos para separar impressao de fato.", traitKey: "precision" }
     ]
   },
   {
     id: "q09",
-    text: "Ao apresentar um projeto para pessoas seniores, você se prepara melhor quando:",
+    format: "situational",
+    text: "Quando vai apresentar um projeto para pessoas seniores, sua preparacao costuma se apoiar mais em:",
     options: [
-      { id: "q09_o1", text: "Define a recomendação principal e o pedido de decisão.", traitKey: "direction" },
-      { id: "q09_o2", text: "Cria uma mensagem que gere adesão rapidamente.", traitKey: "influence" },
-      { id: "q09_o3", text: "Mapeia sensibilidades políticas e possíveis resistências.", traitKey: "diplomacy" },
-      { id: "q09_o4", text: "Domina números, premissas e riscos antes da reunião.", traitKey: "precision" }
+      { id: "q09_o1", text: "A recomendacao principal, o pedido de decisao e o que precisa acontecer depois.", traitKey: "direction" },
+      { id: "q09_o2", text: "A mensagem que cria adesao rapida e faz o valor ficar evidente.", traitKey: "influence" },
+      { id: "q09_o3", text: "As sensibilidades politicas, resistencias provaveis e relacoes envolvidas.", traitKey: "diplomacy" },
+      { id: "q09_o4", text: "Numeros, premissas, riscos e perguntas dificeis que podem aparecer.", traitKey: "precision" }
     ]
   },
   {
     id: "q10",
-    text: "Quando uma conversa fica emocionalmente carregada, você costuma:",
+    format: "situational",
+    text: "Quando uma conversa fica carregada emocionalmente, seu corpo normalmente pede que voce:",
     options: [
-      { id: "q10_o1", text: "Cortar a ambiguidade e trazer a conversa para uma decisão.", traitKey: "direction" },
-      { id: "q10_o2", text: "Reformular a mensagem para manter influência sem confronto.", traitKey: "influence" },
-      { id: "q10_o3", text: "Baixar a temperatura e escutar antes de responder.", traitKey: "diplomacy" },
-      { id: "q10_o4", text: "Voltar aos fatos para reduzir interpretações soltas.", traitKey: "precision" }
+      { id: "q10_o1", text: "Corte a ambiguidade e conduza a conversa para uma definicao.", traitKey: "direction" },
+      { id: "q10_o2", text: "Reformule a mensagem para manter influencia sem entrar em confronto aberto.", traitKey: "influence" },
+      { id: "q10_o3", text: "Escute mais um pouco para baixar a tensao antes de responder.", traitKey: "diplomacy" },
+      { id: "q10_o4", text: "Volte aos fatos para impedir que interpretacoes soltas dominem a conversa.", traitKey: "precision" }
     ]
   },
   {
     id: "q11",
-    text: "Em um comitê com opiniões divergentes, você se destaca quando:",
+    format: "agreement",
+    text: "Eu costumo ganhar mais espaco em conversas com opinioes divergentes quando:",
     options: [
-      { id: "q11_o1", text: "Propõe uma rota e assume responsabilidade pelo encaminhamento.", traitKey: "direction" },
-      { id: "q11_o2", text: "Conecta interesses diferentes em uma narrativa comum.", traitKey: "influence" },
-      { id: "q11_o3", text: "Costura acordos possíveis entre pessoas com prioridades distintas.", traitKey: "diplomacy" },
-      { id: "q11_o4", text: "Organiza critérios para comparar alternativas com justiça.", traitKey: "precision" }
+      { id: "q11_o1", text: "Proponho uma rota e assumo responsabilidade pelo encaminhamento.", traitKey: "direction" },
+      { id: "q11_o2", text: "Consigo conectar interesses diferentes em uma narrativa comum.", traitKey: "influence" },
+      { id: "q11_o3", text: "Costuro acordos possiveis entre pessoas com prioridades distintas.", traitKey: "diplomacy" },
+      { id: "q11_o4", text: "Organizo criterios para comparar alternativas de forma justa.", traitKey: "precision" }
     ]
   },
   {
     id: "q12",
-    text: "Quando precisa defender seu trabalho, você prefere:",
+    format: "frequency",
+    text: "Com que frequencia, ao defender uma entrega sua, voce sente que precisa:",
     options: [
-      { id: "q12_o1", text: "Apontar impacto, responsabilidade e decisão esperada.", traitKey: "direction" },
-      { id: "q12_o2", text: "Mostrar valor de forma memorável e convincente.", traitKey: "influence" },
-      { id: "q12_o3", text: "Reconhecer contribuições do grupo enquanto afirma sua parte.", traitKey: "diplomacy" },
-      { id: "q12_o4", text: "Apresentar evidências, entregas e escopo com precisão.", traitKey: "precision" }
+      { id: "q12_o1", text: "Apontar impacto, responsabilidade assumida e decisao esperada.", traitKey: "direction" },
+      { id: "q12_o2", text: "Fazer o valor da entrega ficar memoravel para quem decide.", traitKey: "influence" },
+      { id: "q12_o3", text: "Reconhecer contribuicoes do grupo enquanto afirma sua propria parte.", traitKey: "diplomacy" },
+      { id: "q12_o4", text: "Apresentar evidencias, escopo e entregas com precisao para nao deixar margem.", traitKey: "precision" }
     ]
   },
   {
     id: "q13",
-    text: "Quando há uma decisão difícil em aberto, seu instinto é:",
+    format: "agreement",
+    text: "Eu me sinto mais pronta para uma decisao dificil quando:",
     options: [
-      { id: "q13_o1", text: "Definir a opção mais forte e avançar.", traitKey: "direction" },
-      { id: "q13_o2", text: "Criar consenso suficiente para a decisão ganhar tração.", traitKey: "influence" },
-      { id: "q13_o3", text: "Ouvir impactos nas pessoas antes de fechar posição.", traitKey: "diplomacy" },
-      { id: "q13_o4", text: "Comparar cenários, riscos e consequências.", traitKey: "precision" }
+      { id: "q13_o1", text: "Consigo escolher a alternativa mais forte e sustentar o movimento.", traitKey: "direction" },
+      { id: "q13_o2", text: "Existe consenso suficiente para a decisao ganhar tracao.", traitKey: "influence" },
+      { id: "q13_o3", text: "Entendo o impacto nas pessoas antes de fechar posicao.", traitKey: "diplomacy" },
+      { id: "q13_o4", text: "Comparei cenarios, riscos e consequencias com cuidado.", traitKey: "precision" }
     ]
   },
   {
     id: "q14",
-    text: "Quando precisa posicaor em público no trabalho, você se apoia mais em:",
+    format: "frequency",
+    text: "Com que frequencia, quando precisa se posicionar em publico, voce se apoia primeiro em:",
     options: [
-      { id: "q14_o1", text: "Clareza de mensagem e presença firme.", traitKey: "direction" },
-      { id: "q14_o2", text: "Energia, conexão e capacidade de engajar.", traitKey: "influence" },
-      { id: "q14_o3", text: "Percepcao do ambiente e adaptação ao público.", traitKey: "diplomacy" },
-      { id: "q14_o4", text: "Estrutura lógica e domínio do conteúdo.", traitKey: "precision" }
+      { id: "q14_o1", text: "Uma mensagem limpa e uma presenca que nao se desculpa por ocupar espaco.", traitKey: "direction" },
+      { id: "q14_o2", text: "Energia, conexao e capacidade de fazer a sala acompanhar seu raciocinio.", traitKey: "influence" },
+      { id: "q14_o3", text: "Percepcao do ambiente, timing e adaptacao ao publico.", traitKey: "diplomacy" },
+      { id: "q14_o4", text: "Estrutura logica, dominio do conteudo e preparo para perguntas.", traitKey: "precision" }
     ]
   },
   {
     id: "q15",
-    text: "Se uma entrega crítica está atrasando, você tende a:",
+    format: "situational",
+    text: "Quando uma entrega critica esta atrasando e ha risco de desgaste, voce tende a:",
     options: [
-      { id: "q15_o1", text: "Cobrar definição de responsável, prazo e decisão.", traitKey: "direction" },
-      { id: "q15_o2", text: "Reengajar as pessoas mostrando impacto e urgência.", traitKey: "influence" },
-      { id: "q15_o3", text: "Entender bloqueios e renegociar combinados com cuidado.", traitKey: "diplomacy" },
-      { id: "q15_o4", text: "Mapear dependências, riscos e plano de recuperação.", traitKey: "precision" }
+      { id: "q15_o1", text: "Cobrar responsavel, prazo e decisao para evitar que o atraso vire normal.", traitKey: "direction" },
+      { id: "q15_o2", text: "Reengajar as pessoas mostrando impacto, urgencia e sentido do movimento.", traitKey: "influence" },
+      { id: "q15_o3", text: "Entender bloqueios e renegociar combinados sem expor demais ninguem.", traitKey: "diplomacy" },
+      { id: "q15_o4", text: "Mapear dependencias, riscos e plano de recuperacao antes de escalar.", traitKey: "precision" }
     ]
   },
   {
     id: "q16",
-    text: "Quando alguém questiona sua recomendação, você responde melhor quando:",
+    format: "agreement",
+    text: "Eu respondo melhor a um questionamento sobre minha recomendacao quando:",
     options: [
-      { id: "q16_o1", text: "Reafirma o ponto central e sustenta sua posição.", traitKey: "direction" },
-      { id: "q16_o2", text: "Transforma a objeção em oportunidade de alinhamento.", traitKey: "influence" },
-      { id: "q16_o3", text: "Reconhece a preocupação antes de defender sua visão.", traitKey: "diplomacy" },
-      { id: "q16_o4", text: "Explica premissas e dados que levaram à conclusão.", traitKey: "precision" }
+      { id: "q16_o1", text: "Reafirmo o ponto central sem enfraquecer minha posicao.", traitKey: "direction" },
+      { id: "q16_o2", text: "Transformo a objecao em uma oportunidade de alinhamento.", traitKey: "influence" },
+      { id: "q16_o3", text: "Reconheco a preocupacao da outra pessoa antes de defender minha visao.", traitKey: "diplomacy" },
+      { id: "q16_o4", text: "Explico premissas e dados que sustentam a conclusao.", traitKey: "precision" }
     ]
   },
   {
     id: "q17",
-    text: "Em ambientes politicamente sensíveis, você naturalmente observa:",
+    format: "agreement",
+    text: "Eu leio melhor ambientes politicamente sensiveis quando presto atencao em:",
     options: [
-      { id: "q17_o1", text: "Quem decide e qual movimento precisa ser feito.", traitKey: "direction" },
-      { id: "q17_o2", text: "Quem influencia a conversa mesmo sem autoridade formal.", traitKey: "influence" },
-      { id: "q17_o3", text: "Quais relações, histórias e sensibilidades estão em jogo.", traitKey: "diplomacy" },
-      { id: "q17_o4", text: "Quais fatos sustentam ou enfraquecem cada narrativa.", traitKey: "precision" }
+      { id: "q17_o1", text: "Quem decide, quem esta evitando decidir e qual movimento precisa ser feito.", traitKey: "direction" },
+      { id: "q17_o2", text: "Quem influencia a conversa mesmo sem ter o cargo mais alto.", traitKey: "influence" },
+      { id: "q17_o3", text: "Quais relacoes, historias e sensibilidades estao moldando o clima.", traitKey: "diplomacy" },
+      { id: "q17_o4", text: "Quais fatos sustentam ou enfraquecem cada narrativa em circulacao.", traitKey: "precision" }
     ]
   },
   {
     id: "q18",
-    text: "Quando precisa pedir apoio, você costuma:",
+    format: "frequency",
+    text: "Com que frequencia, ao pedir apoio, voce organiza o pedido a partir de:",
     options: [
-      { id: "q18_o1", text: "Ser direta sobre o que precisa e até quando.", traitKey: "direction" },
-      { id: "q18_o2", text: "Mostrar por que o apoio faz diferença para o resultado.", traitKey: "influence" },
-      { id: "q18_o3", text: "Considerar disponibilidade e contexto da outra pessoa.", traitKey: "diplomacy" },
-      { id: "q18_o4", text: "Detalhar escopo, expectativa e critérios de qualidade.", traitKey: "precision" }
+      { id: "q18_o1", text: "O que precisa, de quem precisa e ate quando precisa.", traitKey: "direction" },
+      { id: "q18_o2", text: "Por que esse apoio muda o resultado e aumenta o impacto coletivo.", traitKey: "influence" },
+      { id: "q18_o3", text: "A disponibilidade, o momento e o contexto da outra pessoa.", traitKey: "diplomacy" },
+      { id: "q18_o4", text: "Escopo, expectativa, criterio de qualidade e risco de desalinhamento.", traitKey: "precision" }
     ]
   },
   {
     id: "q19",
-    text: "Quando percebe que está sendo subestimada, sua melhor resposta seria:",
+    format: "situational",
+    text: "Quando percebe que esta sendo subestimada, sua resposta mais provavel e:",
     options: [
-      { id: "q19_o1", text: "Ocupar espaço com firmeza e colocar sua contribuição na mesa.", traitKey: "direction" },
-      { id: "q19_o2", text: "Reposicionar sua imagem por meio de presença e narrativa.", traitKey: "influence" },
-      { id: "q19_o3", text: "Construir confiança gradualmente sem entrar em disputa aberta.", traitKey: "diplomacy" },
-      { id: "q19_o4", text: "Demonstrar consistência com entregas, dados e preparo.", traitKey: "precision" }
+      { id: "q19_o1", text: "Ocupar mais espaco e colocar sua contribuicao na mesa com firmeza.", traitKey: "direction" },
+      { id: "q19_o2", text: "Reposicionar sua imagem por meio de presenca, narrativa e consistencia publica.", traitKey: "influence" },
+      { id: "q19_o3", text: "Construir confianca aos poucos sem transformar a situacao em disputa aberta.", traitKey: "diplomacy" },
+      { id: "q19_o4", text: "Demonstrar preparo, entrega e consistencia ate que a percepcao mude.", traitKey: "precision" }
     ]
   },
   {
     id: "q20",
-    text: "No seu próximo nível de carreira, você mais quer fortalecer:",
+    format: "agreement",
+    text: "Eu sinto que meu proximo nivel de carreira exige fortalecer principalmente:",
     options: [
-      { id: "q20_o1", text: "Capacidade de decidir, se posicionar e sustentar limites.", traitKey: "direction" },
-      { id: "q20_o2", text: "Influência, visibilidade e capacidade de mobilizar pessoas.", traitKey: "influence" },
+      { id: "q20_o1", text: "Decisao, posicionamento e capacidade de sustentar limites.", traitKey: "direction" },
+      { id: "q20_o2", text: "Influencia, visibilidade e capacidade de mobilizar pessoas.", traitKey: "influence" },
       { id: "q20_o3", text: "Criterio politico, negociacao e conversas de alta sensibilidade.", traitKey: "diplomacy" },
-      { id: "q20_o4", text: "Pensamento estruturado, análise e recomendações mais sólidas.", traitKey: "precision" }
+      { id: "q20_o4", text: "Pensamento estruturado, analise e recomendacoes mais solidas.", traitKey: "precision" }
     ]
   }
 ];

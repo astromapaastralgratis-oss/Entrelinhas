@@ -50,8 +50,11 @@ export type ExecutivePresenceOption = {
   traitKey: TraitKey;
 };
 
+export type ExecutivePresenceQuestionFormat = "situational" | "frequency" | "agreement";
+
 export type ExecutivePresenceQuestion = {
   id: string;
+  format: ExecutivePresenceQuestionFormat;
   text: string;
   options: ExecutivePresenceOption[];
 };
@@ -217,3 +220,4 @@ export type ExecutivePresenceResult = {
   evolution?: ExecutivePresenceEvolution;
   recognitionPhrases?: ExecutiveRecognitionPhrase[];
 };
+
