@@ -243,6 +243,23 @@ export type ExecutivePresenceFeedbackRow = {
   created_at: string;
 };
 
+export type RaioXBetaFeedbackRow = {
+  id: string;
+  user_id: string;
+  result_id: string;
+  profile_id: string;
+  personalization_rating: string | null;
+  depth_rating: string | null;
+  would_share: string | null;
+  would_return: string | null;
+  tone_rating: string | null;
+  most_real_part: string | null;
+  generic_part: string | null;
+  improvement_suggestion: string | null;
+  methodology_version: string | null;
+  created_at: string;
+};
+
 export type AppSettingsRow = {
   key: string;
   value: Record<string, unknown>;
@@ -340,6 +357,15 @@ export type Database = {
           created_at?: string;
         };
         Update: Partial<Omit<ExecutivePresenceFeedbackRow, "id" | "created_at" | "user_id" | "result_id">>;
+        Relationships: [];
+      };
+      feedback_ex: {
+        Row: RaioXBetaFeedbackRow;
+        Insert: Omit<RaioXBetaFeedbackRow, "id" | "created_at"> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<Omit<RaioXBetaFeedbackRow, "id" | "created_at" | "user_id" | "result_id">>;
         Relationships: [];
       };
       app_settings: {

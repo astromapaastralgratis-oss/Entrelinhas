@@ -27,8 +27,26 @@ type AdminSettings = {
   activeUsers: number;
 };
 
+type BetaFeedback = {
+  id: string;
+  email: string | null;
+  fullName: string | null;
+  profileId: string;
+  personalizationRating: string | null;
+  depthRating: string | null;
+  wouldShare: string | null;
+  wouldReturn: string | null;
+  toneRating: string | null;
+  mostRealPart: string | null;
+  genericPart: string | null;
+  improvementSuggestion: string | null;
+  methodologyVersion: string | null;
+  createdAt: string;
+};
+
 export function AdminPage() {
   const [users, setUsers] = useState<AdminUser[]>([]);
+  const [feedbacks, setFeedbacks] = useState<BetaFeedback[]>([]);
   const [settings, setSettings] = useState<AdminSettings | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -64,7 +82,9 @@ export function AdminPage() {
         adminFetch("/api/admin/users"),
         adminFetch("/api/admin/settings")
       ]);
+      const feedbackData = await adminFetch("/api/admin/raio-x-feedback").catch(() => ({ feedbacks: [] }));
       setUsers(usersData.users ?? []);
+      setFeedbacks(feedbackData.feedbacks ?? []);
       setSettings(settingsData);
       const limit = settingsData.signupLimits?.max_active_users;
       setGlobalLimit(limit ? String(limit) : "");
@@ -165,6 +185,46 @@ export function AdminPage() {
         </div>
       </section>
 
+      <section className="mt-6 editorial-panel p-5">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-muted">Feedback beta do Raio-X</p>
+            <h2 className="mt-2 text-2xl font-semibold text-white">Percepcoes recentes</h2>
+          </div>
+          <p className="text-sm text-entrelinhas-muted">{feedbacks.length} registros</p>
+        </div>
+        <div className="mt-4 grid gap-3">
+          {feedbacks.length ? feedbacks.slice(0, 8).map((feedback) => (
+            <article key={feedback.id} className="rounded-2xl border border-entrelinhas-gold/10 bg-entrelinhas-navy/42 p-4">
+              <div className="flex flex-col gap-2 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                  <h3 className="font-semibold text-white">{feedback.fullName || feedback.email || "Usuaria"}</h3>
+                  <p className="mt-1 text-xs text-entrelinhas-muted">
+                    {feedback.profileId} · {new Date(feedback.createdAt).toLocaleDateString("pt-BR")}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2 text-xs">
+                  <FeedbackBadge label="personalizacao" value={feedback.personalizationRating} />
+                  <FeedbackBadge label="profundidade" value={feedback.depthRating} />
+                  <FeedbackBadge label="tom" value={feedback.toneRating} />
+                  <FeedbackBadge label="compartilha" value={feedback.wouldShare} />
+                  <FeedbackBadge label="retorna" value={feedback.wouldReturn} />
+                </div>
+              </div>
+              <div className="mt-3 grid gap-2 text-sm leading-6 text-entrelinhas-muted lg:grid-cols-3">
+                {feedback.mostRealPart ? <p><strong className="text-white/80">Real:</strong> {feedback.mostRealPart}</p> : null}
+                {feedback.genericPart ? <p><strong className="text-white/80">Generico:</strong> {feedback.genericPart}</p> : null}
+                {feedback.improvementSuggestion ? <p><strong className="text-white/80">Melhoria:</strong> {feedback.improvementSuggestion}</p> : null}
+              </div>
+            </article>
+          )) : (
+            <div className="rounded-2xl border border-entrelinhas-gold/10 bg-entrelinhas-navy/35 p-4 text-sm text-entrelinhas-muted">
+              Nenhum feedback beta registrado ainda.
+            </div>
+          )}
+        </div>
+      </section>
+
       <section className="mt-6 space-y-4">
         {loading ? (
           <div className="editorial-panel p-6 text-center text-entrelinhas-muted">Carregando administracao.</div>
@@ -234,4 +294,18 @@ function Metric({ label, value }: { label: string; value: string | number }) {
       <p className="mt-1 font-semibold text-white">{value}</p>
     </div>
   );
+}
+
+function FeedbackBadge({ label, value }: { label: string; value: string | null }) {
+  if (!value) return null;
+
+  return (
+    <span className="rounded-full border border-entrelinhas-gold/12 bg-entrelinhas-gold/[0.08] px-3 py-1 text-entrelinhas-goldLight">
+      {label}: {formatFeedbackValue(value)}
+    </span>
+  );
+}
+
+function formatFeedbackValue(value: string) {
+  return value.replace(/_/g, " ");
 }

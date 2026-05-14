@@ -10,12 +10,13 @@ import { buildExecutivePresenceEvolution } from "@/src/utils/buildExecutivePrese
 import { buildExecutiveRecognitionPhrases } from "@/src/utils/buildExecutiveRecognitionPhrases";
 import { calculateExecutivePresenceResult } from "@/src/utils/calculateExecutivePresenceResult";
 import {
-  buildExecutivePresenceFeedbackPayload,
-  hasExecutivePresenceFeedback
+  buildRaioXBetaFeedbackPayload,
+  hasRaioXBetaFeedback
 } from "@/src/utils/executivePresenceFeedback";
 import { shuffleArray } from "@/src/utils/shuffleArray";
 import type { ExecutivePresenceResultRow } from "@/types/database";
 import type { ExecutivePresenceAnswer, ExecutivePresenceProfile, TraitKey } from "@/src/types/executivePresence";
+import type { RaioXBetaFeedbackDraft } from "@/src/utils/executivePresenceFeedback";
 
 const traitKeys: TraitKey[] = ["direction", "influence", "diplomacy", "precision"];
 
@@ -89,6 +90,17 @@ describe("executive presence questions", () => {
     }
   });
 
+  it("uses the approved visual question format distribution", () => {
+    const counts = executivePresenceQuestions.reduce(
+      (accumulator, question) => {
+        accumulator[question.format] += 1;
+        return accumulator;
+      },
+      { situational: 0, frequency: 0, agreement: 0 }
+    );
+
+    expect(counts).toEqual({ situational: 7, frequency: 7, agreement: 6 });
+  });
   it("keeps internal trait keys out of user-facing question text", () => {
     const userFacingText = executivePresenceQuestions
       .flatMap((question) => [question.text, ...question.options.map((option) => option.text)])
@@ -505,51 +517,71 @@ describe("buildExecutiveRecognitionPhrases", () => {
   });
 });
 
-describe("executive presence feedback", () => {
+describe("raio x beta feedback", () => {
   it("keeps feedback optional and skips empty drafts", () => {
-    const draft = {
+    const draft: RaioXBetaFeedbackDraft = {
+      personalizationRating: null,
+      depthRating: null,
+      wouldShare: null,
+      wouldReturn: null,
+      toneRating: null,
       mostRealPart: "   ",
       genericPart: "",
-      wouldShare: null,
-      wouldReturn: null
+      improvementSuggestion: ""
     };
 
-    expect(hasExecutivePresenceFeedback(draft)).toBe(false);
-    expect(buildExecutivePresenceFeedbackPayload({ resultId: "result-id", userId: "user-id", draft })).toBeNull();
+    expect(hasRaioXBetaFeedback(draft)).toBe(false);
+    expect(buildRaioXBetaFeedbackPayload({ resultId: "result-id", userId: "user-id", profileId: "profile-id", draft })).toBeNull();
   });
 
   it("builds a sanitized payload associated to the active result and user", () => {
-    const payload = buildExecutivePresenceFeedbackPayload({
+    const payload = buildRaioXBetaFeedbackPayload({
       resultId: "result-id",
       userId: "user-id",
+      profileId: "profile-id",
+      methodologyVersion: "2026-05-11-v1",
       draft: {
+        personalizationRating: "sim_muito",
+        depthRating: "profundo",
+        toneRating: "humano_sofisticado",
         mostRealPart: "  A parte sobre limite.  ",
         genericPart: " ",
-        wouldShare: true,
-        wouldReturn: false
+        improvementSuggestion: "  Mais exemplos. ",
+        wouldShare: "sim",
+        wouldReturn: "talvez"
       }
     });
 
     expect(payload).toEqual({
       result_id: "result-id",
       user_id: "user-id",
+      profile_id: "profile-id",
+      methodology_version: "2026-05-11-v1",
+      personalization_rating: "sim_muito",
+      depth_rating: "profundo",
+      tone_rating: "humano_sofisticado",
       most_real_part: "A parte sobre limite.",
       generic_part: null,
-      would_share: true,
-      would_return: false
+      improvement_suggestion: "Mais exemplos.",
+      would_share: "sim",
+      would_return: "talvez"
     });
   });
 
-  it("treats negative choices as valid feedback", () => {
-    const draft = {
+  it("treats negative choices as valid beta feedback", () => {
+    const draft: RaioXBetaFeedbackDraft = {
+      personalizationRating: null,
+      depthRating: null,
+      toneRating: null,
       mostRealPart: "",
       genericPart: "",
-      wouldShare: false,
-      wouldReturn: false
+      improvementSuggestion: "",
+      wouldShare: "nao",
+      wouldReturn: "nao"
     };
 
-    expect(hasExecutivePresenceFeedback(draft)).toBe(true);
-    expect(buildExecutivePresenceFeedbackPayload({ resultId: "result-id", userId: "user-id", draft })?.would_share).toBe(false);
+    expect(hasRaioXBetaFeedback(draft)).toBe(true);
+    expect(buildRaioXBetaFeedbackPayload({ resultId: "result-id", userId: "user-id", profileId: "profile-id", draft })?.would_share).toBe("nao");
   });
 });
 
@@ -569,3 +601,4 @@ function expectProfileContent(profile: ExecutivePresenceProfile) {
   expect(profile.recommendedTrainings.length).toBeGreaterThan(0);
   expect(profile.firstScriptSuggestions.length).toBeGreaterThan(0);
 }
+

@@ -123,7 +123,11 @@ export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPla
           </div>
         ) : null}
 
-        <RaioXFeedback resultId={result.resultId} />
+        <RaioXFeedback
+          resultId={result.resultId}
+          profileId={result.profileId}
+          methodologyVersion={result.methodologyVersion}
+        />
       </div>
     </section>
   );

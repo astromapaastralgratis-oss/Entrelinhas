@@ -2,29 +2,67 @@
 
 import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import { Send } from "lucide-react";
+import { ChevronDown, Send } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import {
-  buildExecutivePresenceFeedbackPayload,
-  hasExecutivePresenceFeedback,
-  type ExecutivePresenceFeedbackDraft
+  buildRaioXBetaFeedbackPayload,
+  hasRaioXBetaFeedback,
+  type BetaDepthRating,
+  type BetaIntentRating,
+  type BetaPersonalizationRating,
+  type BetaToneRating,
+  type RaioXBetaFeedbackDraft
 } from "@/src/utils/executivePresenceFeedback";
 
 type RaioXFeedbackProps = {
   resultId?: string;
+  profileId: string;
+  methodologyVersion?: string;
 };
 
-const initialDraft: ExecutivePresenceFeedbackDraft = {
+const initialDraft: RaioXBetaFeedbackDraft = {
+  personalizationRating: null,
+  depthRating: null,
+  wouldShare: null,
+  wouldReturn: null,
+  toneRating: null,
   mostRealPart: "",
   genericPart: "",
-  wouldShare: null,
-  wouldReturn: null
+  improvementSuggestion: ""
 };
 
-export function RaioXFeedback({ resultId }: RaioXFeedbackProps) {
+const personalizationOptions: Array<{ value: BetaPersonalizationRating; label: string }> = [
+  { value: "sim_muito", label: "Sim, muito" },
+  { value: "em_partes", label: "Em partes" },
+  { value: "pouco", label: "Pouco" },
+  { value: "nao", label: "Nao" }
+];
+
+const depthOptions: Array<{ value: BetaDepthRating; label: string }> = [
+  { value: "superficial", label: "Superficial" },
+  { value: "adequado", label: "Adequado" },
+  { value: "profundo", label: "Profundo" },
+  { value: "profundo_demais_confuso", label: "Profundo demais/confuso" }
+];
+
+const intentOptions: Array<{ value: BetaIntentRating; label: string }> = [
+  { value: "sim", label: "Sim" },
+  { value: "talvez", label: "Talvez" },
+  { value: "nao", label: "Nao" }
+];
+
+const toneOptions: Array<{ value: BetaToneRating; label: string }> = [
+  { value: "humano_sofisticado", label: "Humano e sofisticado" },
+  { value: "um_pouco_generico", label: "Um pouco generico" },
+  { value: "muito_tecnico", label: "Muito tecnico" },
+  { value: "muito_emocional", label: "Muito emocional" }
+];
+
+export function RaioXFeedback({ resultId, profileId, methodologyVersion }: RaioXFeedbackProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const [draft, setDraft] = useState(initialDraft);
-  const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
-  const canSubmit = useMemo(() => hasExecutivePresenceFeedback(draft), [draft]);
+  const [status, setStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const canSubmit = useMemo(() => hasRaioXBetaFeedback(draft), [draft]);
 
   if (!resultId) return null;
 
@@ -33,9 +71,11 @@ export function RaioXFeedback({ resultId }: RaioXFeedbackProps) {
 
     setStatus("saving");
     const { data: authData } = await supabase.auth.getUser();
-    const payload = buildExecutivePresenceFeedbackPayload({
+    const payload = buildRaioXBetaFeedbackPayload({
       resultId,
       userId: authData.user?.id,
+      profileId,
+      methodologyVersion,
       draft
     });
 
@@ -45,15 +85,10 @@ export function RaioXFeedback({ resultId }: RaioXFeedbackProps) {
     }
 
     const { error } = await supabase
-      .from("executive_presence_feedback")
+      .from("feedback_ex")
       .upsert(payload, { onConflict: "result_id,user_id" });
 
-    if (error) {
-      setStatus("error");
-      return;
-    }
-
-    setStatus("saved");
+    setStatus(error ? "idle" : "saved");
   }
 
   if (status === "saved") {
@@ -61,9 +96,11 @@ export function RaioXFeedback({ resultId }: RaioXFeedbackProps) {
       <div className="border-t border-entrelinhas-gold/12 p-5 sm:p-7">
         <div className="rounded-2xl border border-entrelinhas-gold/14 bg-entrelinhas-navy/42 p-5">
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-gold">
-            Essa leitura fez sentido para você?
+            Obrigada
           </p>
-          <p className="mt-3 text-sm leading-6 text-entrelinhas-muted">Obrigada. Sua percepção foi registrada.</p>
+          <p className="mt-3 text-sm leading-6 text-entrelinhas-muted">
+            Sua percepcao ajuda a tornar o Entrelinhas mais preciso e humano.
+          </p>
         </div>
       </div>
     );
@@ -72,59 +109,112 @@ export function RaioXFeedback({ resultId }: RaioXFeedbackProps) {
   return (
     <div className="border-t border-entrelinhas-gold/12 p-5 sm:p-7">
       <div className="rounded-2xl border border-entrelinhas-gold/14 bg-entrelinhas-navy/42 p-5">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-gold">
-              Essa leitura fez sentido para você?
-            </p>
-            <p className="mt-2 text-sm leading-6 text-entrelinhas-muted">
-              Responda se fizer sentido. Isso ajuda a calibrar a experiência sem interromper sua jornada.
-            </p>
-          </div>
-          <span className="text-xs font-semibold uppercase tracking-[0.16em] text-white/38">Opcional</span>
-        </div>
-
-        <div className="mt-5 grid gap-4">
-          <FeedbackTextarea
-            label="Qual parte mais pareceu real?"
-            value={draft.mostRealPart}
-            onChange={(mostRealPart) => setDraft((current) => ({ ...current, mostRealPart }))}
+        <button
+          type="button"
+          onClick={() => setIsOpen((current) => !current)}
+          className="flex w-full items-center justify-between gap-4 text-left"
+        >
+          <span>
+            <span className="block text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-gold">
+              Feedback beta
+            </span>
+            <span className="mt-2 block text-base font-semibold text-white">
+              Deixar minha percepcao sobre a leitura
+            </span>
+          </span>
+          <ChevronDown
+            size={20}
+            className={`shrink-0 text-entrelinhas-gold transition duration-300 ${isOpen ? "rotate-180" : ""}`}
           />
-          <FeedbackTextarea
-            label="Algo pareceu genérico?"
-            value={draft.genericPart}
-            onChange={(genericPart) => setDraft((current) => ({ ...current, genericPart }))}
-          />
+        </button>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <FeedbackBoolean
-              label="Você salvaria ou compartilharia essa leitura?"
+        {isOpen ? (
+          <div className="mt-6 space-y-5">
+            <FeedbackChoiceGroup
+              label="A leitura pareceu feita para voce?"
+              options={personalizationOptions}
+              value={draft.personalizationRating}
+              onChange={(personalizationRating) => setDraft((current) => ({ ...current, personalizationRating }))}
+            />
+            <FeedbackChoiceGroup
+              label="O nivel de profundidade foi:"
+              options={depthOptions}
+              value={draft.depthRating}
+              onChange={(depthRating) => setDraft((current) => ({ ...current, depthRating }))}
+            />
+            <FeedbackChoiceGroup
+              label="Voce salvaria ou compartilharia algum trecho?"
+              options={intentOptions}
               value={draft.wouldShare}
               onChange={(wouldShare) => setDraft((current) => ({ ...current, wouldShare }))}
             />
-            <FeedbackBoolean
-              label="Você voltaria para uma nova leitura?"
+            <FeedbackChoiceGroup
+              label="Voce voltaria para usar de novo?"
+              options={intentOptions}
               value={draft.wouldReturn}
               onChange={(wouldReturn) => setDraft((current) => ({ ...current, wouldReturn }))}
             />
+            <FeedbackChoiceGroup
+              label="O tom da leitura pareceu:"
+              options={toneOptions}
+              value={draft.toneRating}
+              onChange={(toneRating) => setDraft((current) => ({ ...current, toneRating }))}
+            />
+
+            <div className="grid gap-4 lg:grid-cols-3">
+              <FeedbackTextarea
+                label="Qual parte mais pareceu real para voce?"
+                value={draft.mostRealPart}
+                onChange={(mostRealPart) => setDraft((current) => ({ ...current, mostRealPart }))}
+              />
+              <FeedbackTextarea
+                label="Qual parte pareceu generica ou menos precisa?"
+                value={draft.genericPart}
+                onChange={(genericPart) => setDraft((current) => ({ ...current, genericPart }))}
+              />
+              <FeedbackTextarea
+                label="O que voce melhoraria?"
+                value={draft.improvementSuggestion}
+                onChange={(improvementSuggestion) => setDraft((current) => ({ ...current, improvementSuggestion }))}
+              />
+            </div>
+
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={!canSubmit || status === "saving"}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-entrelinhas-gold/24 bg-entrelinhas-gold/10 px-5 py-3 text-sm font-bold text-entrelinhas-goldLight transition duration-300 hover:border-entrelinhas-gold/45 hover:bg-entrelinhas-gold/16 disabled:cursor-not-allowed disabled:opacity-45 sm:w-auto"
+            >
+              <Send size={16} />
+              {status === "saving" ? "Registrando..." : "Enviar percepcao"}
+            </button>
           </div>
-        </div>
-
-        {status === "error" ? (
-          <p className="mt-4 rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm leading-6 text-red-100">
-            Não conseguimos registrar agora. Você pode seguir normalmente.
-          </p>
         ) : null}
+      </div>
+    </div>
+  );
+}
 
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={!canSubmit || status === "saving"}
-          className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-entrelinhas-gold/24 bg-entrelinhas-gold/10 px-5 py-3 text-sm font-bold text-entrelinhas-goldLight transition duration-300 hover:border-entrelinhas-gold/45 hover:bg-entrelinhas-gold/16 disabled:cursor-not-allowed disabled:opacity-45 sm:w-auto"
-        >
-          <Send size={16} />
-          {status === "saving" ? "Registrando..." : "Registrar percepção"}
-        </button>
+function FeedbackChoiceGroup<T extends string>({
+  label,
+  options,
+  value,
+  onChange
+}: {
+  label: string;
+  options: Array<{ value: T; label: string }>;
+  value: T | null;
+  onChange: (value: T) => void;
+}) {
+  return (
+    <div>
+      <p className="text-sm font-semibold text-white/84">{label}</p>
+      <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+        {options.map((option) => (
+          <FeedbackChoice key={option.value} selected={value === option.value} onClick={() => onChange(option.value)}>
+            {option.label}
+          </FeedbackChoice>
+        ))}
       </div>
     </div>
   );
@@ -151,30 +241,6 @@ function FeedbackTextarea({
         placeholder="Escreva em poucas palavras, se quiser."
       />
     </label>
-  );
-}
-
-function FeedbackBoolean({
-  label,
-  value,
-  onChange
-}: {
-  label: string;
-  value: boolean | null;
-  onChange: (value: boolean) => void;
-}) {
-  return (
-    <div>
-      <p className="text-sm font-semibold text-white/84">{label}</p>
-      <div className="mt-2 grid grid-cols-2 gap-2">
-        <FeedbackChoice selected={value === true} onClick={() => onChange(true)}>
-          Sim
-        </FeedbackChoice>
-        <FeedbackChoice selected={value === false} onClick={() => onChange(false)}>
-          Ainda não
-        </FeedbackChoice>
-      </div>
-    </div>
   );
 }
 
