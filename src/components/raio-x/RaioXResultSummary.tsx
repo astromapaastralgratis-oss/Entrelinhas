@@ -11,6 +11,19 @@ type RaioXResultSummaryProps = {
   onViewPlan: () => void;
 };
 
+const impactCopyByProfileId: Record<ExecutivePresenceResult["profileId"], string> = {
+  assertive_executor: "Sua forca aparece quando ha decisao em jogo. O proximo nivel e fazer sua firmeza criar adesao, nao apenas movimento.",
+  strategic_influencer: "Sua presenca mobiliza. O proximo nivel e transformar influencia em decisao antes que a narrativa se alongue.",
+  relational_diplomat: "Voce sustenta relacoes com maturidade. O proximo nivel e deixar sua posicao aparecer sem pedir licenca ao desconforto.",
+  analytical_advisor: "Sua clareza nasce do criterio. O proximo nivel e transformar analise em posicionamento visivel.",
+  leader_mobilizer: "Voce cria movimento. O proximo nivel e garantir que a energia ao redor vire alinhamento real.",
+  decision_strategist: "Voce sustenta decisoes dificeis. O proximo nivel e combinar rigor com leitura politica antes de fechar a rota.",
+  diplomatic_articulator: "Voce sabe ler interesses. O proximo nivel e articular sem desaparecer da decisao.",
+  careful_counselor: "Sua maturidade esta no cuidado. O proximo nivel e fazer esse cuidado aparecer como autoridade.",
+  firmness_builder: "Voce ja sabe onde precisa se posicionar. O proximo nivel e sustentar limites sem transformar clareza em justificativa.",
+  analytical_influencer: "Sua inteligencia convence quando encontra sintese. O proximo nivel e fazer a mensagem chegar antes do excesso de explicacao."
+};
+
 const confidenceCopy = {
   high: "Seu resultado mostra um padrão bem definido.",
   medium: "Seu resultado mostra um perfil consistente, com nuances importantes.",
@@ -22,6 +35,7 @@ export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPla
   const strongestDynamics = getTopEntries(result.executiveDynamicScores, executiveDynamicLabels, 3);
   const evolution = result.evolution;
   const recognitionPhrases = result.recognitionPhrases ?? [];
+  const impactCopy = impactCopyByProfileId[result.profileId];
 
   return (
     <section className="brand-fade-in mx-auto max-w-5xl">
@@ -33,6 +47,15 @@ export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPla
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Seu direcionamento estratégico</p>
               <h1 className="mt-1 text-3xl font-semibold leading-tight text-white sm:text-4xl">{result.profile.name}</h1>
             </div>
+          </div>
+        </div>
+
+        <div className="border-b border-entrelinhas-gold/12 p-5 sm:p-7">
+          <div className="rounded-[1.35rem] border border-entrelinhas-gold/14 bg-entrelinhas-void/35 p-5 sm:p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-entrelinhas-gold">Leitura central</p>
+            <p className="mt-3 text-2xl font-semibold leading-tight text-white sm:text-3xl">
+              {impactCopy}
+            </p>
           </div>
         </div>
 
