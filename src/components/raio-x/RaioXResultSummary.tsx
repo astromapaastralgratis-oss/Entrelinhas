@@ -36,6 +36,26 @@ export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPla
   const evolution = result.evolution;
   const recognitionPhrases = result.recognitionPhrases ?? [];
   const impactCopy = impactCopyByProfileId[result.profileId];
+  const firstViewHighlights = [
+    {
+      icon: CheckCircle2,
+      title: "Sua forca mais visivel",
+      text: result.profile.strengths[0],
+      tone: "gold" as const
+    },
+    {
+      icon: AlertTriangle,
+      title: "O ponto que pode reduzir sua influencia",
+      text: result.profile.risks[0],
+      tone: "blue" as const
+    },
+    {
+      icon: Target,
+      title: "Seu proximo movimento",
+      text: result.profile.corporateExpectation,
+      tone: "gold" as const
+    }
+  ];
 
   return (
     <section className="brand-fade-in mx-auto max-w-5xl">
@@ -57,12 +77,19 @@ export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPla
               {impactCopy}
             </p>
           </div>
+
+          <div className="mt-4 grid gap-3 md:grid-cols-3">
+            {firstViewHighlights.map((item) => (
+              <ExecutiveHighlight key={item.title} {...item} />
+            ))}
+          </div>
         </div>
 
         <div className="grid gap-5 p-5 sm:p-7 lg:grid-cols-[1.05fr_0.95fr]">
           <article>
-            <p className="text-base leading-7 text-white/90 sm:text-lg">{result.profile.shortDescription}</p>
-            <p className="mt-4 line-clamp-4 leading-7 text-entrelinhas-muted">{result.profile.perceivedByOthers}</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-entrelinhas-gold">Leitura ampliada</p>
+            <p className="mt-3 text-base leading-7 text-white/90">{result.profile.shortDescription}</p>
+            <p className="mt-3 line-clamp-3 leading-7 text-entrelinhas-muted">{result.profile.perceivedByOthers}</p>
             {result.contextSnapshot?.mainChallenge ? (
               <p className="mt-4 rounded-2xl border border-entrelinhas-gold/14 bg-entrelinhas-navy/45 px-4 py-3 text-sm leading-6 text-entrelinhas-goldLight">
                 Contexto calibrado: {result.contextSnapshot.mainChallenge}
@@ -153,6 +180,37 @@ export function RaioXResultSummary({ result, onRestart, onViewReading, onViewPla
         />
       </div>
     </section>
+  );
+}
+
+function ExecutiveHighlight({
+  icon: Icon,
+  title,
+  text,
+  tone
+}: {
+  icon: typeof CheckCircle2;
+  title: string;
+  text: string;
+  tone: "gold" | "blue";
+}) {
+  const iconClass =
+    tone === "gold"
+      ? "border-entrelinhas-gold/25 bg-entrelinhas-gold/10 text-entrelinhas-gold"
+      : "border-entrelinhas-blueLight/25 bg-entrelinhas-blue/20 text-entrelinhas-blueLight";
+
+  return (
+    <div className="rounded-2xl border border-entrelinhas-gold/10 bg-entrelinhas-navy/38 p-4">
+      <div className="flex items-start gap-3">
+        <span className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border ${iconClass}`}>
+          <Icon size={16} />
+        </span>
+        <div>
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-entrelinhas-muted">{title}</p>
+          <p className="mt-2 text-sm font-semibold leading-6 text-white/90">{text}</p>
+        </div>
+      </div>
+    </div>
   );
 }
 
